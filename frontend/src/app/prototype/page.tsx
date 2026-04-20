@@ -29,6 +29,14 @@ type DialogueEntry = {
   line: string;
 };
 
+type CombatFx = {
+  id: number;
+  unitId: string;
+  kind: "attack" | "hit" | "skill" | "heal";
+  value?: number;
+  positive?: boolean;
+};
+
 const mapRows = 8;
 const mapCols = 10;
 const objectiveTile = { x: 1, y: 5 };
@@ -182,6 +190,26 @@ export default function PrototypePage() {
     "战斗开始：塞缪尔与伊索尔德必须守住星隐乡外围。",
     "提示：伊索尔德与月溪灵鹿相邻时，可发动治疗与风系支援。",
   ]);
+  const [combatFx, setCombatFx] = useState<CombatFx[]>([]);
+  const [fxSeed, setFxSeed] = useState(1);
+
+  function triggerFx(unitId: string, kind: CombatFx["kind"], options?: Pick<CombatFx, "value" | "positive">) {
+    const nextId = fxSeed;
+    setFxSeed((prev) => prev + 1);
+    setCombatFx((prev) => [...prev, { id: nextId, unitId, kind, ...options }]);
+    window.setTimeout(() => {
+      setCombatFx((prev) => prev.filter((item) => item.id !== nextId));
+    }, kind === "heal" ? 900 : 700);
+  }
+
+  const fxByUnit = useMemo(
+    () =>
+      combatFx.reduce<Record<string, CombatFx[]>>((acc, item) => {
+        acc[item.unitId] = acc[item.unitId] ? [...acc[item.unitId], item] : [item];
+        return acc;
+      }, {}),
+    [combatFx],
+  );
 
   const selected = useMemo(() => units.find((u) => u.id === selectedId) ?? null, [units, selectedId]);
 
@@ -238,7 +266,9 @@ export default function PrototypePage() {
     return false;
   }
 
-  function healUnit(targetId: string, amount: number) {
+  function healUnit(targetId: string, amount: number, sourceId?: string) {
+    if (sourceId) triggerFx(sourceId, "skill");
+    triggerFx(targetId, "heal", { value: amount, positive: true });
     setUnits((prev) =>
       prev.map((unit) =>
         unit.id === targetId ? { ...unit, hp: Math.min(unit.maxHp, unit.hp + amount) } : unit,
@@ -246,7 +276,9 @@ export default function PrototypePage() {
     );
   }
 
-  function damageUnit(targetId: string, amount: number) {
+  function damageUnit(targetId: string, amount: number, sourceId?: string, kind: "attack" | "skill" = "attack") {
+    if (sourceId) triggerFx(sourceId, kind);
+    triggerFx(targetId, "hit", { value: amount, positive: false });
     setUnits((prev) =>
       prev
         .map((unit) => (unit.id === targetId ? { ...unit, hp: unit.hp - amount } : unit))
@@ -260,7 +292,7 @@ export default function PrototypePage() {
     if (selected.id === "isolde") {
       if (target && target.team !== "enemy") {
         const bonus = healingBondActive ? 2 : 0;
-        healUnit(target.id, 5 + bonus);
+        healUnit(target.id, 5 + bonus, selected.id);
         markUnitActed(selected.id);
         setEventBanner("伊索尔德释放风愈术，前线压力暂时缓解。");
         pushDialogue("伊索尔德", "风会托住你，别倒下！");
@@ -276,17 +308,18 @@ export default function PrototypePage() {
         markUnitActed(selected.id);
         if (comboReady && isolde) {
           const mainDamage = selected.atk + 3;
-          damageUnit(target.id, mainDamage);
+          triggerFx(selected.id, "skill");
+          damageUnit(target.id, mainDamage, undefined, "skill");
           const splashTargets = units.filter(
             (unit) => unit.team === "enemy" && unit.id !== target.id && distance(target, unit.x, unit.y) === 1,
           );
-          splashTargets.forEach((unit) => damageUnit(unit.id, 3));
+          splashTargets.forEach((unit) => damageUnit(unit.id, 3, undefined, "skill"));
           setEventBanner("兄妹共鸣发动，星风连携撕开敌阵。");
           pushDialogue("塞缪尔", "伊索尔德，现在！");
           pushDialogue("伊索尔德", "星风会回应我们的！");
           pushLog(`塞缪尔与伊索尔德发动「星风连携」，对 ${target.name} 造成 ${mainDamage} 点伤害，并波及周围敌人。`);
         } else {
-          damageUnit(target.id, selected.atk + 2);
+          damageUnit(target.id, selected.atk + 2, selected.id, "skill");
           setEventBanner("塞缪尔的星辉斩逼退了前线敌军。");
           pushDialogue("塞缪尔", "别想越过这道防线。");
           pushLog(`塞缪尔发动「星辉斩」，对 ${target.name} 造成 ${selected.atk + 2} 点伤害。`);
@@ -305,6 +338,8 @@ export default function PrototypePage() {
         pushLog("月溪灵鹿周围没有可庇护的友军。");
         return;
       }
+      triggerFx(selected.id, "skill");
+      nearAllies.forEach((ally) => triggerFx(ally.id, "heal", { value: 3, positive: true }));
       setUnits((prev) =>
         prev.map((unit) =>
           nearAllies.some((ally) => ally.id === unit.id)
@@ -346,7 +381,7 @@ export default function PrototypePage() {
 
     if (unit && canAttack(unit)) {
       const bonus = selected.id === "samuel" && siblingBondActive ? 2 : 0;
-      damageUnit(unit.id, selected.atk + bonus);
+      damageUnit(unit.id, selected.atk + bonus, selected.id, "attack");
       markUnitActed(selected.id);
       setEventBanner(`${selected.name} 压制了 ${unit.name}。`);
       pushLog(`${selected.name} 攻击 ${unit.name}，造成 ${selected.atk + bonus} 点伤害。`);
@@ -392,6 +427,8 @@ export default function PrototypePage() {
           const targetIndex = nextUnits.findIndex((unit) => unit.id === target.id);
           if (targetIndex >= 0) {
             const targetUnit = nextUnits[targetIndex];
+            triggerFx(currentEnemy.id, "attack");
+            triggerFx(targetUnit.id, "hit", { value: currentEnemy.atk, positive: false });
             nextUnits[targetIndex] = { ...targetUnit, hp: targetUnit.hp - currentEnemy.atk };
             urgentBanner = `${currentEnemy.name} 正在猛攻 ${targetUnit.name}。`;
             newLogs.push(`${currentEnemy.name} 攻击 ${targetUnit.name}，造成 ${currentEnemy.atk} 点伤害。`);
@@ -532,12 +569,32 @@ export default function PrototypePage() {
       "战斗开始：塞缪尔与伊索尔德必须守住星隐乡外围。",
       "提示：伊索尔德与月溪灵鹿相邻时，可发动治疗与风系支援。",
     ]);
+    setCombatFx([]);
+    setFxSeed(1);
   }
 
   const selectedTerrain = selected ? terrainMap[selected.y][selected.x] : null;
 
   return (
     <main className="min-h-screen bg-[#050816] px-4 py-8 text-white sm:px-6 sm:py-12 lg:px-10 lg:py-16">
+      <style jsx global>{`
+        @keyframes battleHit {
+          0%, 100% { transform: translateX(0); }
+          25% { transform: translateX(-6px); }
+          50% { transform: translateX(6px); }
+          75% { transform: translateX(-4px); }
+        }
+        @keyframes battleHeal {
+          0% { transform: scale(1); filter: brightness(1); }
+          40% { transform: scale(1.08); filter: brightness(1.35); }
+          100% { transform: scale(1); filter: brightness(1); }
+        }
+        @keyframes floatNumber {
+          0% { opacity: 0; transform: translate(-50%, -20%); }
+          15% { opacity: 1; transform: translate(-50%, -50%); }
+          100% { opacity: 0; transform: translate(-50%, -140%); }
+        }
+      `}</style>
       <div className="mx-auto max-w-7xl">
         <div className="mb-6 max-w-4xl space-y-3 sm:mb-8 sm:space-y-4">
           <p className="text-xs uppercase tracking-[0.35em] text-cyan-300 sm:text-sm">Battle Prototype</p>
@@ -680,6 +737,10 @@ export default function PrototypePage() {
                     const attackable = unit ? canAttack(unit) : false;
                     const skillable = canUseSkill(x, y);
                     const isObjective = x === objectiveTile.x && y === objectiveTile.y;
+                    const unitFx = unit ? fxByUnit[unit.id] ?? [] : [];
+                    const attackerFx = unitFx.some((fx) => fx.kind === "attack" || fx.kind === "skill");
+                    const hitFx = unitFx.some((fx) => fx.kind === "hit");
+                    const healFx = unitFx.some((fx) => fx.kind === "heal");
 
                     return (
                       <button
@@ -695,7 +756,7 @@ export default function PrototypePage() {
                         title={`${terrainInfo[terrain].label} - ${terrainInfo[terrain].desc}`}
                       >
                         {unit ? (
-                          <div className="relative h-full w-full overflow-hidden rounded-[inherit]">
+                          <div className={`relative h-full w-full overflow-hidden rounded-[inherit] transition-transform duration-300 ${attackerFx ? "scale-110 -translate-y-1" : ""} ${hitFx ? "animate-[battleHit_0.45s_ease-in-out]" : ""} ${healFx ? "animate-[battleHeal_0.7s_ease-out]" : ""}`}>
                             {unit.portrait ? (
                               <div
                                 className="absolute inset-0 bg-cover bg-center"
@@ -703,11 +764,26 @@ export default function PrototypePage() {
                               />
                             ) : null}
                             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                            {attackerFx ? <div className="absolute inset-0 bg-cyan-300/25" /> : null}
+                            {hitFx ? <div className="absolute inset-0 bg-rose-300/35 animate-pulse" /> : null}
+                            {healFx ? <div className="absolute inset-0 bg-emerald-300/30" /> : null}
                             <div className="absolute left-1 top-1 rounded bg-black/65 px-1 text-[9px] text-white">
                               {unit.name.slice(0, 2)}
                             </div>
                             <div className="absolute bottom-1 right-1 rounded bg-black/75 px-1 text-[9px] text-white">
                               {unit.hp}
+                            </div>
+                            <div className="pointer-events-none absolute inset-0 overflow-visible">
+                              {unitFx.map((fx) =>
+                                fx.value ? (
+                                  <div
+                                    key={fx.id}
+                                    className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-sm font-extrabold drop-shadow-[0_2px_6px_rgba(0,0,0,0.7)] animate-[floatNumber_0.8s_ease-out_forwards] ${fx.positive ? "text-emerald-200" : "text-rose-100"}`}
+                                  >
+                                    {fx.positive ? `+${fx.value}` : `-${fx.value}`}
+                                  </div>
+                                ) : null,
+                              )}
                             </div>
                           </div>
                         ) : isObjective ? "据点" : terrainInfo[terrain].label}
