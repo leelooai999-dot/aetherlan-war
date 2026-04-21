@@ -2,6 +2,13 @@
 
 import { useEffect, useMemo, useState } from "react";
 
+const spriteKeyframes = `
+  @keyframes spriteRun {
+    from { background-position: 0% 0; }
+    to { background-position: 133.333% 0; }
+  }
+`;
+
 type Team = "player" | "enemy" | "beast";
 type Mode = "move" | "attack" | "skill";
 type Terrain = "plain" | "forest" | "water" | "ruin";
@@ -601,6 +608,10 @@ export default function PrototypePage() {
           15% { opacity: 1; transform: translate(-50%, -50%); }
           100% { opacity: 0; transform: translate(-50%, -140%); }
         }
+        @keyframes spriteRun {
+          from { background-position: 0% 0; }
+          to { background-position: 133.333% 0; }
+        }
       `}</style>
       <div className="mx-auto max-w-7xl">
         <div className="mb-6 max-w-4xl space-y-3 sm:mb-8 sm:space-y-4">
@@ -764,7 +775,12 @@ export default function PrototypePage() {
                       >
                         {unit ? (
                           <div className={`relative h-full w-full overflow-hidden rounded-[inherit] transition-transform duration-300 ${attackerFx ? "scale-110 -translate-y-1" : ""} ${hitFx ? "animate-[battleHit_0.45s_ease-in-out]" : ""} ${healFx ? "animate-[battleHeal_0.7s_ease-out]" : ""}`}>
-                            {unit.portrait ? (
+                            {unit.runSprite ? (
+                              <div
+                                className="absolute inset-0 bg-[length:400%_100%] bg-left-top bg-no-repeat animate-[spriteRun_0.8s_steps(4)_infinite]"
+                                style={{ backgroundImage: `url(${unit.runSprite})` }}
+                              />
+                            ) : unit.portrait ? (
                               <div
                                 className="absolute inset-0 bg-cover bg-center"
                                 style={{ backgroundImage: `url(${unit.portrait})` }}
