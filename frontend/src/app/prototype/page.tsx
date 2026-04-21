@@ -20,6 +20,7 @@ type Unit = {
   moveRange: number;
   desc: string;
   portrait?: string;
+  runSprite?: string;
   moved?: boolean;
   acted?: boolean;
 };
@@ -89,6 +90,7 @@ const initialUnits: Unit[] = [
     moveRange: 2,
     desc: "前排守护者，擅长反击与星辉斩击。",
     portrait: "/characters/samuel.png",
+    runSprite: "/characters/elliot-run.png",
     acted: false,
   },
   {
@@ -542,17 +544,22 @@ export default function PrototypePage() {
 
   useEffect(() => {
     if (turn === "player" && allPlayerActed && battleState === "ongoing") {
-      setEventBanner("我方单位已全部行动，准备迎接敌方回合。");
+      setEventBanner("我方单位已全部行动，自动切换到敌方回合。");
+      pushLog("我方单位已全部行动，自动结束回合。");
+      const timer = window.setTimeout(() => {
+        endTurn(true);
+      }, 650);
+      return () => window.clearTimeout(timer);
     }
   }, [allPlayerActed, turn, battleState]);
 
-  function endTurn() {
+  function endTurn(auto = false) {
     if (battleState !== "ongoing") return;
     setSelectedId(null);
     setMode("move");
     setTurn("enemy");
-    setEventBanner("我方回合结束，敌军开始反扑。");
-    pushLog("我方回合结束，敌方开始推进。");
+    setEventBanner(auto ? "我方行动完成，敌军开始反扑。" : "我方回合结束，敌军开始反扑。");
+    pushLog(auto ? "系统自动结束我方回合，敌方开始推进。" : "我方回合结束，敌方开始推进。");
   }
 
   function resetBattle() {
@@ -716,7 +723,7 @@ export default function PrototypePage() {
                   技能模式
                 </button>
                 <button
-                  onClick={endTurn}
+                  onClick={() => endTurn()}
                   disabled={turn !== "player" || battleState !== "ongoing"}
                   className="min-h-11 rounded-full bg-cyan-400 px-4 py-2 text-sm font-semibold text-slate-950 transition hover:bg-cyan-300 disabled:cursor-not-allowed disabled:bg-slate-700 disabled:text-slate-300 sm:px-5"
                 >
@@ -837,8 +844,7 @@ export default function PrototypePage() {
                 <p>• 失败条件：塞缪尔或伊索尔德倒下，或结界耐久归零</p>
                 <p>• 第 6 回合会出现新的暗影增援</p>
                 <p>• 每名友军每回合仅可行动一次</p>
-                <p>• 当全部友军已行动时，建议直接结束回合</p>
-              </div>
+                <p>• 当全部友军已行动时，系统会自动结束回合</p>              </div>
             </div>
 
             <div className="rounded-2xl bg-slate-900/70 p-4">
