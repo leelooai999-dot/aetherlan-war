@@ -1,7 +1,7 @@
 {
   "version": 2,
-  "buildCommand": "cd frontend && pnpm build",
-  "installCommand": "echo 'skip install, using uploaded build artifacts'",
-  "outputDirectory": "frontend/.next",
-  "framework": "nextjs"
+  "framework": "nextjs",
+  "rootDirectory": "frontend",
+  "installCommand": "pnpm install --frozen-lockfile",
+  "buildCommand": "pnpm build"
 }
