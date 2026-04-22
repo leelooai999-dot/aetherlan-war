@@ -2,6 +2,13 @@
 
 import { useEffect, useMemo, useState } from "react";
 
+const tileVisualSize = 56;
+const spriteSheetColumns = 5;
+const spriteSheetRows = 5;
+const spriteFrameCount = 25;
+const spriteFrameSize = 256;
+const runDurationMs = 900;
+
 const spriteKeyframes = `
   @keyframes spriteRun {
     from { background-position: 0% 0; }
@@ -43,6 +50,15 @@ type CombatFx = {
   kind: "attack" | "hit" | "skill" | "heal";
   value?: number;
   positive?: boolean;
+};
+
+type MovementFx = {
+  unitId: string;
+  fromX: number;
+  fromY: number;
+  toX: number;
+  toY: number;
+  sprite: string;
 };
 
 const mapRows = 8;
@@ -201,6 +217,7 @@ export default function PrototypePage() {
   ]);
   const [combatFx, setCombatFx] = useState<CombatFx[]>([]);
   const [fxSeed, setFxSeed] = useState(1);
+  const [movementFx, setMovementFx] = useState<MovementFx | null>(null);
 
   function triggerFx(unitId: string, kind: CombatFx["kind"], options?: Pick<CombatFx, "value" | "positive">) {
     const nextId = fxSeed;
@@ -399,6 +416,17 @@ export default function PrototypePage() {
     }
 
     if (canMoveTo(x, y)) {
+      if (selected.id === "samuel" && selected.runSprite) {
+        setMovementFx({
+          unitId: selected.id,
+          fromX: selected.x,
+          fromY: selected.y,
+          toX: x,
+          toY: y,
+          sprite: selected.runSprite,
+        });
+        window.setTimeout(() => setMovementFx(null), runDurationMs);
+      }
       setUnits((prev) => prev.map((u) => (u.id === selected.id ? { ...u, x, y, moved: true } : u)));
       const terrain = terrainMap[y][x];
       setEventBanner(`${selected.name} 进入${terrainInfo[terrain].label}地形，仍可继续攻击或施法。`);
@@ -585,6 +613,7 @@ export default function PrototypePage() {
     ]);
     setCombatFx([]);
     setFxSeed(1);
+    setMovementFx(null);
   }
 
   const selectedTerrain = selected ? terrainMap[selected.y][selected.x] : null;
@@ -609,8 +638,12 @@ export default function PrototypePage() {
           100% { opacity: 0; transform: translate(-50%, -140%); }
         }
         @keyframes spriteRun {
-          from { background-position: 0% 0; }
-          to { background-position: 133.333% 0; }
+          from { background-position: 0px 0px; }
+          to { background-position: -1280px -1024px; }
+        }
+        @keyframes runAcrossTile {
+          from { transform: translate(var(--run-start-x), var(--run-start-y)); }
+          to { transform: translate(var(--run-end-x), var(--run-end-y)); }
         }
       `}</style>
       <div className="mx-auto max-w-7xl">
@@ -699,6 +732,33 @@ export default function PrototypePage() {
         </div>
 
         <div className="grid gap-6 lg:grid-cols-[minmax(0,1.25fr)_minmax(400px,0.75fr)] lg:gap-8">
+          {movementFx ? (
+            <div
+              className="pointer-events-none absolute z-30 hidden sm:block"
+              style={{
+                width: `${tileVisualSize}px`,
+                height: `${tileVisualSize}px`,
+                marginLeft: '6px',
+                marginTop: '6px',
+                transform: `translate(${movementFx.fromX * (tileVisualSize + 8)}px, ${movementFx.fromY * (tileVisualSize + 8)}px)`,
+              }}
+            >
+              <div
+                className="h-full w-full bg-no-repeat [image-rendering:pixelated] animate-[runAcrossTile_0.9s_linear_forwards]"
+                style={{
+                  backgroundImage: `url(${movementFx.sprite})`,
+                  backgroundSize: `${spriteSheetColumns * 100}% ${spriteSheetRows * 100}%`,
+                  width: `${tileVisualSize}px`,
+                  height: `${tileVisualSize}px`,
+                  ['--run-start-x' as string]: '0px',
+                  ['--run-start-y' as string]: '0px',
+                  ['--run-end-x' as string]: `${(movementFx.toX - movementFx.fromX) * (tileVisualSize + 8)}px`,
+                  ['--run-end-y' as string]: `${(movementFx.toY - movementFx.fromY) * (tileVisualSize + 8)}px`,
+                  animation: `spriteRun ${runDurationMs}ms steps(${spriteFrameCount}) forwards, runAcrossTile ${runDurationMs}ms ease-in-out forwards`,
+                }}
+              />
+            </div>
+          ) : null}
           <section className="overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-3 sm:p-4">
             <div className="mb-3 flex flex-wrap items-center justify-between gap-3 sm:mb-4">
               <div>
@@ -774,13 +834,8 @@ export default function PrototypePage() {
                         title={`${terrainInfo[terrain].label} - ${terrainInfo[terrain].desc}`}
                       >
                         {unit ? (
-                          <div className={`relative h-full w-full overflow-hidden rounded-[inherit] transition-transform duration-300 ${attackerFx ? "scale-110 -translate-y-1" : ""} ${hitFx ? "animate-[battleHit_0.45s_ease-in-out]" : ""} ${healFx ? "animate-[battleHeal_0.7s_ease-out]" : ""}`}>
-                            {unit.runSprite ? (
-                              <div
-                                className="absolute inset-0 bg-[length:400%_100%] bg-left-top bg-no-repeat animate-[spriteRun_0.8s_steps(4)_infinite]"
-                                style={{ backgroundImage: `url(${unit.runSprite})` }}
-                              />
-                            ) : unit.portrait ? (
+                          <div className={`relative h-full w-full overflow-hidden rounded-[inherit] transition-transform duration-300 ${attackerFx ? "scale-110 -translate-y-1" : ""} ${hitFx ? "animate-[battleHit_0.45s_ease-in-out]" : ""} ${healFx ? "animate-[battleHeal_0.7s_ease-out]" : ""} ${movementFx?.unitId === unit.id ? "opacity-0" : ""}`}>
+                            {unit.portrait ? (
                               <div
                                 className="absolute inset-0 bg-cover bg-center"
                                 style={{ backgroundImage: `url(${unit.portrait})` }}
