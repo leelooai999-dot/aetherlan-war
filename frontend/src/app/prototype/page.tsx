@@ -7,6 +7,7 @@ const spriteSheetColumns = 5;
 const spriteSheetRows = 5;
 const spriteFrameCount = 25;
 const spriteFrameSize = 256;
+const runSpriteScale = 2.4;
 const baseRunDurationMs = 420;
 const runDurationPerTileMs = 240;
 
@@ -787,18 +788,20 @@ export default function PrototypePage() {
               <div className="relative min-w-[320px]">
                 {movementFx ? (
                   <div
-                    className="pointer-events-none absolute inset-0 z-30"
+                    className="pointer-events-none absolute inset-0 z-30 overflow-visible"
                     aria-hidden="true"
                   >
                     <div
-                      className="absolute"
+                      className="absolute overflow-visible"
                       style={{
                         left: `calc(${movementFx.fromX} * (100% / ${mapCols}) + 0.375rem)`,
                         top: `calc(${movementFx.fromY} * (100% / ${mapRows}) + 0.375rem)`,
-                        width: `calc(100% / ${mapCols} - 0.75rem)`,
-                        height: `calc(100% / ${mapRows} - 0.75rem)`,
+                        width: `calc((100% / ${mapCols} - 0.75rem) * ${runSpriteScale})`,
+                        height: `calc((100% / ${mapRows} - 0.75rem) * ${runSpriteScale})`,
+                        marginLeft: `calc((100% / ${mapCols} - 0.75rem) * -${(runSpriteScale - 1) / 2})`,
+                        marginTop: `calc((100% / ${mapRows} - 0.75rem) * -${runSpriteScale - 1})`,
                         transform: movementFx.facing === "left" ? 'scaleX(-1)' : undefined,
-                        transformOrigin: 'center',
+                        transformOrigin: 'center bottom',
                       }}
                     >
                       <div
@@ -806,10 +809,11 @@ export default function PrototypePage() {
                         style={{
                           backgroundImage: `url(${movementFx.sprite})`,
                           backgroundSize: `${spriteSheetColumns * 100}% ${spriteSheetRows * 100}%`,
+                          backgroundPosition: '0 0',
                           ['--run-start-x' as string]: '0%',
                           ['--run-start-y' as string]: '0%',
-                          ['--run-end-x' as string]: `${(movementFx.toX - movementFx.fromX) * 100}%`,
-                          ['--run-end-y' as string]: `${(movementFx.toY - movementFx.fromY) * 100}%`,
+                          ['--run-end-x' as string]: `${(movementFx.toX - movementFx.fromX) * (100 / runSpriteScale)}%`,
+                          ['--run-end-y' as string]: `${(movementFx.toY - movementFx.fromY) * (100 / runSpriteScale)}%`,
                           animation: `spriteRun ${movementFx.durationMs}ms steps(${spriteFrameCount}) forwards, runAcrossTile ${movementFx.durationMs}ms ease-in-out forwards`,
                         }}
                       />
