@@ -6,22 +6,24 @@ const tileVisualSize = 56;
 const spriteSheetColumns = 5;
 const spriteSheetRows = 5;
 const spriteFrameCount = 25;
-const spriteFrameSize = 256;
-const runSpriteScale = 2.4;
-const baseRunDurationMs = 420;
-const runDurationPerTileMs = 240;
-
-const spriteKeyframes = `
-  @keyframes spriteRun {
-    from { background-position: 0% 0; }
-    to { background-position: 133.333% 0; }
-  }
-`;
+const runSpriteScale = 3.2;
+const baseRunDurationMs = 560;
+const runDurationPerTileMs = 320;
+const mobileTileSize = 44;
+const desktopTileSize = 56;
 
 type Team = "player" | "enemy" | "beast";
 type Mode = "move" | "attack" | "skill";
 type Terrain = "plain" | "forest" | "water" | "ruin";
 type BattleState = "ongoing" | "victory" | "defeat";
+
+type SpriteAnimKey = "idle" | "run" | "attack" | "jump";
+
+type SpriteAnimDef = {
+  row: number;
+  frames: number;
+  fps: number;
+};
 
 type Unit = {
   id: string;
@@ -37,6 +39,10 @@ type Unit = {
   desc: string;
   portrait?: string;
   runSprite?: string;
+  spriteSheet?: string;
+  spriteSheetCols?: number;
+  spriteSheetRows?: number;
+  spriteAnims?: Partial<Record<SpriteAnimKey, SpriteAnimDef>>;
   moved?: boolean;
   acted?: boolean;
 };
@@ -60,9 +66,11 @@ type MovementFx = {
   fromY: number;
   toX: number;
   toY: number;
-  sprite: string;
+  sprite?: string;
   durationMs: number;
   facing: "left" | "right";
+  team: Team;
+  name: string;
 };
 
 const mapRows = 8;
@@ -133,6 +141,15 @@ const initialUnits: Unit[] = [
     moveRange: 2,
     desc: "17岁的妹妹，擅长风系、治愈与辅助控场。",
     portrait: "/characters/isolde.png",
+    spriteSheet: "/characters/heroine-sprite-sheet.png",
+    spriteSheetCols: 8,
+    spriteSheetRows: 5,
+    spriteAnims: {
+      idle: { row: 0, frames: 1, fps: 1 },
+      run: { row: 0, frames: 8, fps: 10 },
+      jump: { row: 1, frames: 8, fps: 10 },
+      attack: { row: 2, frames: 8, fps: 12 },
+    },
     acted: false,
   },
   {
@@ -195,6 +212,31 @@ function isAdjacent(a: Unit, b: Unit) {
 
 function clampToBoard(x: number, y: number) {
   return x >= 0 && x < mapCols && y >= 0 && y < mapRows;
+}
+
+function getUnitSpriteState(unit: Unit, flags: { selected: boolean; moving: boolean; attacking: boolean; healing: boolean }) {
+  if (!unit.spriteSheet || !unit.spriteAnims || !unit.spriteSheetCols || !unit.spriteSheetRows) return null;
+
+  const activeAnim = flags.attacking
+    ? unit.spriteAnims.attack
+    : flags.moving
+      ? unit.spriteAnims.run
+      : flags.healing
+        ? unit.spriteAnims.jump ?? unit.spriteAnims.idle
+        : flags.selected
+          ? unit.spriteAnims.jump ?? unit.spriteAnims.idle
+          : unit.spriteAnims.idle;
+
+  if (!activeAnim) return null;
+
+  return {
+    sheet: unit.spriteSheet,
+    cols: unit.spriteSheetCols,
+    rows: unit.spriteSheetRows,
+    row: activeAnim.row,
+    frames: Math.max(1, activeAnim.frames),
+    fps: Math.max(1, activeAnim.fps),
+  };
 }
 
 function buildInitialDialogue(): DialogueEntry[] {
@@ -420,7 +462,7 @@ export default function PrototypePage() {
     }
 
     if (canMoveTo(x, y)) {
-      if (selected.id === "samuel" && selected.runSprite) {
+      {
         const travelTiles = Math.max(1, Math.abs(x - selected.x) + Math.abs(y - selected.y));
         const durationMs = baseRunDurationMs + travelTiles * runDurationPerTileMs;
         setMovementFx({
@@ -432,6 +474,8 @@ export default function PrototypePage() {
           sprite: selected.runSprite,
           durationMs,
           facing: x < selected.x ? "left" : "right",
+          team: selected.team,
+          name: selected.name,
         });
         window.setTimeout(() => setMovementFx(null), durationMs);
       }
@@ -650,8 +694,18 @@ export default function PrototypePage() {
           to { background-position: -1280px -1024px; }
         }
         @keyframes runAcrossTile {
-          from { transform: translate(var(--run-start-x), var(--run-start-y)); }
-          to { transform: translate(var(--run-end-x), var(--run-end-y)); }
+          0% { transform: translate(var(--run-start-x), var(--run-start-y)) scale(1); }
+          20% { transform: translate(calc(var(--run-end-x) * 0.2), calc(var(--run-end-y) * 0.2 - 4%)) scale(1.02); }
+          50% { transform: translate(calc(var(--run-end-x) * 0.5), calc(var(--run-end-y) * 0.5 - 6%)) scale(1.04); }
+          100% { transform: translate(var(--run-end-x), var(--run-end-y)) scale(1); }
+        }
+        @keyframes tokenRunBob {
+          0%, 100% { transform: translateY(0) scale(1); }
+          50% { transform: translateY(-10%) scale(1.08); }
+        }
+        @keyframes unitSpritePlay {
+          from { background-position-x: 0%; }
+          to { background-position-x: 114.2857%; }
         }
       `}</style>
       <div className="mx-auto max-w-7xl">
@@ -784,8 +838,8 @@ export default function PrototypePage() {
               </div>
             </div>
 
-            <div className="overflow-x-auto">
-              <div className="relative min-w-[320px]">
+            <div className="overflow-x-auto overflow-y-visible pb-16">
+              <div className="relative min-w-[440px] sm:min-w-[560px]">
                 {movementFx ? (
                   <div
                     className="pointer-events-none absolute inset-0 z-30 overflow-visible"
@@ -804,23 +858,47 @@ export default function PrototypePage() {
                         transformOrigin: 'center bottom',
                       }}
                     >
-                      <div
-                        className="h-full w-full bg-no-repeat [image-rendering:pixelated]"
-                        style={{
-                          backgroundImage: `url(${movementFx.sprite})`,
-                          backgroundSize: `${spriteSheetColumns * 100}% ${spriteSheetRows * 100}%`,
-                          backgroundPosition: '0 0',
-                          ['--run-start-x' as string]: '0%',
-                          ['--run-start-y' as string]: '0%',
-                          ['--run-end-x' as string]: `${(movementFx.toX - movementFx.fromX) * (100 / runSpriteScale)}%`,
-                          ['--run-end-y' as string]: `${(movementFx.toY - movementFx.fromY) * (100 / runSpriteScale)}%`,
-                          animation: `spriteRun ${movementFx.durationMs}ms steps(${spriteFrameCount}) forwards, runAcrossTile ${movementFx.durationMs}ms ease-in-out forwards`,
-                        }}
-                      />
+                      {movementFx.sprite ? (
+                        <div
+                          className="h-full w-full bg-no-repeat [image-rendering:pixelated] drop-shadow-[0_10px_18px_rgba(0,0,0,0.45)]"
+                          style={{
+                            backgroundImage: `url(${movementFx.sprite})`,
+                            backgroundSize: `${spriteSheetColumns * 100}% ${spriteSheetRows * 100}%`,
+                            backgroundPosition: '0 0',
+                            ['--run-start-x' as string]: '0%',
+                            ['--run-start-y' as string]: '0%',
+                            ['--run-end-x' as string]: `${(movementFx.toX - movementFx.fromX) * (100 / runSpriteScale)}%`,
+                            ['--run-end-y' as string]: `${(movementFx.toY - movementFx.fromY) * (100 / runSpriteScale)}%`,
+                            animation: `spriteRun ${movementFx.durationMs}ms steps(${spriteFrameCount}) infinite, runAcrossTile ${movementFx.durationMs}ms ease-in-out forwards`,
+                          }}
+                        />
+                      ) : (
+                        <div
+                          className={`relative flex h-full w-full items-end justify-center rounded-[28%] border-2 text-[10px] font-black tracking-wide shadow-2xl ${teamClass(movementFx.team)} ${movementFx.team === "enemy" ? "border-rose-200/60" : movementFx.team === "beast" ? "border-violet-200/60" : "border-cyan-100/70"}`}
+                          style={{
+                            ['--run-start-x' as string]: '0%',
+                            ['--run-start-y' as string]: '0%',
+                            ['--run-end-x' as string]: `${(movementFx.toX - movementFx.fromX) * (100 / runSpriteScale)}%`,
+                            ['--run-end-y' as string]: `${(movementFx.toY - movementFx.fromY) * (100 / runSpriteScale)}%`,
+                            animation: `runAcrossTile ${movementFx.durationMs}ms ease-in-out forwards, tokenRunBob 220ms ease-in-out infinite`,
+                          }}
+                        >
+                          <div className="absolute inset-0 rounded-[28%] bg-gradient-to-t from-black/35 to-white/10" />
+                          <span className="relative z-10 mb-2 rounded bg-black/45 px-2 py-1 text-white">
+                            {movementFx.name.slice(0, 2)}
+                          </span>
+                        </div>
+                      )}
                     </div>
                   </div>
                 ) : null}
-                <div className="grid gap-1.5 sm:gap-2" style={{ gridTemplateColumns: `repeat(${mapCols}, minmax(0, 1fr))` }}>
+                <div
+                  className="grid gap-1 sm:gap-2"
+                  style={{
+                    gridTemplateColumns: `repeat(${mapCols}, minmax(${mobileTileSize}px, ${desktopTileSize}px))`,
+                    gridAutoRows: `minmax(${mobileTileSize}px, ${desktopTileSize}px)`,
+                  }}
+                >
                   {Array.from({ length: mapRows * mapCols }).map((_, index) => {
                     const x = index % mapCols;
                     const y = Math.floor(index / mapCols);
@@ -834,12 +912,20 @@ export default function PrototypePage() {
                     const attackerFx = unitFx.some((fx) => fx.kind === "attack" || fx.kind === "skill");
                     const hitFx = unitFx.some((fx) => fx.kind === "hit");
                     const healFx = unitFx.some((fx) => fx.kind === "heal");
+                    const unitSprite = unit
+                      ? getUnitSpriteState(unit, {
+                          selected: selected?.id === unit.id,
+                          moving: movementFx?.unitId === unit.id,
+                          attacking: attackerFx,
+                          healing: healFx,
+                        })
+                      : null;
 
                     return (
                       <button
                         key={`${x}-${y}`}
                         onClick={() => handleTileClick(x, y)}
-                        className={`flex min-h-11 aspect-square items-center justify-center rounded-xl border text-[10px] font-semibold transition sm:rounded-2xl sm:text-xs ${
+                        className={`flex items-center justify-center rounded-xl border text-[10px] font-semibold transition sm:rounded-2xl sm:text-xs ${
                           unit
                             ? `${teamClass(unit.team)} border-white/10 ${unit.team !== "enemy" && unit.acted ? "opacity-55" : ""}`
                             : movable
@@ -847,13 +933,33 @@ export default function PrototypePage() {
                               : terrainInfo[terrain].className
                         } ${attackable ? "ring-4 ring-rose-300/60" : ""} ${skillable ? "ring-4 ring-emerald-300/50" : ""} ${selected?.x === x && selected?.y === y ? "ring-4 ring-cyan-200/60" : ""} ${isObjective ? "outline outline-2 outline-amber-300/80" : ""}`}
                         title={`${terrainInfo[terrain].label} - ${terrainInfo[terrain].desc}`}
+                        style={{
+                          width: `${mobileTileSize}px`,
+                          height: `${mobileTileSize}px`,
+                        }}
                       >
                         {unit ? (
-                          <div className={`relative h-full w-full overflow-hidden rounded-[inherit] transition-transform duration-300 ${attackerFx ? "scale-110 -translate-y-1" : ""} ${hitFx ? "animate-[battleHit_0.45s_ease-in-out]" : ""} ${healFx ? "animate-[battleHeal_0.7s_ease-out]" : ""} ${movementFx?.unitId === unit.id ? "opacity-0" : ""}`}>
-                            {unit.portrait ? (
+                          <div className={`relative h-full w-full overflow-visible rounded-[inherit] transition-transform duration-300 ${attackerFx ? "scale-110 -translate-y-1" : ""} ${hitFx ? "animate-[battleHit_0.45s_ease-in-out]" : ""} ${healFx ? "animate-[battleHeal_0.7s_ease-out]" : ""} ${movementFx?.unitId === unit.id ? "opacity-0" : ""}`}>
+                            {unitSprite ? (
                               <div
-                                className="absolute inset-0 bg-cover bg-center"
-                                style={{ backgroundImage: `url(${unit.portrait})` }}
+                                className="absolute left-0 right-0 bottom-0 overflow-visible sm:[height:150%]"
+                                style={{ height: '170%' }}
+                              >
+                                <div
+                                  className="absolute inset-0 bg-no-repeat [image-rendering:pixelated] origin-bottom scale-[1.08] sm:scale-100"
+                                  style={{
+                                    backgroundImage: `url(${unitSprite.sheet})`,
+                                    backgroundSize: `${unitSprite.cols * 100}% ${unitSprite.rows * 100}%`,
+                                    backgroundPositionX: "0%",
+                                    backgroundPositionY: `${(unitSprite.row / Math.max(1, unitSprite.rows - 1)) * 100}%`,
+                                    animation: unitSprite.frames > 1 ? `unitSpritePlay ${Math.max(0.4, unitSprite.frames / unitSprite.fps)}s steps(${Math.max(1, unitSprite.frames - 1)}) infinite` : undefined,
+                                  }}
+                                />
+                              </div>
+                            ) : unit.portrait ? (
+                              <div
+                                className="absolute left-0 right-0 bottom-0 bg-cover bg-center bg-no-repeat"
+                                style={{ backgroundImage: `url(${unit.portrait})`, height: '170%' }}
                               />
                             ) : null}
                             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
