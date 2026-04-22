@@ -732,33 +732,6 @@ export default function PrototypePage() {
         </div>
 
         <div className="grid gap-6 lg:grid-cols-[minmax(0,1.25fr)_minmax(400px,0.75fr)] lg:gap-8">
-          {movementFx ? (
-            <div
-              className="pointer-events-none absolute z-30 hidden sm:block"
-              style={{
-                width: `${tileVisualSize}px`,
-                height: `${tileVisualSize}px`,
-                marginLeft: '6px',
-                marginTop: '6px',
-                transform: `translate(${movementFx.fromX * (tileVisualSize + 8)}px, ${movementFx.fromY * (tileVisualSize + 8)}px)`,
-              }}
-            >
-              <div
-                className="h-full w-full bg-no-repeat [image-rendering:pixelated] animate-[runAcrossTile_0.9s_linear_forwards]"
-                style={{
-                  backgroundImage: `url(${movementFx.sprite})`,
-                  backgroundSize: `${spriteSheetColumns * 100}% ${spriteSheetRows * 100}%`,
-                  width: `${tileVisualSize}px`,
-                  height: `${tileVisualSize}px`,
-                  ['--run-start-x' as string]: '0px',
-                  ['--run-start-y' as string]: '0px',
-                  ['--run-end-x' as string]: `${(movementFx.toX - movementFx.fromX) * (tileVisualSize + 8)}px`,
-                  ['--run-end-y' as string]: `${(movementFx.toY - movementFx.fromY) * (tileVisualSize + 8)}px`,
-                  animation: `spriteRun ${runDurationMs}ms steps(${spriteFrameCount}) forwards, runAcrossTile ${runDurationMs}ms ease-in-out forwards`,
-                }}
-              />
-            </div>
-          ) : null}
           <section className="overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-3 sm:p-4">
             <div className="mb-3 flex flex-wrap items-center justify-between gap-3 sm:mb-4">
               <div>
@@ -804,7 +777,36 @@ export default function PrototypePage() {
             </div>
 
             <div className="overflow-x-auto">
-              <div className="min-w-[320px]">
+              <div className="relative min-w-[320px]">
+                {movementFx ? (
+                  <div
+                    className="pointer-events-none absolute inset-0 z-30"
+                    aria-hidden="true"
+                  >
+                    <div
+                      className="absolute"
+                      style={{
+                        left: `calc(${movementFx.fromX} * (100% / ${mapCols}) + 0.375rem)`,
+                        top: `calc(${movementFx.fromY} * (100% / ${mapRows}) + 0.375rem)`,
+                        width: `calc(100% / ${mapCols} - 0.75rem)`,
+                        height: `calc(100% / ${mapRows} - 0.75rem)`,
+                      }}
+                    >
+                      <div
+                        className="h-full w-full bg-no-repeat [image-rendering:pixelated]"
+                        style={{
+                          backgroundImage: `url(${movementFx.sprite})`,
+                          backgroundSize: `${spriteSheetColumns * 100}% ${spriteSheetRows * 100}%`,
+                          ['--run-start-x' as string]: '0%',
+                          ['--run-start-y' as string]: '0%',
+                          ['--run-end-x' as string]: `${(movementFx.toX - movementFx.fromX) * 100}%`,
+                          ['--run-end-y' as string]: `${(movementFx.toY - movementFx.fromY) * 100}%`,
+                          animation: `spriteRun ${runDurationMs}ms steps(${spriteFrameCount}) forwards, runAcrossTile ${runDurationMs}ms ease-in-out forwards`,
+                        }}
+                      />
+                    </div>
+                  </div>
+                ) : null}
                 <div className="grid gap-1.5 sm:gap-2" style={{ gridTemplateColumns: `repeat(${mapCols}, minmax(0, 1fr))` }}>
                   {Array.from({ length: mapRows * mapCols }).map((_, index) => {
                     const x = index % mapCols;
