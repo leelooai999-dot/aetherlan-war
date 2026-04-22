@@ -7,7 +7,8 @@ const spriteSheetColumns = 5;
 const spriteSheetRows = 5;
 const spriteFrameCount = 25;
 const spriteFrameSize = 256;
-const runDurationMs = 900;
+const baseRunDurationMs = 420;
+const runDurationPerTileMs = 240;
 
 const spriteKeyframes = `
   @keyframes spriteRun {
@@ -59,6 +60,8 @@ type MovementFx = {
   toX: number;
   toY: number;
   sprite: string;
+  durationMs: number;
+  facing: "left" | "right";
 };
 
 const mapRows = 8;
@@ -417,6 +420,8 @@ export default function PrototypePage() {
 
     if (canMoveTo(x, y)) {
       if (selected.id === "samuel" && selected.runSprite) {
+        const travelTiles = Math.max(1, Math.abs(x - selected.x) + Math.abs(y - selected.y));
+        const durationMs = baseRunDurationMs + travelTiles * runDurationPerTileMs;
         setMovementFx({
           unitId: selected.id,
           fromX: selected.x,
@@ -424,8 +429,10 @@ export default function PrototypePage() {
           toX: x,
           toY: y,
           sprite: selected.runSprite,
+          durationMs,
+          facing: x < selected.x ? "left" : "right",
         });
-        window.setTimeout(() => setMovementFx(null), runDurationMs);
+        window.setTimeout(() => setMovementFx(null), durationMs);
       }
       setUnits((prev) => prev.map((u) => (u.id === selected.id ? { ...u, x, y, moved: true } : u)));
       const terrain = terrainMap[y][x];
@@ -790,6 +797,8 @@ export default function PrototypePage() {
                         top: `calc(${movementFx.fromY} * (100% / ${mapRows}) + 0.375rem)`,
                         width: `calc(100% / ${mapCols} - 0.75rem)`,
                         height: `calc(100% / ${mapRows} - 0.75rem)`,
+                        transform: movementFx.facing === "left" ? 'scaleX(-1)' : undefined,
+                        transformOrigin: 'center',
                       }}
                     >
                       <div
@@ -801,7 +810,7 @@ export default function PrototypePage() {
                           ['--run-start-y' as string]: '0%',
                           ['--run-end-x' as string]: `${(movementFx.toX - movementFx.fromX) * 100}%`,
                           ['--run-end-y' as string]: `${(movementFx.toY - movementFx.fromY) * 100}%`,
-                          animation: `spriteRun ${runDurationMs}ms steps(${spriteFrameCount}) forwards, runAcrossTile ${runDurationMs}ms ease-in-out forwards`,
+                          animation: `spriteRun ${movementFx.durationMs}ms steps(${spriteFrameCount}) forwards, runAcrossTile ${movementFx.durationMs}ms ease-in-out forwards`,
                         }}
                       />
                     </div>
