@@ -67,6 +67,12 @@ type MovementFx = {
   toX: number;
   toY: number;
   sprite?: string;
+  spriteSheet?: string;
+  spriteSheetCols?: number;
+  spriteSheetRows?: number;
+  spriteRow?: number;
+  spriteFrames?: number;
+  spriteFps?: number;
   durationMs: number;
   facing: "left" | "right";
   team: Team;
@@ -472,6 +478,12 @@ export default function PrototypePage() {
           toX: x,
           toY: y,
           sprite: selected.runSprite,
+          spriteSheet: selected.spriteSheet,
+          spriteSheetCols: selected.spriteSheetCols,
+          spriteSheetRows: selected.spriteSheetRows,
+          spriteRow: selected.spriteAnims?.run?.row,
+          spriteFrames: selected.spriteAnims?.run?.frames,
+          spriteFps: selected.spriteAnims?.run?.fps,
           durationMs,
           facing: x < selected.x ? "left" : "right",
           team: selected.team,
@@ -869,7 +881,22 @@ export default function PrototypePage() {
                             ['--run-start-y' as string]: '0%',
                             ['--run-end-x' as string]: `${(movementFx.toX - movementFx.fromX) * (100 / runSpriteScale)}%`,
                             ['--run-end-y' as string]: `${(movementFx.toY - movementFx.fromY) * (100 / runSpriteScale)}%`,
-                            animation: `spriteRun ${movementFx.durationMs}ms steps(${spriteFrameCount}) infinite, runAcrossTile ${movementFx.durationMs}ms ease-in-out forwards`,
+                            animation: `spriteRun ${movementFx.durationMs}ms steps(${spriteFrameCount}) infinite, runAcrossTile ${movementFx.durationMs}ms linear forwards`,
+                          }}
+                        />
+                      ) : movementFx.spriteSheet && movementFx.spriteSheetCols && movementFx.spriteSheetRows ? (
+                        <div
+                          className="h-full w-full bg-no-repeat [image-rendering:pixelated] drop-shadow-[0_10px_18px_rgba(0,0,0,0.45)]"
+                          style={{
+                            backgroundImage: `url(${movementFx.spriteSheet})`,
+                            backgroundSize: `${movementFx.spriteSheetCols * 100}% ${movementFx.spriteSheetRows * 100}%`,
+                            backgroundPositionX: '0%',
+                            backgroundPositionY: `${((movementFx.spriteRow ?? 0) / Math.max(1, movementFx.spriteSheetRows - 1)) * 100}%`,
+                            ['--run-start-x' as string]: '0%',
+                            ['--run-start-y' as string]: '0%',
+                            ['--run-end-x' as string]: `${(movementFx.toX - movementFx.fromX) * (100 / runSpriteScale)}%`,
+                            ['--run-end-y' as string]: `${(movementFx.toY - movementFx.fromY) * (100 / runSpriteScale)}%`,
+                            animation: `unitSpritePlay ${Math.max(0.35, (movementFx.spriteFrames ?? 8) / Math.max(1, movementFx.spriteFps ?? 10))}s steps(${Math.max(1, (movementFx.spriteFrames ?? 8) - 1)}) infinite, runAcrossTile ${movementFx.durationMs}ms linear forwards`,
                           }}
                         />
                       ) : (
@@ -939,7 +966,7 @@ export default function PrototypePage() {
                         }}
                       >
                         {unit ? (
-                          <div className={`relative h-full w-full overflow-visible rounded-[inherit] transition-transform duration-300 ${attackerFx ? "scale-110 -translate-y-1" : ""} ${hitFx ? "animate-[battleHit_0.45s_ease-in-out]" : ""} ${healFx ? "animate-[battleHeal_0.7s_ease-out]" : ""} ${movementFx?.unitId === unit.id ? "opacity-0" : ""}`}>
+                          <div className={`relative h-full w-full overflow-visible rounded-[inherit] transition-transform duration-300 ${attackerFx ? "scale-110 -translate-y-1" : ""} ${hitFx ? "animate-[battleHit_0.45s_ease-in-out]" : ""} ${healFx ? "animate-[battleHeal_0.7s_ease-out]" : ""} ${movementFx?.unitId === unit.id && !unit.spriteSheet ? "opacity-0" : ""}`}>
                             {unitSprite ? (
                               <div
                                 className="absolute left-0 right-0 bottom-0 overflow-visible sm:[height:150%]"
