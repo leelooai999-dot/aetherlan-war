@@ -52,6 +52,14 @@ type DialogueEntry = {
   line: string;
 };
 
+type BattleCinematic = {
+  attacker: Unit;
+  defender: Unit;
+  kind: "attack" | "skill";
+  damage: number;
+  phase: "run" | "attack" | "impact";
+};
+
 type CombatFx = {
   id: number;
   unitId: string;
@@ -270,6 +278,7 @@ export default function PrototypePage() {
   const [combatFx, setCombatFx] = useState<CombatFx[]>([]);
   const [fxSeed, setFxSeed] = useState(1);
   const [movementFx, setMovementFx] = useState<MovementFx | null>(null);
+  const [battleCinematic, setBattleCinematic] = useState<BattleCinematic | null>(null);
 
   function triggerFx(unitId: string, kind: CombatFx["kind"], options?: Pick<CombatFx, "value" | "positive">) {
     const nextId = fxSeed;
@@ -290,6 +299,23 @@ export default function PrototypePage() {
   );
 
   const selected = useMemo(() => units.find((u) => u.id === selectedId) ?? null, [units, selectedId]);
+
+  const cinematicAttackerSprite = battleCinematic
+    ? getUnitSpriteState(battleCinematic.attacker, {
+        selected: false,
+        moving: battleCinematic.phase === "run",
+        attacking: battleCinematic.phase !== "run",
+        healing: false,
+      })
+    : null;
+  const cinematicDefenderSprite = battleCinematic
+    ? getUnitSpriteState(battleCinematic.defender, {
+        selected: false,
+        moving: false,
+        attacking: false,
+        healing: false,
+      })
+    : null;
 
   const samuel = units.find((unit) => unit.id === "samuel");
   const isolde = units.find((unit) => unit.id === "isolde");
@@ -364,6 +390,24 @@ export default function PrototypePage() {
     );
   }
 
+  function playBattleCinematic(attacker: Unit, defender: Unit, damage: number, kind: "attack" | "skill", onDone?: () => void) {
+    setBattleCinematic({ attacker, defender, damage, kind, phase: "run" });
+
+    window.setTimeout(() => {
+      setBattleCinematic((prev) => (prev ? { ...prev, phase: "attack" } : null));
+    }, 420);
+
+    window.setTimeout(() => {
+      setBattleCinematic((prev) => (prev ? { ...prev, phase: "impact" } : null));
+      damageUnit(defender.id, damage, attacker.id, kind);
+      onDone?.();
+    }, kind === "skill" ? 1050 : 920);
+
+    window.setTimeout(() => {
+      setBattleCinematic(null);
+    }, kind === "skill" ? 1500 : 1320);
+  }
+
   function handleSkill(x: number, y: number, target: Unit | undefined) {
     if (!selected || !canUseSkill(x, y)) return;
 
@@ -386,21 +430,23 @@ export default function PrototypePage() {
         markUnitActed(selected.id);
         if (comboReady && isolde) {
           const mainDamage = selected.atk + 3;
-          triggerFx(selected.id, "skill");
-          damageUnit(target.id, mainDamage, undefined, "skill");
           const splashTargets = units.filter(
             (unit) => unit.team === "enemy" && unit.id !== target.id && distance(target, unit.x, unit.y) === 1,
           );
-          splashTargets.forEach((unit) => damageUnit(unit.id, 3, undefined, "skill"));
-          setEventBanner("兄妹共鸣发动，星风连携撕开敌阵。");
-          pushDialogue("塞缪尔", "伊索尔德，现在！");
-          pushDialogue("伊索尔德", "星风会回应我们的！");
-          pushLog(`塞缪尔与伊索尔德发动「星风连携」，对 ${target.name} 造成 ${mainDamage} 点伤害，并波及周围敌人。`);
+          playBattleCinematic(selected, target, mainDamage, "skill", () => {
+            splashTargets.forEach((unit) => damageUnit(unit.id, 3, undefined, "skill"));
+            setEventBanner("兄妹共鸣发动，星风连携撕开敌阵。");
+            pushDialogue("塞缪尔", "伊索尔德，现在！");
+            pushDialogue("伊索尔德", "星风会回应我们的！");
+            pushLog(`塞缪尔与伊索尔德发动「星风连携」，对 ${target.name} 造成 ${mainDamage} 点伤害，并波及周围敌人。`);
+          });
         } else {
-          damageUnit(target.id, selected.atk + 2, selected.id, "skill");
-          setEventBanner("塞缪尔的星辉斩逼退了前线敌军。");
-          pushDialogue("塞缪尔", "别想越过这道防线。");
-          pushLog(`塞缪尔发动「星辉斩」，对 ${target.name} 造成 ${selected.atk + 2} 点伤害。`);
+          const skillDamage = selected.atk + 2;
+          playBattleCinematic(selected, target, skillDamage, "skill", () => {
+            setEventBanner("塞缪尔的星辉斩逼退了前线敌军。");
+            pushDialogue("塞缪尔", "别想越过这道防线。");
+            pushLog(`塞缪尔发动「星辉斩」，对 ${target.name} 造成 ${skillDamage} 点伤害。`);
+          });
         }
       } else {
         pushLog("塞缪尔的技能需要锁定敌方单位。");
@@ -459,11 +505,13 @@ export default function PrototypePage() {
 
     if (unit && canAttack(unit)) {
       const bonus = selected.id === "samuel" && siblingBondActive ? 2 : 0;
-      damageUnit(unit.id, selected.atk + bonus, selected.id, "attack");
-      markUnitActed(selected.id);
-      setEventBanner(`${selected.name} 压制了 ${unit.name}。`);
-      pushLog(`${selected.name} 攻击 ${unit.name}，造成 ${selected.atk + bonus} 点伤害。`);
-      setMode("move");
+      const totalDamage = selected.atk + bonus;
+      playBattleCinematic(selected, unit, totalDamage, "attack", () => {
+        markUnitActed(selected.id);
+        setEventBanner(`${selected.name} 压制了 ${unit.name}。`);
+        pushLog(`${selected.name} 攻击 ${unit.name}，造成 ${totalDamage} 点伤害。`);
+        setMode("move");
+      });
       return;
     }
 
@@ -721,6 +769,57 @@ export default function PrototypePage() {
         }
       `}</style>
       <div className="mx-auto max-w-7xl">
+        {battleCinematic ? (
+          <div className="fixed inset-0 z-[90] flex items-center justify-center bg-slate-950/92 backdrop-blur-sm px-4">
+            <div className="relative flex h-full max-h-[90vh] w-full max-w-6xl items-end justify-between overflow-hidden rounded-3xl border border-cyan-300/20 bg-[radial-gradient(circle_at_center,_rgba(34,211,238,0.12),_rgba(2,6,23,0.95)_60%)] px-6 py-10 sm:px-10">
+              <div className="absolute inset-x-0 bottom-[18%] h-px bg-gradient-to-r from-transparent via-cyan-300/35 to-transparent" />
+              <div className={`relative flex w-[42%] min-w-[150px] justify-center self-end transition-all duration-300 ${battleCinematic.phase === "run" ? "translate-x-[10%]" : battleCinematic.phase === "attack" ? "translate-x-[22%] scale-110" : "translate-x-[18%] scale-105"}`}>
+                <div className="relative h-[44vh] w-full max-w-[320px] min-h-[220px]">
+                  {cinematicAttackerSprite ? (
+                    <div
+                      className={`absolute inset-0 bg-no-repeat [image-rendering:pixelated] ${battleCinematic.attacker.id === "samuel" ? "" : "scale-110"}`}
+                      style={{
+                        backgroundImage: `url(${cinematicAttackerSprite.sheet})`,
+                        backgroundSize: `${cinematicAttackerSprite.cols * 100}% ${cinematicAttackerSprite.rows * 100}%`,
+                        backgroundPositionX: '0%',
+                        backgroundPositionY: `${((cinematicAttackerSprite.row ?? 0) / Math.max(1, cinematicAttackerSprite.rows - 1)) * 100}%`,
+                        animation: `unitSpritePlay ${Math.max(0.35, (cinematicAttackerSprite.frames / Math.max(1, cinematicAttackerSprite.fps)))}s steps(${Math.max(1, cinematicAttackerSprite.frames - 1)}) infinite`,
+                      }}
+                    />
+                  ) : (
+                    <div className="absolute inset-0 bg-contain bg-bottom bg-no-repeat" style={{ backgroundImage: `url(${battleCinematic.attacker.portrait})` }} />
+                  )}
+                </div>
+              </div>
+              <div className={`relative flex w-[38%] min-w-[140px] justify-center self-end transition-all duration-300 ${battleCinematic.phase === "impact" ? "scale-105 -translate-y-2" : ""}`}>
+                <div className="relative h-[40vh] w-full max-w-[280px] min-h-[200px] scale-x-[-1]">
+                  {cinematicDefenderSprite ? (
+                    <div
+                      className={`absolute inset-0 bg-no-repeat [image-rendering:pixelated] ${battleCinematic.phase === "impact" ? "animate-[battleHit_0.45s_ease-in-out]" : ""}`}
+                      style={{
+                        backgroundImage: `url(${cinematicDefenderSprite.sheet})`,
+                        backgroundSize: `${cinematicDefenderSprite.cols * 100}% ${cinematicDefenderSprite.rows * 100}%`,
+                        backgroundPositionX: '0%',
+                        backgroundPositionY: `${((cinematicDefenderSprite.row ?? 0) / Math.max(1, cinematicDefenderSprite.rows - 1)) * 100}%`,
+                        animation: `unitSpritePlay ${Math.max(0.45, (cinematicDefenderSprite.frames / Math.max(1, cinematicDefenderSprite.fps)))}s steps(${Math.max(1, cinematicDefenderSprite.frames - 1)}) infinite`,
+                      }}
+                    />
+                  ) : (
+                    <div className={`absolute inset-0 bg-contain bg-bottom bg-no-repeat ${battleCinematic.phase === "impact" ? "animate-[battleHit_0.45s_ease-in-out]" : ""}`} style={{ backgroundImage: `url(${battleCinematic.defender.portrait})` }} />
+                  )}
+                  {battleCinematic.phase === "impact" ? <div className="absolute inset-0 bg-white/20 mix-blend-screen" /> : null}
+                </div>
+              </div>
+              <div className="absolute left-6 top-6 rounded-full border border-cyan-300/30 bg-slate-950/70 px-4 py-2 text-xs uppercase tracking-[0.3em] text-cyan-200">
+                {battleCinematic.kind === "skill" ? "Full Screen Skill" : "Full Screen Attack"}
+              </div>
+              <div className="absolute bottom-8 left-1/2 -translate-x-1/2 rounded-2xl border border-white/10 bg-black/40 px-5 py-3 text-center text-white shadow-2xl">
+                <p className="text-sm text-cyan-100">{battleCinematic.attacker.name} → {battleCinematic.defender.name}</p>
+                <p className="mt-1 text-2xl font-black tracking-wide">-{battleCinematic.damage}</p>
+              </div>
+            </div>
+          </div>
+        ) : null}
         <div className="mb-6 max-w-4xl space-y-3 sm:mb-8 sm:space-y-4">
           <p className="text-xs uppercase tracking-[0.35em] text-cyan-300 sm:text-sm">Battle Prototype</p>
           <h1 className="text-3xl font-bold lg:text-6xl">星隐乡守卫战 Demo</h1>
