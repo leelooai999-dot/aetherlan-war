@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 const tileVisualSize = 56;
 const spriteSheetColumns = 5;
@@ -471,6 +471,7 @@ export default function PrototypePage() {
   const [fxSeed, setFxSeed] = useState(1);
   const [movementFx, setMovementFx] = useState<MovementFx | null>(null);
   const [battleCinematic, setBattleCinematic] = useState<BattleCinematic | null>(null);
+  const cinematicCleanupRef = useRef<number | null>(null);
 
   function triggerFx(unitId: string, kind: CombatFx["kind"], options?: Pick<CombatFx, "value" | "positive">) {
     const nextId = fxSeed;
@@ -584,6 +585,10 @@ export default function PrototypePage() {
 
   function playBattleCinematic(attacker: Unit, defender: Unit, damage: number, kind: "attack" | "skill", onDone?: () => void) {
     const videoEffect = attacker.id === "samuel" && kind === "attack" ? "/effects/samuel-attack.webm" : undefined;
+    if (cinematicCleanupRef.current) {
+      window.clearTimeout(cinematicCleanupRef.current);
+      cinematicCleanupRef.current = null;
+    }
     setBattleCinematic({ attacker, defender, damage, kind, phase: "run", videoEffect });
 
     window.setTimeout(() => {
@@ -594,11 +599,13 @@ export default function PrototypePage() {
       setBattleCinematic((prev) => (prev ? { ...prev, phase: "impact" } : null));
       damageUnit(defender.id, damage, attacker.id, kind);
       onDone?.();
+      if (!videoEffect) {
+        cinematicCleanupRef.current = window.setTimeout(() => {
+          setBattleCinematic(null);
+          cinematicCleanupRef.current = null;
+        }, kind === "skill" ? 450 : 400);
+      }
     }, kind === "skill" ? 1050 : 920);
-
-    window.setTimeout(() => {
-      setBattleCinematic(null);
-    }, kind === "skill" ? 1500 : 1320);
   }
 
   function handleSkill(x: number, y: number, target: Unit | undefined) {
@@ -992,6 +999,13 @@ export default function PrototypePage() {
                     autoPlay
                     muted
                     playsInline
+                    onEnded={() => {
+                      setBattleCinematic(null);
+                      if (cinematicCleanupRef.current) {
+                        window.clearTimeout(cinematicCleanupRef.current);
+                        cinematicCleanupRef.current = null;
+                      }
+                    }}
                   />
                 </div>
               ) : null}
@@ -1008,7 +1022,7 @@ export default function PrototypePage() {
               ) : null}
               <div className={`relative flex w-[42%] min-w-[150px] justify-center self-end transition-all duration-300 ${battleCinematic.phase === "run" ? "translate-x-[10%]" : battleCinematic.phase === "attack" ? "translate-x-[22%] scale-110" : "translate-x-[18%] scale-105"}`}>
                 <div className="relative h-[44vh] w-full max-w-[320px] min-h-[220px]">
-                  {cinematicAttackerSprite ? (
+                  {cinematicAttackerSprite && !(battleCinematic.videoEffect && battleCinematic.attacker.id === "samuel" && battleCinematic.kind === "attack" && battleCinematic.phase !== "run") ? (
                     <div
                       className="absolute bottom-0 bg-no-repeat [image-rendering:pixelated]"
                       style={{
