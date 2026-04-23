@@ -799,6 +799,10 @@ export default function PrototypePage() {
           from { background-position-x: 0%; }
           to { background-position-x: 114.2857%; }
         }
+        @keyframes spriteFloatCenter {
+          0%, 100% { transform: translate(-50%, 0) scale(1); }
+          50% { transform: translate(-50%, -3%) scale(1.01); }
+        }
       `}</style>
       <div className="mx-auto max-w-7xl">
         {battleCinematic ? (
@@ -809,13 +813,15 @@ export default function PrototypePage() {
                 <div className="relative h-[44vh] w-full max-w-[320px] min-h-[220px]">
                   {cinematicAttackerSprite ? (
                     <div
-                      className={`absolute inset-0 bg-no-repeat [image-rendering:pixelated] ${battleCinematic.attacker.id === "samuel" ? "" : "scale-110"}`}
+                      className={`absolute left-1/2 bottom-0 w-[72%] bg-no-repeat [image-rendering:pixelated] ${battleCinematic.attacker.id === "samuel" ? "" : ""}`}
                       style={{
+                        height: '100%',
                         backgroundImage: `url(${cinematicAttackerSprite.sheet})`,
                         backgroundSize: `${cinematicAttackerSprite.cols * 100}% ${cinematicAttackerSprite.rows * 100}%`,
                         backgroundPositionX: '0%',
                         backgroundPositionY: `${((cinematicAttackerSprite.row ?? 0) / Math.max(1, cinematicAttackerSprite.rows - 1)) * 100}%`,
-                        animation: `unitSpritePlay ${Math.max(0.35, (cinematicAttackerSprite.frames / Math.max(1, cinematicAttackerSprite.fps)))}s steps(${Math.max(1, cinematicAttackerSprite.frames - 1)}) infinite`,
+                        filter: 'drop-shadow(0 14px 18px rgba(0,0,0,0.42))',
+                        animation: `unitSpritePlay ${Math.max(0.35, (cinematicAttackerSprite.frames / Math.max(1, cinematicAttackerSprite.fps)))}s steps(${Math.max(1, cinematicAttackerSprite.frames - 1)}) infinite${battleCinematic.phase === "run" ? ', spriteFloatCenter 0.9s ease-in-out infinite' : ''}`,
                       }}
                     />
                   ) : (
@@ -827,12 +833,14 @@ export default function PrototypePage() {
                 <div className="relative h-[40vh] w-full max-w-[280px] min-h-[200px] scale-x-[-1]">
                   {cinematicDefenderSprite ? (
                     <div
-                      className={`absolute inset-0 bg-no-repeat [image-rendering:pixelated] ${battleCinematic.phase === "impact" ? "animate-[battleHit_0.45s_ease-in-out]" : ""}`}
+                      className={`absolute left-1/2 bottom-0 w-[72%] bg-no-repeat [image-rendering:pixelated] ${battleCinematic.phase === "impact" ? "animate-[battleHit_0.45s_ease-in-out]" : ""}`}
                       style={{
+                        height: '100%',
                         backgroundImage: `url(${cinematicDefenderSprite.sheet})`,
                         backgroundSize: `${cinematicDefenderSprite.cols * 100}% ${cinematicDefenderSprite.rows * 100}%`,
                         backgroundPositionX: '0%',
                         backgroundPositionY: `${((cinematicDefenderSprite.row ?? 0) / Math.max(1, cinematicDefenderSprite.rows - 1)) * 100}%`,
+                        filter: 'drop-shadow(0 14px 18px rgba(0,0,0,0.42))',
                         animation: `unitSpritePlay ${Math.max(0.45, (cinematicDefenderSprite.frames / Math.max(1, cinematicDefenderSprite.fps)))}s steps(${Math.max(1, cinematicDefenderSprite.frames - 1)}) infinite`,
                       }}
                     />
@@ -1104,13 +1112,15 @@ export default function PrototypePage() {
                                 style={{ height: '170%' }}
                               >
                                 <div
-                                  className="absolute inset-0 bg-no-repeat [image-rendering:pixelated] origin-bottom scale-[1.08] sm:scale-100"
+                                  className="absolute left-1/2 bottom-0 w-[72%] bg-no-repeat [image-rendering:pixelated]"
                                   style={{
+                                    height: '100%',
                                     backgroundImage: `url(${unitSprite.sheet})`,
                                     backgroundSize: `${unitSprite.cols * 100}% ${unitSprite.rows * 100}%`,
                                     backgroundPositionX: "0%",
                                     backgroundPositionY: `${(unitSprite.row / Math.max(1, unitSprite.rows - 1)) * 100}%`,
-                                    animation: unitSprite.frames > 1 ? `unitSpritePlay ${Math.max(0.4, unitSprite.frames / unitSprite.fps)}s steps(${Math.max(1, unitSprite.frames - 1)}) infinite` : undefined,
+                                    filter: 'drop-shadow(0 8px 10px rgba(0,0,0,0.38))',
+                                    animation: unitSprite.frames > 1 ? `unitSpritePlay ${Math.max(0.4, unitSprite.frames / unitSprite.fps)}s steps(${Math.max(1, unitSprite.frames - 1)}) infinite, spriteFloatCenter 1.4s ease-in-out infinite` : 'spriteFloatCenter 1.4s ease-in-out infinite',
                                   }}
                                 />
                               </div>
