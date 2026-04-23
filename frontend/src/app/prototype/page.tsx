@@ -25,6 +25,17 @@ type SpriteAnimDef = {
   fps: number;
 };
 
+type SpritePresentation = {
+  mapScale?: number;
+  mapWidth?: number;
+  mapAnchorX?: number;
+  mapAnchorY?: number;
+  cinematicScale?: number;
+  cinematicWidth?: number;
+  cinematicAnchorX?: number;
+  cinematicAnchorY?: number;
+};
+
 type Unit = {
   id: string;
   name: string;
@@ -44,6 +55,7 @@ type Unit = {
   spriteSheetCols?: number;
   spriteSheetRows?: number;
   spriteAnims?: Partial<Record<SpriteAnimKey, SpriteAnimDef>>;
+  spritePresentation?: SpritePresentation;
   moved?: boolean;
   acted?: boolean;
 };
@@ -151,6 +163,16 @@ const initialUnits: Unit[] = [
       jump: { row: 2, frames: 10, fps: 10 },
       attack: { row: 3, frames: 10, fps: 12 },
     },
+    spritePresentation: {
+      mapWidth: 0.7,
+      mapScale: 1.04,
+      mapAnchorX: 0.5,
+      mapAnchorY: 0,
+      cinematicWidth: 0.68,
+      cinematicScale: 1.03,
+      cinematicAnchorX: 0.5,
+      cinematicAnchorY: 0,
+    },
     acted: false,
   },
   {
@@ -175,6 +197,16 @@ const initialUnits: Unit[] = [
       run: { row: 1, frames: 10, fps: 11 },
       jump: { row: 2, frames: 10, fps: 10 },
       attack: { row: 3, frames: 10, fps: 12 },
+    },
+    spritePresentation: {
+      mapWidth: 0.62,
+      mapScale: 1.12,
+      mapAnchorX: 0.51,
+      mapAnchorY: -0.03,
+      cinematicWidth: 0.6,
+      cinematicScale: 1.16,
+      cinematicAnchorX: 0.5,
+      cinematicAnchorY: -0.04,
     },
     acted: false,
   },
@@ -201,6 +233,16 @@ const initialUnits: Unit[] = [
       jump: { row: 2, frames: 8, fps: 10 },
       attack: { row: 3, frames: 8, fps: 12 },
     },
+    spritePresentation: {
+      mapWidth: 0.86,
+      mapScale: 1,
+      mapAnchorX: 0.5,
+      mapAnchorY: -0.01,
+      cinematicWidth: 0.8,
+      cinematicScale: 1.04,
+      cinematicAnchorX: 0.5,
+      cinematicAnchorY: -0.02,
+    },
     acted: false,
   },
   {
@@ -225,6 +267,16 @@ const initialUnits: Unit[] = [
       run: { row: 1, frames: 9, fps: 11 },
       jump: { row: 2, frames: 9, fps: 10 },
       attack: { row: 3, frames: 8, fps: 12 },
+    },
+    spritePresentation: {
+      mapWidth: 0.78,
+      mapScale: 1.08,
+      mapAnchorX: 0.52,
+      mapAnchorY: -0.02,
+      cinematicWidth: 0.72,
+      cinematicScale: 1.12,
+      cinematicAnchorX: 0.52,
+      cinematicAnchorY: -0.03,
     },
   },
   {
@@ -282,6 +334,7 @@ function getUnitSpriteState(unit: Unit, flags: { selected: boolean; moving: bool
     row: activeAnim.row,
     frames: Math.max(1, activeAnim.frames),
     fps: Math.max(1, activeAnim.fps),
+    presentation: unit.spritePresentation,
   };
 }
 
@@ -813,9 +866,13 @@ export default function PrototypePage() {
                 <div className="relative h-[44vh] w-full max-w-[320px] min-h-[220px]">
                   {cinematicAttackerSprite ? (
                     <div
-                      className={`absolute left-1/2 bottom-0 w-[72%] bg-no-repeat [image-rendering:pixelated] ${battleCinematic.attacker.id === "samuel" ? "" : ""}`}
+                      className="absolute bottom-0 bg-no-repeat [image-rendering:pixelated]"
                       style={{
-                        height: '100%',
+                        left: `${(cinematicAttackerSprite.presentation?.cinematicAnchorX ?? 0.5) * 100}%`,
+                        width: `${(cinematicAttackerSprite.presentation?.cinematicWidth ?? 0.72) * 100}%`,
+                        height: `${(cinematicAttackerSprite.presentation?.cinematicScale ?? 1) * 100}%`,
+                        transform: `translateX(-${(cinematicAttackerSprite.presentation?.cinematicAnchorX ?? 0.5) * 100}%) translateY(${(cinematicAttackerSprite.presentation?.cinematicAnchorY ?? 0) * 100}%)`,
+                        transformOrigin: 'center bottom',
                         backgroundImage: `url(${cinematicAttackerSprite.sheet})`,
                         backgroundSize: `${cinematicAttackerSprite.cols * 100}% ${cinematicAttackerSprite.rows * 100}%`,
                         backgroundPositionX: '0%',
@@ -833,9 +890,13 @@ export default function PrototypePage() {
                 <div className="relative h-[40vh] w-full max-w-[280px] min-h-[200px] scale-x-[-1]">
                   {cinematicDefenderSprite ? (
                     <div
-                      className={`absolute left-1/2 bottom-0 w-[72%] bg-no-repeat [image-rendering:pixelated] ${battleCinematic.phase === "impact" ? "animate-[battleHit_0.45s_ease-in-out]" : ""}`}
+                      className={`absolute bottom-0 bg-no-repeat [image-rendering:pixelated] ${battleCinematic.phase === "impact" ? "animate-[battleHit_0.45s_ease-in-out]" : ""}`}
                       style={{
-                        height: '100%',
+                        left: `${(cinematicDefenderSprite.presentation?.cinematicAnchorX ?? 0.5) * 100}%`,
+                        width: `${(cinematicDefenderSprite.presentation?.cinematicWidth ?? 0.72) * 100}%`,
+                        height: `${(cinematicDefenderSprite.presentation?.cinematicScale ?? 1) * 100}%`,
+                        transform: `translateX(-${(cinematicDefenderSprite.presentation?.cinematicAnchorX ?? 0.5) * 100}%) translateY(${(cinematicDefenderSprite.presentation?.cinematicAnchorY ?? 0) * 100}%)`,
+                        transformOrigin: 'center bottom',
                         backgroundImage: `url(${cinematicDefenderSprite.sheet})`,
                         backgroundSize: `${cinematicDefenderSprite.cols * 100}% ${cinematicDefenderSprite.rows * 100}%`,
                         backgroundPositionX: '0%',
@@ -1112,9 +1173,13 @@ export default function PrototypePage() {
                                 style={{ height: '170%' }}
                               >
                                 <div
-                                  className="absolute left-1/2 bottom-0 w-[72%] bg-no-repeat [image-rendering:pixelated]"
+                                  className="absolute bottom-0 bg-no-repeat [image-rendering:pixelated]"
                                   style={{
-                                    height: '100%',
+                                    left: `${(unitSprite.presentation?.mapAnchorX ?? 0.5) * 100}%`,
+                                    width: `${(unitSprite.presentation?.mapWidth ?? 0.72) * 100}%`,
+                                    height: `${(unitSprite.presentation?.mapScale ?? 1) * 100}%`,
+                                    transform: `translateX(-${(unitSprite.presentation?.mapAnchorX ?? 0.5) * 100}%) translateY(${(unitSprite.presentation?.mapAnchorY ?? 0) * 100}%)`,
+                                    transformOrigin: 'center bottom',
                                     backgroundImage: `url(${unitSprite.sheet})`,
                                     backgroundSize: `${unitSprite.cols * 100}% ${unitSprite.rows * 100}%`,
                                     backgroundPositionX: "0%",
