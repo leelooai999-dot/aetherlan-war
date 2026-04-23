@@ -78,6 +78,7 @@ type BattleCinematic = {
   kind: "attack" | "skill";
   damage: number;
   phase: "run" | "attack" | "impact";
+  videoEffect?: string;
 };
 
 type CombatFx = {
@@ -582,7 +583,8 @@ export default function PrototypePage() {
   }
 
   function playBattleCinematic(attacker: Unit, defender: Unit, damage: number, kind: "attack" | "skill", onDone?: () => void) {
-    setBattleCinematic({ attacker, defender, damage, kind, phase: "run" });
+    const videoEffect = attacker.id === "samuel" && kind === "attack" ? "/effects/samuel-attack.webm" : undefined;
+    setBattleCinematic({ attacker, defender, damage, kind, phase: "run", videoEffect });
 
     window.setTimeout(() => {
       setBattleCinematic((prev) => (prev ? { ...prev, phase: "attack" } : null));
@@ -981,6 +983,18 @@ export default function PrototypePage() {
           <div className="fixed inset-0 z-[90] flex items-center justify-center bg-slate-950/92 backdrop-blur-sm px-4">
             <div className="relative flex h-full max-h-[90vh] w-full max-w-6xl items-end justify-between overflow-hidden rounded-3xl border border-cyan-300/20 bg-[radial-gradient(circle_at_center,_rgba(34,211,238,0.12),_rgba(2,6,23,0.95)_60%)] px-6 py-10 sm:px-10">
               <div className="absolute inset-x-0 bottom-[18%] h-px bg-gradient-to-r from-transparent via-cyan-300/35 to-transparent" />
+              {battleCinematic.videoEffect && battleCinematic.phase !== "run" ? (
+                <div className="pointer-events-none absolute inset-0 z-[1] flex items-center justify-center overflow-hidden rounded-3xl">
+                  <video
+                    key={battleCinematic.videoEffect}
+                    className="h-full w-full object-contain mix-blend-screen opacity-90"
+                    src={battleCinematic.videoEffect}
+                    autoPlay
+                    muted
+                    playsInline
+                  />
+                </div>
+              ) : null}
               {battleCinematic.phase === "impact" ? (
                 <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
                   <div className="h-40 w-40 rounded-full bg-white/30 blur-xl animate-[impactFlash_0.45s_ease-out_forwards]" />
