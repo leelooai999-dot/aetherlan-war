@@ -36,6 +36,13 @@ type SpritePresentation = {
   cinematicAnchorY?: number;
 };
 
+type SpritePresentationSet = SpritePresentation & {
+  idle?: SpritePresentation;
+  run?: SpritePresentation;
+  attack?: SpritePresentation;
+  jump?: SpritePresentation;
+};
+
 type Unit = {
   id: string;
   name: string;
@@ -55,7 +62,7 @@ type Unit = {
   spriteSheetCols?: number;
   spriteSheetRows?: number;
   spriteAnims?: Partial<Record<SpriteAnimKey, SpriteAnimDef>>;
-  spritePresentation?: SpritePresentation;
+  spritePresentation?: SpritePresentationSet;
   moved?: boolean;
   acted?: boolean;
 };
@@ -172,6 +179,24 @@ const initialUnits: Unit[] = [
       cinematicScale: 1.03,
       cinematicAnchorX: 0.5,
       cinematicAnchorY: 0,
+      run: {
+        mapWidth: 0.74,
+        mapScale: 1.08,
+        mapAnchorX: 0.53,
+        cinematicWidth: 0.72,
+        cinematicScale: 1.08,
+        cinematicAnchorX: 0.53,
+      },
+      attack: {
+        mapWidth: 0.78,
+        mapScale: 1.1,
+        mapAnchorX: 0.56,
+        mapAnchorY: -0.02,
+        cinematicWidth: 0.76,
+        cinematicScale: 1.12,
+        cinematicAnchorX: 0.57,
+        cinematicAnchorY: -0.03,
+      },
     },
     acted: false,
   },
@@ -207,6 +232,44 @@ const initialUnits: Unit[] = [
       cinematicScale: 1.16,
       cinematicAnchorX: 0.5,
       cinematicAnchorY: -0.04,
+      idle: {
+        mapWidth: 0.58,
+        mapScale: 1.08,
+        mapAnchorX: 0.5,
+        mapAnchorY: -0.02,
+        cinematicWidth: 0.56,
+        cinematicScale: 1.12,
+      },
+      run: {
+        mapWidth: 0.66,
+        mapScale: 1.16,
+        mapAnchorX: 0.53,
+        mapAnchorY: -0.05,
+        cinematicWidth: 0.64,
+        cinematicScale: 1.2,
+        cinematicAnchorX: 0.53,
+        cinematicAnchorY: -0.06,
+      },
+      attack: {
+        mapWidth: 0.7,
+        mapScale: 1.18,
+        mapAnchorX: 0.56,
+        mapAnchorY: -0.06,
+        cinematicWidth: 0.7,
+        cinematicScale: 1.24,
+        cinematicAnchorX: 0.56,
+        cinematicAnchorY: -0.08,
+      },
+      jump: {
+        mapWidth: 0.64,
+        mapScale: 1.15,
+        mapAnchorX: 0.52,
+        mapAnchorY: -0.07,
+        cinematicWidth: 0.62,
+        cinematicScale: 1.2,
+        cinematicAnchorX: 0.52,
+        cinematicAnchorY: -0.1,
+      },
     },
     acted: false,
   },
@@ -242,6 +305,24 @@ const initialUnits: Unit[] = [
       cinematicScale: 1.04,
       cinematicAnchorX: 0.5,
       cinematicAnchorY: -0.02,
+      run: {
+        mapWidth: 0.9,
+        mapScale: 1.03,
+        mapAnchorY: -0.03,
+        cinematicWidth: 0.84,
+        cinematicScale: 1.08,
+        cinematicAnchorY: -0.04,
+      },
+      attack: {
+        mapWidth: 0.94,
+        mapScale: 1.05,
+        mapAnchorX: 0.54,
+        mapAnchorY: -0.04,
+        cinematicWidth: 0.88,
+        cinematicScale: 1.1,
+        cinematicAnchorX: 0.55,
+        cinematicAnchorY: -0.05,
+      },
     },
     acted: false,
   },
@@ -277,6 +358,26 @@ const initialUnits: Unit[] = [
       cinematicScale: 1.12,
       cinematicAnchorX: 0.52,
       cinematicAnchorY: -0.03,
+      run: {
+        mapWidth: 0.82,
+        mapScale: 1.12,
+        mapAnchorX: 0.56,
+        mapAnchorY: -0.05,
+        cinematicWidth: 0.76,
+        cinematicScale: 1.16,
+        cinematicAnchorX: 0.56,
+        cinematicAnchorY: -0.06,
+      },
+      attack: {
+        mapWidth: 0.86,
+        mapScale: 1.15,
+        mapAnchorX: 0.58,
+        mapAnchorY: -0.06,
+        cinematicWidth: 0.8,
+        cinematicScale: 1.2,
+        cinematicAnchorX: 0.58,
+        cinematicAnchorY: -0.08,
+      },
     },
   },
   {
@@ -315,15 +416,15 @@ function clampToBoard(x: number, y: number) {
 function getUnitSpriteState(unit: Unit, flags: { selected: boolean; moving: boolean; attacking: boolean; healing: boolean }) {
   if (!unit.spriteSheet || !unit.spriteAnims || !unit.spriteSheetCols || !unit.spriteSheetRows) return null;
 
-  const activeAnim = flags.attacking
-    ? unit.spriteAnims.attack
+  const activeKey: SpriteAnimKey = flags.attacking
+    ? "attack"
     : flags.moving
-      ? unit.spriteAnims.run
-      : flags.healing
-        ? unit.spriteAnims.jump ?? unit.spriteAnims.idle
-        : flags.selected
-          ? unit.spriteAnims.jump ?? unit.spriteAnims.idle
-          : unit.spriteAnims.idle;
+      ? "run"
+      : flags.healing || flags.selected
+        ? (unit.spriteAnims.jump ? "jump" : "idle")
+        : "idle";
+
+  const activeAnim = unit.spriteAnims[activeKey];
 
   if (!activeAnim) return null;
 
@@ -334,7 +435,11 @@ function getUnitSpriteState(unit: Unit, flags: { selected: boolean; moving: bool
     row: activeAnim.row,
     frames: Math.max(1, activeAnim.frames),
     fps: Math.max(1, activeAnim.fps),
-    presentation: unit.spritePresentation,
+    presentation: {
+      ...unit.spritePresentation,
+      ...(unit.spritePresentation?.[activeKey] ?? {}),
+    },
+    animKey: activeKey,
   };
 }
 
