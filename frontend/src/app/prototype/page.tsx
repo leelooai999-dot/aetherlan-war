@@ -38,6 +38,7 @@ type Unit = {
   moveRange: number;
   desc: string;
   portrait?: string;
+  profilePortrait?: string;
   runSprite?: string;
   spriteSheet?: string;
   spriteSheetCols?: number;
@@ -139,7 +140,17 @@ const initialUnits: Unit[] = [
     moveRange: 2,
     desc: "前排守护者，擅长反击与星辉斩击。",
     portrait: "/characters/samuel.png",
+    profilePortrait: "/characters/samuel-profile-pic.png",
     runSprite: "/characters/elliot-run.png",
+    spriteSheet: "/characters/samuel-sprite.png",
+    spriteSheetCols: 11,
+    spriteSheetRows: 5,
+    spriteAnims: {
+      idle: { row: 0, frames: 11, fps: 8 },
+      run: { row: 1, frames: 10, fps: 11 },
+      jump: { row: 2, frames: 10, fps: 10 },
+      attack: { row: 3, frames: 10, fps: 12 },
+    },
     acted: false,
   },
   {
@@ -155,14 +166,15 @@ const initialUnits: Unit[] = [
     moveRange: 2,
     desc: "17岁的妹妹，擅长风系、治愈与辅助控场。",
     portrait: "/characters/isolde.png",
-    spriteSheet: "/characters/heroine-sprite-sheet.png",
-    spriteSheetCols: 9,
+    profilePortrait: "/characters/isolde-profile-pic.png",
+    spriteSheet: "/characters/isolde-sprite.png",
+    spriteSheetCols: 11,
     spriteSheetRows: 5,
     spriteAnims: {
-      idle: { row: 0, frames: 1, fps: 1 },
-      run: { row: 0, frames: 9, fps: 10 },
-      jump: { row: 1, frames: 8, fps: 10 },
-      attack: { row: 2, frames: 7, fps: 12 },
+      idle: { row: 0, frames: 11, fps: 8 },
+      run: { row: 1, frames: 10, fps: 11 },
+      jump: { row: 2, frames: 10, fps: 10 },
+      attack: { row: 3, frames: 10, fps: 12 },
     },
     acted: false,
   },
@@ -179,6 +191,16 @@ const initialUnits: Unit[] = [
     moveRange: 3,
     desc: "能踏风而行的灵鹿，是团队的移动治愈站。",
     portrait: "/characters/moon-deer.png",
+    profilePortrait: "/characters/deer-profile-pic.png",
+    spriteSheet: "/characters/moon-deer-sprite.png",
+    spriteSheetCols: 10,
+    spriteSheetRows: 5,
+    spriteAnims: {
+      idle: { row: 0, frames: 10, fps: 8 },
+      run: { row: 1, frames: 9, fps: 11 },
+      jump: { row: 2, frames: 8, fps: 10 },
+      attack: { row: 3, frames: 8, fps: 12 },
+    },
     acted: false,
   },
   {
@@ -194,6 +216,16 @@ const initialUnits: Unit[] = [
     moveRange: 2,
     desc: "会快速切入后排的异化魔兽。",
     portrait: "/characters/mutated-beast.png",
+    profilePortrait: "/characters/mutated-monster-profile-pic.png",
+    spriteSheet: "/characters/mutated-beast-sprite.png",
+    spriteSheetCols: 11,
+    spriteSheetRows: 5,
+    spriteAnims: {
+      idle: { row: 0, frames: 11, fps: 8 },
+      run: { row: 1, frames: 9, fps: 11 },
+      jump: { row: 2, frames: 9, fps: 10 },
+      attack: { row: 3, frames: 8, fps: 12 },
+    },
   },
   {
     id: "apostle",
@@ -1180,6 +1212,26 @@ export default function PrototypePage() {
                 </p>
               ) : null}
             </div>
+
+            {selected ? (
+              <div className="fixed bottom-4 left-4 z-[80] w-[150px] overflow-hidden rounded-2xl border border-cyan-300/20 bg-slate-950/85 shadow-2xl backdrop-blur sm:w-[180px]">
+                <div className="relative h-[180px] w-full sm:h-[220px]">
+                  <div
+                    className="absolute inset-0 bg-cover bg-center"
+                    style={{ backgroundImage: `url(${selected.profilePortrait ?? selected.portrait})` }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/25 to-transparent" />
+                  <div className="absolute left-3 top-3 rounded-full bg-cyan-300/90 px-2 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-950">
+                    Selected
+                  </div>
+                  <div className="absolute inset-x-0 bottom-0 p-3 text-white">
+                    <p className="text-base font-bold sm:text-lg">{selected.name}</p>
+                    <p className="text-xs text-cyan-100 sm:text-sm">{selected.role}</p>
+                    <p className="mt-2 text-xs text-slate-200">HP {selected.hp}/{selected.maxHp} · ATK {selected.atk}</p>
+                  </div>
+                </div>
+              </div>
+            ) : null}
 
             <div className="rounded-2xl bg-slate-900/70 p-4">
               <p className="text-xs uppercase tracking-[0.3em] text-cyan-300 sm:text-sm">战斗日志</p>
