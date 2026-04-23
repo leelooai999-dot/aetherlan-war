@@ -101,6 +101,7 @@ type MovementFx = {
   spriteRow?: number;
   spriteFrames?: number;
   spriteFps?: number;
+  spritePresentation?: SpritePresentation;
   durationMs: number;
   facing: "left" | "right";
   team: Team;
@@ -722,6 +723,10 @@ export default function PrototypePage() {
           spriteRow: selected.spriteAnims?.run?.row,
           spriteFrames: selected.spriteAnims?.run?.frames,
           spriteFps: selected.spriteAnims?.run?.fps,
+          spritePresentation: {
+            ...selected.spritePresentation,
+            ...(selected.spritePresentation?.run ?? {}),
+          },
           durationMs,
           facing: x < selected.x ? "left" : "right",
           team: selected.team,
@@ -961,12 +966,32 @@ export default function PrototypePage() {
           0%, 100% { transform: translate(-50%, 0) scale(1); }
           50% { transform: translate(-50%, -3%) scale(1.01); }
         }
+        @keyframes impactFlash {
+          0% { opacity: 0; transform: scale(0.7); }
+          30% { opacity: 0.9; transform: scale(1.05); }
+          100% { opacity: 0; transform: scale(1.35); }
+        }
+        @keyframes skillPulse {
+          0%, 100% { opacity: 0.2; transform: scale(0.94); }
+          50% { opacity: 0.7; transform: scale(1.08); }
+        }
       `}</style>
       <div className="mx-auto max-w-7xl">
         {battleCinematic ? (
           <div className="fixed inset-0 z-[90] flex items-center justify-center bg-slate-950/92 backdrop-blur-sm px-4">
             <div className="relative flex h-full max-h-[90vh] w-full max-w-6xl items-end justify-between overflow-hidden rounded-3xl border border-cyan-300/20 bg-[radial-gradient(circle_at_center,_rgba(34,211,238,0.12),_rgba(2,6,23,0.95)_60%)] px-6 py-10 sm:px-10">
               <div className="absolute inset-x-0 bottom-[18%] h-px bg-gradient-to-r from-transparent via-cyan-300/35 to-transparent" />
+              {battleCinematic.phase === "impact" ? (
+                <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+                  <div className="h-40 w-40 rounded-full bg-white/30 blur-xl animate-[impactFlash_0.45s_ease-out_forwards]" />
+                </div>
+              ) : null}
+              {battleCinematic.kind === "skill" ? (
+                <div className="pointer-events-none absolute inset-0 overflow-hidden">
+                  <div className="absolute left-[24%] bottom-[22%] h-40 w-40 rounded-full bg-cyan-300/20 blur-2xl animate-[skillPulse_1.1s_ease-in-out_infinite]" />
+                  <div className="absolute right-[18%] bottom-[28%] h-48 w-48 rounded-full bg-emerald-300/20 blur-2xl animate-[skillPulse_1.2s_ease-in-out_infinite]" />
+                </div>
+              ) : null}
               <div className={`relative flex w-[42%] min-w-[150px] justify-center self-end transition-all duration-300 ${battleCinematic.phase === "run" ? "translate-x-[10%]" : battleCinematic.phase === "attack" ? "translate-x-[22%] scale-110" : "translate-x-[18%] scale-105"}`}>
                 <div className="relative h-[44vh] w-full max-w-[320px] min-h-[220px]">
                   {cinematicAttackerSprite ? (
@@ -1191,12 +1216,18 @@ export default function PrototypePage() {
                         />
                       ) : movementFx.spriteSheet && movementFx.spriteSheetCols && movementFx.spriteSheetRows ? (
                         <div
-                          className="h-full w-full bg-no-repeat [image-rendering:pixelated] drop-shadow-[0_10px_18px_rgba(0,0,0,0.45)]"
+                          className="absolute bottom-0 bg-no-repeat [image-rendering:pixelated]"
                           style={{
+                            left: `${(movementFx.spritePresentation?.mapAnchorX ?? 0.5) * 100}%`,
+                            width: `${(movementFx.spritePresentation?.mapWidth ?? 0.72) * 100}%`,
+                            height: `${(movementFx.spritePresentation?.mapScale ?? 1) * 100}%`,
+                            transform: `translateX(-${(movementFx.spritePresentation?.mapAnchorX ?? 0.5) * 100}%) translateY(${(movementFx.spritePresentation?.mapAnchorY ?? 0) * 100}%)`,
+                            transformOrigin: 'center bottom',
                             backgroundImage: `url(${movementFx.spriteSheet})`,
                             backgroundSize: `${movementFx.spriteSheetCols * 100}% ${movementFx.spriteSheetRows * 100}%`,
                             backgroundPositionX: '0%',
                             backgroundPositionY: `${((movementFx.spriteRow ?? 0) / Math.max(1, movementFx.spriteSheetRows - 1)) * 100}%`,
+                            filter: 'drop-shadow(0 10px 18px rgba(0,0,0,0.45))',
                             ['--run-start-x' as string]: '0%',
                             ['--run-start-y' as string]: '0%',
                             ['--run-end-x' as string]: `${(movementFx.toX - movementFx.fromX) * (100 / runSpriteScale)}%`,
