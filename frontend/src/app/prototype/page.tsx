@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { Application, BlurFilter, Container, Graphics, Sprite, Text, TextStyle } from "pixi.js";
 
 const tileVisualSize = 56;
 const spriteSheetColumns = 5;
@@ -79,6 +80,14 @@ type BattleCinematic = {
   damage: number;
   phase: "run" | "attack" | "impact";
   videoEffect?: string;
+};
+
+type FullscreenBattleFx = {
+  attacker: Unit;
+  defender: Unit;
+  damage: number;
+  kind: "attack" | "skill";
+  combo?: boolean;
 };
 
 type CombatFx = {
@@ -471,7 +480,9 @@ export default function PrototypePage() {
   const [fxSeed, setFxSeed] = useState(1);
   const [movementFx, setMovementFx] = useState<MovementFx | null>(null);
   const [battleCinematic, setBattleCinematic] = useState<BattleCinematic | null>(null);
+  const [fullscreenBattleFx, setFullscreenBattleFx] = useState<FullscreenBattleFx | null>(null);
   const cinematicCleanupRef = useRef<number | null>(null);
+  const fullscreenBattleCanvasRef = useRef<HTMLDivElement | null>(null);
 
   function triggerFx(unitId: string, kind: CombatFx["kind"], options?: Pick<CombatFx, "value" | "positive">) {
     const nextId = fxSeed;
@@ -521,6 +532,7 @@ export default function PrototypePage() {
   const allPlayerActed = playerUnits.length > 0 && playerUnits.every((unit) => unit.acted);
   const defeatedEnemies = Math.max(0, 3 - enemies.length);
   const missionProgress = Math.min(100, Math.round((defeatedEnemies / 3) * 60 + ((12 - objectiveHp) / 12) * 40));
+  const fullscreenBattleActive = Boolean(fullscreenBattleFx);
 
   function getUnit(x: number, y: number) {
     return units.find((unit) => unit.x === x && unit.y === y);
@@ -583,12 +595,14 @@ export default function PrototypePage() {
     );
   }
 
-  function playBattleCinematic(attacker: Unit, defender: Unit, damage: number, kind: "attack" | "skill", onDone?: () => void) {
+  function playBattleCinematic(attacker: Unit, defender: Unit, damage: number, kind: "attack" | "skill", onDone?: () => void, options?: { combo?: boolean }) {
     const videoEffect = attacker.id === "samuel" && kind === "attack" ? "/effects/samuel-attack.webm" : undefined;
     if (cinematicCleanupRef.current) {
       window.clearTimeout(cinematicCleanupRef.current);
       cinematicCleanupRef.current = null;
     }
+
+    setFullscreenBattleFx({ attacker, defender, damage, kind, combo: options?.combo });
     setBattleCinematic({ attacker, defender, damage, kind, phase: "run", videoEffect });
 
     window.setTimeout(() => {
@@ -599,12 +613,11 @@ export default function PrototypePage() {
       setBattleCinematic((prev) => (prev ? { ...prev, phase: "impact" } : null));
       damageUnit(defender.id, damage, attacker.id, kind);
       onDone?.();
-      if (!videoEffect) {
-        cinematicCleanupRef.current = window.setTimeout(() => {
-          setBattleCinematic(null);
-          cinematicCleanupRef.current = null;
-        }, kind === "skill" ? 450 : 400);
-      }
+      cinematicCleanupRef.current = window.setTimeout(() => {
+        setBattleCinematic(null);
+        setFullscreenBattleFx(null);
+        cinematicCleanupRef.current = null;
+      }, kind === "skill" ? 650 : 520);
     }, kind === "skill" ? 1050 : 920);
   }
 
@@ -639,7 +652,7 @@ export default function PrototypePage() {
             pushDialogue("塞缪尔", "伊索尔德，现在！");
             pushDialogue("伊索尔德", "星风会回应我们的！");
             pushLog(`塞缪尔与伊索尔德发动「星风连携」，对 ${target.name} 造成 ${mainDamage} 点伤害，并波及周围敌人。`);
-          });
+          }, { combo: true });
         } else {
           const skillDamage = selected.atk + 2;
           playBattleCinematic(selected, target, skillDamage, "skill", () => {
@@ -886,12 +899,223 @@ export default function PrototypePage() {
   }, [objectiveHp, samuel, isolde, enemies.length, battleState, turnCount]);
 
   useEffect(() => {
-    if (turn !== "enemy" || battleState !== "ongoing") return;
+    if (turn !== "enemy" || battleState !== "ongoing" || fullscreenBattleActive) return;
     const timer = window.setTimeout(() => {
       enemyTurnStep();
     }, 900);
     return () => window.clearTimeout(timer);
-  }, [turn, battleState, objectiveHp]);
+  }, [turn, battleState, objectiveHp, fullscreenBattleActive]);
+
+  useEffect(() => {
+    if (!fullscreenBattleFx || !fullscreenBattleCanvasRef.current) return;
+
+    let cancelled = false;
+    let app: Application | null = null;
+
+    const mount = async () => {
+      app = new Application();
+      await app.init({
+        width: 1280,
+        height: 720,
+        backgroundAlpha: 0,
+        antialias: true,
+        resolution: Math.min(window.devicePixelRatio || 1, 2),
+      });
+
+      if (cancelled || !fullscreenBattleCanvasRef.current || !app) return;
+
+      fullscreenBattleCanvasRef.current.innerHTML = "";
+      fullscreenBattleCanvasRef.current.appendChild(app.canvas);
+      app.canvas.style.width = "100%";
+      app.canvas.style.height = "100%";
+      app.canvas.style.display = "block";
+
+      const stage = app.stage;
+      const blur = new BlurFilter({ strength: 2 });
+
+      const background = new Graphics()
+        .rect(0, 0, 1280, 720)
+        .fill({ color: 0x050816 });
+      stage.addChild(background);
+
+      const vignette = new Graphics()
+        .rect(0, 0, 1280, 720)
+        .fill({ color: 0x000000, alpha: 0.18 });
+      vignette.filters = [blur];
+      stage.addChild(vignette);
+
+      const horizon = new Graphics()
+        .roundRect(90, 470, 1100, 120, 48)
+        .fill({ color: 0x0f172a, alpha: 0.95 });
+      stage.addChild(horizon);
+
+      const energyBand = new Graphics()
+        .roundRect(120, 500, 1040, 12, 12)
+        .fill({ color: fullscreenBattleFx.kind === "skill" ? 0x34d399 : 0x67e8f9, alpha: 0.7 });
+      stage.addChild(energyBand);
+
+      const flash = new Graphics().rect(0, 0, 1280, 720).fill({ color: 0xffffff, alpha: 0 });
+      stage.addChild(flash);
+
+      const attackerWrap = new Container();
+      attackerWrap.position.set(280, 520);
+      stage.addChild(attackerWrap);
+
+      const defenderWrap = new Container();
+      defenderWrap.position.set(980, 520);
+      stage.addChild(defenderWrap);
+
+      const attackerShadow = new Graphics().ellipse(0, 0, 120, 26).fill({ color: 0x000000, alpha: 0.35 });
+      attackerWrap.addChild(attackerShadow);
+      const defenderShadow = new Graphics().ellipse(0, 0, 120, 26).fill({ color: 0x000000, alpha: 0.35 });
+      defenderWrap.addChild(defenderShadow);
+
+      const attackerSprite = Sprite.from(fullscreenBattleFx.attacker.profilePortrait ?? fullscreenBattleFx.attacker.portrait ?? "/characters/samuel-profile-pic.png");
+      attackerSprite.anchor.set(0.5, 1);
+      attackerSprite.width = 290;
+      attackerSprite.height = 370;
+      attackerSprite.y = -10;
+      attackerWrap.addChild(attackerSprite);
+
+      const defenderSprite = Sprite.from(fullscreenBattleFx.defender.profilePortrait ?? fullscreenBattleFx.defender.portrait ?? "/characters/mutated-monster-profile-pic.png");
+      defenderSprite.anchor.set(0.5, 1);
+      defenderSprite.width = 290;
+      defenderSprite.height = 370;
+      defenderSprite.scale.x = -1;
+      defenderSprite.y = -10;
+      defenderWrap.addChild(defenderSprite);
+
+      const slash = new Graphics();
+      slash.visible = false;
+      stage.addChild(slash);
+
+      const impactRing = new Graphics();
+      impactRing.visible = false;
+      stage.addChild(impactRing);
+
+      const labelStyle = new TextStyle({
+        fill: 0xffffff,
+        fontFamily: 'Arial',
+        fontSize: 26,
+        fontWeight: '700',
+        dropShadow: { alpha: 0.5, blur: 6, color: 0x000000, distance: 2 },
+      });
+      const minorStyle = new TextStyle({
+        fill: 0x93c5fd,
+        fontFamily: 'Arial',
+        fontSize: 18,
+        fontWeight: '600',
+      });
+      const damageStyle = new TextStyle({
+        fill: 0xfff1f2,
+        fontFamily: 'Arial',
+        fontSize: 72,
+        fontWeight: '900',
+        dropShadow: { alpha: 0.7, blur: 12, color: 0x7f1d1d, distance: 4 },
+      });
+
+      const attackerName = new Text({ text: fullscreenBattleFx.attacker.name, style: labelStyle });
+      attackerName.position.set(90, 78);
+      stage.addChild(attackerName);
+      const attackerRole = new Text({ text: fullscreenBattleFx.attacker.role, style: minorStyle });
+      attackerRole.position.set(92, 114);
+      stage.addChild(attackerRole);
+
+      const defenderName = new Text({ text: fullscreenBattleFx.defender.name, style: labelStyle });
+      defenderName.anchor.set(1, 0);
+      defenderName.position.set(1190, 78);
+      stage.addChild(defenderName);
+      const defenderRole = new Text({ text: fullscreenBattleFx.defender.role, style: minorStyle });
+      defenderRole.anchor.set(1, 0);
+      defenderRole.position.set(1188, 114);
+      stage.addChild(defenderRole);
+
+      const phaseText = new Text({
+        text: fullscreenBattleFx.combo ? '星风连携' : fullscreenBattleFx.kind === 'skill' ? '奥义释放' : '正面交锋',
+        style: new TextStyle({
+          fill: fullscreenBattleFx.kind === 'skill' ? 0x86efac : 0x67e8f9,
+          fontFamily: 'Arial',
+          fontSize: 22,
+          fontWeight: '800',
+          letterSpacing: 2,
+        }),
+      });
+      phaseText.anchor.set(0.5, 0);
+      phaseText.position.set(640, 64);
+      stage.addChild(phaseText);
+
+      const damageText = new Text({ text: `-${fullscreenBattleFx.damage}`, style: damageStyle });
+      damageText.anchor.set(0.5);
+      damageText.position.set(920, 250);
+      damageText.alpha = 0;
+      stage.addChild(damageText);
+
+      const overlayText = new Text({
+        text: fullscreenBattleFx.kind === 'skill' ? '力量正在凝聚' : '冲刺突进',
+        style: new TextStyle({
+          fill: 0xe2e8f0,
+          fontFamily: 'Arial',
+          fontSize: 20,
+          fontWeight: '700',
+        }),
+      });
+      overlayText.anchor.set(0.5);
+      overlayText.position.set(640, 640);
+      stage.addChild(overlayText);
+
+      let elapsed = 0;
+      app.ticker.add((ticker) => {
+        if (cancelled) return;
+        elapsed += ticker.deltaMS;
+
+        attackerWrap.x = elapsed < 380 ? 280 + Math.min(elapsed / 380, 1) * 200 : elapsed < 620 ? 480 : 460;
+        attackerWrap.y = 520 - Math.sin(Math.min(elapsed, 620) / 620 * Math.PI) * (elapsed < 620 ? 34 : 0);
+
+        if (elapsed > 420) {
+          overlayText.text = fullscreenBattleFx.kind === 'skill' ? '能量爆发' : '命中瞬间';
+          slash.visible = true;
+          slash.clear();
+          slash.moveTo(520, 230);
+          slash.lineTo(820, 410);
+          slash.stroke({ width: fullscreenBattleFx.kind === 'skill' ? 18 : 12, color: fullscreenBattleFx.kind === 'skill' ? 0x86efac : 0x67e8f9, alpha: 0.9, cap: 'round' });
+          slash.alpha = Math.max(0, 1 - (elapsed - 420) / 240);
+        }
+
+        if (elapsed > 650) {
+          flash.alpha = Math.max(0, 0.85 - (elapsed - 650) / 160);
+          impactRing.visible = true;
+          const ringScale = 1 + (elapsed - 650) / 120;
+          impactRing.clear();
+          impactRing.circle(940, 300, 70 * ringScale).stroke({ width: 8, color: 0xffffff, alpha: Math.max(0, 0.7 - (elapsed - 650) / 220) });
+          defenderWrap.x = 980 + Math.sin((elapsed - 650) / 24) * 18;
+          defenderWrap.rotation = Math.min(0.18, (elapsed - 650) / 1200);
+          damageText.alpha = Math.min(1, (elapsed - 650) / 120);
+          damageText.y = 250 - Math.min(70, (elapsed - 650) / 4);
+          stage.x = Math.sin((elapsed - 650) / 20) * 9;
+          stage.y = Math.cos((elapsed - 650) / 24) * 5;
+        }
+
+        if (elapsed > 980) {
+          overlayText.text = '战斗结算中';
+          stage.x *= 0.82;
+          stage.y *= 0.82;
+          defenderWrap.rotation *= 0.85;
+        }
+      });
+    };
+
+    mount();
+
+    return () => {
+      cancelled = true;
+      if (app) {
+        app.destroy(true, { children: true });
+      }
+      if (fullscreenBattleCanvasRef.current) {
+        fullscreenBattleCanvasRef.current.innerHTML = "";
+      }
+    };
+  }, [fullscreenBattleFx]);
 
   useEffect(() => {
     if (turn === "player" && allPlayerActed && battleState === "ongoing") {
@@ -930,6 +1154,8 @@ export default function PrototypePage() {
     setCombatFx([]);
     setFxSeed(1);
     setMovementFx(null);
+    setBattleCinematic(null);
+    setFullscreenBattleFx(null);
   }
 
   const selectedTerrain = selected ? terrainMap[selected.y][selected.x] : null;
@@ -986,6 +1212,13 @@ export default function PrototypePage() {
         }
       `}</style>
       <div className="mx-auto max-w-7xl">
+        {fullscreenBattleActive ? (
+          <div className="fixed inset-0 z-[100] overflow-hidden bg-slate-950/95 backdrop-blur-md">
+            <div ref={fullscreenBattleCanvasRef} className="absolute inset-0" />
+            <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-black/55 to-transparent" />
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-56 bg-gradient-to-t from-black/70 to-transparent" />
+          </div>
+        ) : null}
         {battleCinematic ? (
           <div className="fixed inset-0 z-[90] flex items-center justify-center bg-slate-950/92 backdrop-blur-sm px-4">
             <div className="relative flex h-full max-h-[90vh] w-full max-w-6xl items-end justify-between overflow-hidden rounded-3xl border border-cyan-300/20 bg-[radial-gradient(circle_at_center,_rgba(34,211,238,0.12),_rgba(2,6,23,0.95)_60%)] px-6 py-10 sm:px-10">
