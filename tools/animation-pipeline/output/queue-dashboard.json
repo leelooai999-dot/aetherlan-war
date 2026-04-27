@@ -1,0 +1,332 @@
+{
+  "generatedAt": "2026-04-26T19:27:26.158Z",
+  "total": 8,
+  "queued": 0,
+  "processing": 0,
+  "done": 8,
+  "failed": 0,
+  "jobs": [
+    {
+      "id": "gen-20260425220734-152f61",
+      "status": "done",
+      "createdAt": "2026-04-25T22:07:34.878245+00:00",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "人类战士",
+        "action": "受击",
+        "frameCount": "8",
+        "intent": "battle-animation-assets"
+      }
+    },
+    {
+      "id": "gen-20260425223011-b36979",
+      "status": "done",
+      "createdAt": "2026-04-25T22:30:11.872835+00:00",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "元素法师",
+        "action": "施法",
+        "frameCount": "8",
+        "intent": "battle-animation-assets"
+      }
+    },
+    {
+      "id": "gen-20260426014542-0109ea",
+      "status": "done",
+      "createdAt": "2026-04-26T01:45:42.694667+00:00",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "人类战士",
+        "action": "受击",
+        "frameCount": "8",
+        "intent": "battle-animation-assets"
+      }
+    },
+    {
+      "id": "gen-20260426022445-6c7d7d",
+      "status": "done",
+      "createdAt": "2026-04-26T02:24:45.051966+00:00",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "人类战士",
+        "action": "待机",
+        "frameCount": "16",
+        "intent": "battle-animation-assets"
+      }
+    },
+    {
+      "id": "gen-20260426022646-74f5d0",
+      "status": "done",
+      "createdAt": "2026-04-26T02:26:46.648387+00:00",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "人类战士",
+        "action": "受击",
+        "frameCount": "8",
+        "intent": "battle-animation-assets"
+      }
+    },
+    {
+      "id": "gen-20260426022711-1e1eba",
+      "status": "done",
+      "createdAt": "2026-04-26T02:27:11.216008+00:00",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "人类战士",
+        "action": "受击",
+        "frameCount": "8",
+        "intent": "battle-animation-assets"
+      }
+    },
+    {
+      "id": "gen-20260426022738-ff6040",
+      "status": "done",
+      "createdAt": "2026-04-26T02:27:38.419572+00:00",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "人类战士",
+        "action": "待机",
+        "frameCount": "16",
+        "intent": "battle-animation-assets"
+      }
+    },
+    {
+      "id": "gen-20260426022811-e89052",
+      "status": "done",
+      "createdAt": "2026-04-26T02:28:11.157668+00:00",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "人类战士",
+        "action": "待机",
+        "frameCount": "12",
+        "intent": "battle-animation-assets"
+      }
+    }
+  ],
+  "recentResults": [
+    {
+      "jobId": "gen-20260426022811-e89052",
+      "createdAt": "2026-04-26T04:29:55.891Z",
+      "status": "done",
+      "adapter": "doubao-adapter",
+      "note": "Queue consumer created job workspace, copied uploaded inputs, emitted stub frame/atlas/bundle manifests, and now attempts image trim preprocessing for uploaded PNG/WebP sources.",
+      "request": {
+        "role": "人类战士",
+        "action": "待机",
+        "frameCount": "12",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "originalName": "samuel profile pic男主头像.png",
+          "type": "image/png",
+          "size": 1525929
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260426022811-e89052.png",
+      "processedPreviewUrl": "/generated-previews/gen-20260426022811-e89052.processed.png"
+    },
+    {
+      "jobId": "gen-20260426022738-ff6040",
+      "createdAt": "2026-04-26T04:29:55.042Z",
+      "status": "done",
+      "adapter": "doubao-adapter",
+      "note": "Queue consumer created job workspace, copied uploaded inputs, emitted stub frame/atlas/bundle manifests, and now attempts image trim preprocessing for uploaded PNG/WebP sources.",
+      "request": {
+        "role": "人类战士",
+        "action": "待机",
+        "frameCount": "16",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "originalName": "samuel profile pic男主头像.png",
+          "type": "image/png",
+          "size": 1525929
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260426022738-ff6040.png",
+      "processedPreviewUrl": "/generated-previews/gen-20260426022738-ff6040.processed.png"
+    },
+    {
+      "jobId": "gen-20260426022711-1e1eba",
+      "createdAt": "2026-04-26T04:29:54.201Z",
+      "status": "done",
+      "adapter": "doubao-adapter",
+      "note": "Queue consumer created job workspace, copied uploaded inputs, emitted stub frame/atlas/bundle manifests, and now attempts image trim preprocessing for uploaded PNG/WebP sources.",
+      "request": {
+        "role": "人类战士",
+        "action": "受击",
+        "frameCount": "8",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "originalName": "smoke.png",
+          "type": "image/png",
+          "size": 1000
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260426022711-1e1eba.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260426022646-74f5d0",
+      "createdAt": "2026-04-26T04:29:54.099Z",
+      "status": "done",
+      "adapter": "doubao-adapter",
+      "note": "Queue consumer created job workspace, copied uploaded inputs, emitted stub frame/atlas/bundle manifests, and now attempts image trim preprocessing for uploaded PNG/WebP sources.",
+      "request": {
+        "role": "人类战士",
+        "action": "受击",
+        "frameCount": "8",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "originalName": "smoke.png",
+          "type": "image/png",
+          "size": 1000
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260426022646-74f5d0.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260426022445-6c7d7d",
+      "createdAt": "2026-04-26T04:29:54.005Z",
+      "status": "done",
+      "adapter": "doubao-adapter",
+      "note": "Queue consumer created job workspace, copied uploaded inputs, emitted stub frame/atlas/bundle manifests, and now attempts image trim preprocessing for uploaded PNG/WebP sources.",
+      "request": {
+        "role": "人类战士",
+        "action": "待机",
+        "frameCount": "16",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "originalName": "samuel profile pic男主头像.png",
+          "type": "image/png",
+          "size": 1525929
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260426022445-6c7d7d.png",
+      "processedPreviewUrl": "/generated-previews/gen-20260426022445-6c7d7d.processed.png"
+    },
+    {
+      "jobId": "gen-20260426014542-0109ea",
+      "createdAt": "2026-04-26T04:29:53.438Z",
+      "status": "done",
+      "adapter": "doubao-adapter",
+      "note": "Queue consumer created job workspace, copied uploaded inputs, emitted stub frame/atlas/bundle manifests, and now attempts image trim preprocessing for uploaded PNG/WebP sources.",
+      "request": {
+        "role": "人类战士",
+        "action": "受击",
+        "frameCount": "8",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "originalName": "smoke.png",
+          "type": "image/png",
+          "size": 1450000
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260426014542-0109ea.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260425223011-b36979",
+      "createdAt": "2026-04-26T04:29:53.267Z",
+      "status": "done",
+      "adapter": "doubao-adapter",
+      "note": "Queue consumer created job workspace, copied uploaded inputs, emitted stub frame/atlas/bundle manifests, and now attempts image trim preprocessing for uploaded PNG/WebP sources.",
+      "request": {
+        "role": "元素法师",
+        "action": "施法",
+        "frameCount": "8",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "originalName": "nginx-smoke.txt",
+          "type": "text/plain",
+          "size": 10
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": null,
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260425220734-152f61",
+      "createdAt": "2026-04-26T04:29:53.264Z",
+      "status": "done",
+      "adapter": "doubao-adapter",
+      "note": "Queue consumer created job workspace, copied uploaded inputs, emitted stub frame/atlas/bundle manifests, and now attempts image trim preprocessing for uploaded PNG/WebP sources.",
+      "request": {
+        "role": "人类战士",
+        "action": "受击",
+        "frameCount": "8",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "originalName": "smoke.txt",
+          "type": "text/plain",
+          "size": 15
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": null,
+      "processedPreviewUrl": null
+    }
+  ]
+}

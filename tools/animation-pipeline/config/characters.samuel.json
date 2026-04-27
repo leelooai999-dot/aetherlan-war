@@ -1,0 +1,44 @@
+{
+  "characterId": "samuel",
+  "displayName": "Samuel",
+  "referenceImage": "../../../frontend/public/characters/samuel.png",
+  "profileImage": "../../../frontend/public/characters/samuel-profile-pic.png",
+  "mapModule": {
+    "sheet": "../../../frontend/public/characters/samuel-sprite.png",
+    "frameWidth": 256,
+    "frameHeight": 256,
+    "rows": 4,
+    "columns": 4,
+    "actions": {
+      "idle": { "start": 0, "count": 4, "fps": 8, "loop": true },
+      "run": { "start": 4, "count": 4, "fps": 10, "loop": true },
+      "hit": { "start": 8, "count": 2, "fps": 12, "loop": false },
+      "death": { "start": 10, "count": 4, "fps": 8, "loop": false }
+    },
+    "anchor": { "x": 0.5, "y": 0.82 },
+    "scale": 1
+  },
+  "performanceModule": {
+    "actions": [
+      {
+        "id": "attack",
+        "type": "video",
+        "source": "../../../frontend/public/effects/samuel-attack.webm",
+        "fps": 24,
+        "loop": false,
+        "anchor": { "x": 0.5, "y": 0.75 }
+      }
+    ]
+  },
+  "generation": {
+    "style": "Amadis-style tactical JRPG battle animation, polished fantasy 2D sprite feel",
+    "prompts": {
+      "master": "full body hero, A-pose, front view, transparent or plain background, same face, same armor, same sword, consistent proportions",
+      "idle": "subtle breathing idle loop, fantasy warrior, same costume, transparent background",
+      "run": "side-facing tactical run cycle, fantasy warrior, same costume, transparent background",
+      "hit": "brief recoil hit reaction, fantasy warrior, same costume, transparent background",
+      "death": "falling defeat sequence, fantasy warrior, same costume, transparent background",
+      "attackFx": "bright sword slash arc, alpha background, fantasy hit effect"
+    }
+  }
+}

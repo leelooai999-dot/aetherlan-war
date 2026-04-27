@@ -1,0 +1,20 @@
+{
+  "characterId": "moon-deer",
+  "atlasImage": "atlases/moon-deer-map-atlas.png",
+  "atlasData": "atlases/moon-deer-map-atlas.json",
+  "sourceSheets": [
+    {
+      "type": "map",
+      "path": "../../../frontend/public/characters/moon-deer-sprite.png",
+      "frameWidth": 256,
+      "frameHeight": 256,
+      "rows": 4,
+      "columns": 4
+    }
+  ],
+  "effects": [],
+  "notes": [
+    "This file is a pack plan for a later TexturePacker or custom Python pack step.",
+    "Current pipeline preserves existing sources and emits normalized pack metadata."
+  ]
+}

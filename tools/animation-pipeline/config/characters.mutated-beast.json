@@ -1,0 +1,34 @@
+{
+  "characterId": "mutated-beast",
+  "displayName": "Mutated Beast",
+  "referenceImage": "../../../frontend/public/characters/mutated-beast.png",
+  "profileImage": "../../../frontend/public/characters/mutated-monster-profile-pic.png",
+  "mapModule": {
+    "sheet": "../../../frontend/public/characters/mutated-beast-sprite.png",
+    "frameWidth": 256,
+    "frameHeight": 256,
+    "rows": 4,
+    "columns": 4,
+    "actions": {
+      "idle": { "start": 0, "count": 4, "fps": 8, "loop": true },
+      "run": { "start": 4, "count": 4, "fps": 10, "loop": true },
+      "hit": { "start": 8, "count": 2, "fps": 12, "loop": false },
+      "death": { "start": 10, "count": 4, "fps": 8, "loop": false }
+    },
+    "anchor": { "x": 0.5, "y": 0.84 },
+    "scale": 1
+  },
+  "performanceModule": {
+    "actions": []
+  },
+  "generation": {
+    "style": "Amadis-style grotesque corrupted monster, readable battle sprite silhouette",
+    "prompts": {
+      "master": "full body mutated beast, front view, monstrous anatomy, consistent corrupted details, plain background",
+      "idle": "hostile monster idle loop, breathing and twitching, transparent background",
+      "run": "aggressive charge run cycle, corrupted beast, transparent background",
+      "hit": "violent recoil hit reaction, monster, transparent background",
+      "death": "heavy collapse defeat sequence, monster, transparent background"
+    }
+  }
+}

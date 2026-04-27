@@ -1,0 +1,50 @@
+{
+  "id": "gen-20260426014542-0109ea",
+  "createdAt": "2026-04-26T01:45:42.694667+00:00",
+  "status": "done",
+  "source": "public-generator-ui",
+  "storage": "hetzner-disk-persistent",
+  "request": {
+    "role": "人类战士",
+    "action": "受击",
+    "frameCount": "8",
+    "provider": "Doubao",
+    "notes": "multipart smoke after 413 fix",
+    "intent": "battle-animation-assets"
+  },
+  "uploads": [
+    {
+      "name": "smoke.png",
+      "size": 1450000,
+      "type": "image/png",
+      "path": "/opt/aetherlan-war/uploads/gen-20260426014542-0109ea/smoke.png"
+    }
+  ],
+  "workerPayload": {
+    "jobId": "gen-20260426014542-0109ea",
+    "role": "人类战士",
+    "action": "受击",
+    "provider": "Doubao",
+    "uploadCount": 1,
+    "uploadNames": [
+      "smoke.png"
+    ],
+    "status": "persistent-intake-received",
+    "nextStep": "dispatch-worker-from-queue"
+  },
+  "nextStep": "Queued on persistent Hetzner intake. Worker dispatch is the next integration step.",
+  "updatedAt": "2026-04-26T04:29:53.438Z",
+  "jobDir": "/root/.openclaw/workspace/projects/aetherlan-war/tools/animation-pipeline/jobs/gen-20260426014542-0109ea",
+  "adapter": "doubao-adapter",
+  "inputs": [
+    {
+      "originalName": "smoke.png",
+      "sourcePath": "/root/.openclaw/workspace/projects/aetherlan-war/tools/animation-pipeline/staging/hetzner-uploads/gen-20260426014542-0109ea/smoke.png",
+      "remotePersistentPath": "/opt/aetherlan-war/uploads/gen-20260426014542-0109ea/smoke.png",
+      "jobInputPath": "/root/.openclaw/workspace/projects/aetherlan-war/tools/animation-pipeline/jobs/gen-20260426014542-0109ea/inputs/smoke.png",
+      "size": 1450000,
+      "type": "image/png"
+    }
+  ],
+  "resultPath": "output/queue-results/gen-20260426014542-0109ea.result.json"
+}

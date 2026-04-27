@@ -1,0 +1,22 @@
+{
+  "characterId": "isolde",
+  "displayName": "Isolde",
+  "action": "master",
+  "prompt": "full body heroine, A-pose, front view, transparent or plain background, same face, same dress or armor, same weapon, consistent proportions",
+  "outputHint": "single transparent PNG",
+  "technicalSpec": {
+    "mapFrameWidth": 256,
+    "mapFrameHeight": 256,
+    "expectedRows": 4,
+    "expectedColumns": 4,
+    "alphaBackground": true,
+    "consistentCharacterIdentity": true
+  },
+  "targetFolder": "production-packs/isolde/incoming",
+  "acceptance": [
+    "transparent background",
+    "consistent identity with master reference",
+    "no cropped silhouette",
+    "usable for tactical presentation"
+  ]
+}

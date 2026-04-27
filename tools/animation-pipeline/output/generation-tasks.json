@@ -1,0 +1,198 @@
+{
+  "generatedAt": "2026-04-26T19:27:26.141Z",
+  "tasks": [
+    {
+      "characterId": "isolde",
+      "displayName": "Isolde",
+      "style": "Amadis-style tactical JRPG battle animation, elegant fantasy heroine sprite feel",
+      "referenceImage": "../../../frontend/public/characters/isolde.png",
+      "deliverables": [
+        "master A-pose reference PNG",
+        "map sprite sheet with idle/run/hit/death",
+        "per-action metadata json",
+        "transparent-background skill effect frames when needed"
+      ],
+      "actions": [
+        {
+          "action": "master",
+          "prompt": "full body heroine, A-pose, front view, transparent or plain background, same face, same dress or armor, same weapon, consistent proportions",
+          "outputHint": "single transparent PNG"
+        },
+        {
+          "action": "idle",
+          "prompt": "subtle breathing idle loop, fantasy heroine, same costume, transparent background",
+          "outputHint": "animation frame sequence or sheet"
+        },
+        {
+          "action": "run",
+          "prompt": "side-facing tactical run cycle, fantasy heroine, same costume, transparent background",
+          "outputHint": "animation frame sequence or sheet"
+        },
+        {
+          "action": "hit",
+          "prompt": "brief recoil hit reaction, fantasy heroine, same costume, transparent background",
+          "outputHint": "animation frame sequence or sheet"
+        },
+        {
+          "action": "death",
+          "prompt": "falling defeat sequence, fantasy heroine, same costume, transparent background",
+          "outputHint": "animation frame sequence or sheet"
+        }
+      ],
+      "technicalSpec": {
+        "mapFrameWidth": 256,
+        "mapFrameHeight": 256,
+        "expectedRows": 4,
+        "expectedColumns": 4,
+        "alphaBackground": true,
+        "consistentCharacterIdentity": true
+      }
+    },
+    {
+      "characterId": "moon-deer",
+      "displayName": "Moon Deer",
+      "style": "Amadis-style mystical deer companion, luminous fantasy creature sprite feel",
+      "referenceImage": "../../../frontend/public/characters/moon-deer.png",
+      "deliverables": [
+        "master A-pose reference PNG",
+        "map sprite sheet with idle/run/hit/death",
+        "per-action metadata json",
+        "transparent-background skill effect frames when needed"
+      ],
+      "actions": [
+        {
+          "action": "master",
+          "prompt": "full body moon deer, front view, clean silhouette, glowing antlers, consistent markings, plain background",
+          "outputHint": "single transparent PNG"
+        },
+        {
+          "action": "idle",
+          "prompt": "subtle magical idle loop, glowing deer companion, transparent background",
+          "outputHint": "animation frame sequence or sheet"
+        },
+        {
+          "action": "run",
+          "prompt": "graceful fantasy deer run cycle, transparent background",
+          "outputHint": "animation frame sequence or sheet"
+        },
+        {
+          "action": "hit",
+          "prompt": "brief stagger hit reaction, magical deer, transparent background",
+          "outputHint": "animation frame sequence or sheet"
+        },
+        {
+          "action": "death",
+          "prompt": "gentle collapse sequence, magical deer, transparent background",
+          "outputHint": "animation frame sequence or sheet"
+        }
+      ],
+      "technicalSpec": {
+        "mapFrameWidth": 256,
+        "mapFrameHeight": 256,
+        "expectedRows": 4,
+        "expectedColumns": 4,
+        "alphaBackground": true,
+        "consistentCharacterIdentity": true
+      }
+    },
+    {
+      "characterId": "mutated-beast",
+      "displayName": "Mutated Beast",
+      "style": "Amadis-style grotesque corrupted monster, readable battle sprite silhouette",
+      "referenceImage": "../../../frontend/public/characters/mutated-beast.png",
+      "deliverables": [
+        "master A-pose reference PNG",
+        "map sprite sheet with idle/run/hit/death",
+        "per-action metadata json",
+        "transparent-background skill effect frames when needed"
+      ],
+      "actions": [
+        {
+          "action": "master",
+          "prompt": "full body mutated beast, front view, monstrous anatomy, consistent corrupted details, plain background",
+          "outputHint": "single transparent PNG"
+        },
+        {
+          "action": "idle",
+          "prompt": "hostile monster idle loop, breathing and twitching, transparent background",
+          "outputHint": "animation frame sequence or sheet"
+        },
+        {
+          "action": "run",
+          "prompt": "aggressive charge run cycle, corrupted beast, transparent background",
+          "outputHint": "animation frame sequence or sheet"
+        },
+        {
+          "action": "hit",
+          "prompt": "violent recoil hit reaction, monster, transparent background",
+          "outputHint": "animation frame sequence or sheet"
+        },
+        {
+          "action": "death",
+          "prompt": "heavy collapse defeat sequence, monster, transparent background",
+          "outputHint": "animation frame sequence or sheet"
+        }
+      ],
+      "technicalSpec": {
+        "mapFrameWidth": 256,
+        "mapFrameHeight": 256,
+        "expectedRows": 4,
+        "expectedColumns": 4,
+        "alphaBackground": true,
+        "consistentCharacterIdentity": true
+      }
+    },
+    {
+      "characterId": "samuel",
+      "displayName": "Samuel",
+      "style": "Amadis-style tactical JRPG battle animation, polished fantasy 2D sprite feel",
+      "referenceImage": "../../../frontend/public/characters/samuel.png",
+      "deliverables": [
+        "master A-pose reference PNG",
+        "map sprite sheet with idle/run/hit/death",
+        "per-action metadata json",
+        "transparent-background skill effect frames when needed"
+      ],
+      "actions": [
+        {
+          "action": "master",
+          "prompt": "full body hero, A-pose, front view, transparent or plain background, same face, same armor, same sword, consistent proportions",
+          "outputHint": "single transparent PNG"
+        },
+        {
+          "action": "idle",
+          "prompt": "subtle breathing idle loop, fantasy warrior, same costume, transparent background",
+          "outputHint": "animation frame sequence or sheet"
+        },
+        {
+          "action": "run",
+          "prompt": "side-facing tactical run cycle, fantasy warrior, same costume, transparent background",
+          "outputHint": "animation frame sequence or sheet"
+        },
+        {
+          "action": "hit",
+          "prompt": "brief recoil hit reaction, fantasy warrior, same costume, transparent background",
+          "outputHint": "animation frame sequence or sheet"
+        },
+        {
+          "action": "death",
+          "prompt": "falling defeat sequence, fantasy warrior, same costume, transparent background",
+          "outputHint": "animation frame sequence or sheet"
+        },
+        {
+          "action": "attackFx",
+          "prompt": "bright sword slash arc, alpha background, fantasy hit effect",
+          "outputHint": "animation frame sequence or sheet"
+        }
+      ],
+      "technicalSpec": {
+        "mapFrameWidth": 256,
+        "mapFrameHeight": 256,
+        "expectedRows": 4,
+        "expectedColumns": 4,
+        "alphaBackground": true,
+        "consistentCharacterIdentity": true
+      }
+    }
+  ]
+}

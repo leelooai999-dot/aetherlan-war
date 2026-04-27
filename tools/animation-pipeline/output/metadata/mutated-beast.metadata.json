@@ -1,0 +1,78 @@
+{
+  "characterId": "mutated-beast",
+  "displayName": "Mutated Beast",
+  "generatedAt": "2026-04-26T19:27:25.698Z",
+  "inputs": {
+    "referenceImage": "../../../frontend/public/characters/mutated-beast.png",
+    "profileImage": "../../../frontend/public/characters/mutated-monster-profile-pic.png",
+    "mapSheet": "../../../frontend/public/characters/mutated-beast-sprite.png",
+    "performanceSources": []
+  },
+  "filesVerified": {
+    "referenceImage": true,
+    "profileImage": true,
+    "mapSheet": true,
+    "performanceSources": []
+  },
+  "mapModule": {
+    "frameWidth": 256,
+    "frameHeight": 256,
+    "rows": 4,
+    "columns": 4,
+    "anchor": {
+      "x": 0.5,
+      "y": 0.84
+    },
+    "scale": 1,
+    "actions": [
+      {
+        "id": "idle",
+        "start": 0,
+        "count": 4,
+        "fps": 8,
+        "loop": true
+      },
+      {
+        "id": "run",
+        "start": 4,
+        "count": 4,
+        "fps": 10,
+        "loop": true
+      },
+      {
+        "id": "hit",
+        "start": 8,
+        "count": 2,
+        "fps": 12,
+        "loop": false
+      },
+      {
+        "id": "death",
+        "start": 10,
+        "count": 4,
+        "fps": 8,
+        "loop": false
+      }
+    ]
+  },
+  "performanceModule": [],
+  "generation": {
+    "style": "Amadis-style grotesque corrupted monster, readable battle sprite silhouette",
+    "prompts": {
+      "master": "full body mutated beast, front view, monstrous anatomy, consistent corrupted details, plain background",
+      "idle": "hostile monster idle loop, breathing and twitching, transparent background",
+      "run": "aggressive charge run cycle, corrupted beast, transparent background",
+      "hit": "violent recoil hit reaction, monster, transparent background",
+      "death": "heavy collapse defeat sequence, monster, transparent background"
+    }
+  },
+  "runtime": {
+    "mapStates": [
+      "idle",
+      "run",
+      "hit",
+      "death"
+    ],
+    "cinematicStates": []
+  }
+}

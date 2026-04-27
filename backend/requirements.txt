@@ -1,0 +1,1 @@
+# stdlib-only first cut; no external dependencies yet

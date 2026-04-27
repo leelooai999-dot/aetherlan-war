@@ -1,0 +1,102 @@
+{
+  "jobId": "gen-20260426022811-e89052",
+  "generatedAt": "2026-04-26T04:29:55.889Z",
+  "adapter": "doubao-adapter",
+  "request": {
+    "role": "人类战士",
+    "action": "待机",
+    "frameCount": "12",
+    "provider": "Doubao",
+    "notes": "",
+    "intent": "battle-animation-assets"
+  },
+  "placeholders": {
+    "transparentFramesDir": "/root/.openclaw/workspace/projects/aetherlan-war/tools/animation-pipeline/jobs/gen-20260426022811-e89052/outputs",
+    "atlasJson": "/root/.openclaw/workspace/projects/aetherlan-war/tools/animation-pipeline/jobs/gen-20260426022811-e89052/outputs/atlas.json",
+    "atlasPng": "/root/.openclaw/workspace/projects/aetherlan-war/tools/animation-pipeline/jobs/gen-20260426022811-e89052/outputs/atlas.png",
+    "zipBundle": "/root/.openclaw/workspace/projects/aetherlan-war/tools/animation-pipeline/jobs/gen-20260426022811-e89052/outputs/gen-20260426022811-e89052.zip"
+  },
+  "preprocessResults": [
+    {
+      "ok": true,
+      "input": "/root/.openclaw/workspace/projects/aetherlan-war/tools/animation-pipeline/jobs/gen-20260426022811-e89052/inputs/samuel profile pic男主头像.png",
+      "output": "/root/.openclaw/workspace/projects/aetherlan-war/tools/animation-pipeline/jobs/gen-20260426022811-e89052/outputs/processed/samuel profile pic男主头像.trimmed.png",
+      "original": {
+        "width": 1089,
+        "height": 1445
+      },
+      "trimmed": {
+        "width": 1089,
+        "height": 1445
+      },
+      "bbox": [
+        0,
+        0,
+        1089,
+        1445
+      ]
+    }
+  ],
+  "framePlan": [
+    {
+      "index": 0,
+      "file": "frame_000.png",
+      "status": "planned"
+    },
+    {
+      "index": 1,
+      "file": "frame_001.png",
+      "status": "planned"
+    },
+    {
+      "index": 2,
+      "file": "frame_002.png",
+      "status": "planned"
+    },
+    {
+      "index": 3,
+      "file": "frame_003.png",
+      "status": "planned"
+    },
+    {
+      "index": 4,
+      "file": "frame_004.png",
+      "status": "planned"
+    },
+    {
+      "index": 5,
+      "file": "frame_005.png",
+      "status": "planned"
+    },
+    {
+      "index": 6,
+      "file": "frame_006.png",
+      "status": "planned"
+    },
+    {
+      "index": 7,
+      "file": "frame_007.png",
+      "status": "planned"
+    },
+    {
+      "index": 8,
+      "file": "frame_008.png",
+      "status": "planned"
+    },
+    {
+      "index": 9,
+      "file": "frame_009.png",
+      "status": "planned"
+    },
+    {
+      "index": 10,
+      "file": "frame_010.png",
+      "status": "planned"
+    },
+    {
+      "index": 11,
+      "file": "frame_011.png",
+      "status": "planned"
+    }
+  ]
+}

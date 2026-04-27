@@ -1,0 +1,143 @@
+{
+  "generatedAt": "2026-04-26T19:27:26.146Z",
+  "runtimeReady": [],
+  "blocked": [
+    {
+      "characterId": "isolde",
+      "displayName": "Isolde",
+      "status": "error",
+      "expectedFrames": 16,
+      "actualFrames": 2,
+      "issues": [
+        {
+          "level": "warning",
+          "code": "FRAME_COUNT_MISMATCH",
+          "message": "expected 16 frames from config grid, found 2"
+        },
+        {
+          "level": "error",
+          "code": "ACTION_OUT_OF_RANGE",
+          "message": "idle expects frame index 3, but only 2 frames exist"
+        },
+        {
+          "level": "error",
+          "code": "ACTION_OUT_OF_RANGE",
+          "message": "run expects frame index 7, but only 2 frames exist"
+        },
+        {
+          "level": "error",
+          "code": "ACTION_OUT_OF_RANGE",
+          "message": "hit expects frame index 9, but only 2 frames exist"
+        },
+        {
+          "level": "error",
+          "code": "ACTION_OUT_OF_RANGE",
+          "message": "death expects frame index 13, but only 2 frames exist"
+        }
+      ]
+    },
+    {
+      "characterId": "moon-deer",
+      "displayName": "Moon Deer",
+      "status": "error",
+      "expectedFrames": 16,
+      "actualFrames": 2,
+      "issues": [
+        {
+          "level": "warning",
+          "code": "FRAME_COUNT_MISMATCH",
+          "message": "expected 16 frames from config grid, found 2"
+        },
+        {
+          "level": "error",
+          "code": "ACTION_OUT_OF_RANGE",
+          "message": "idle expects frame index 3, but only 2 frames exist"
+        },
+        {
+          "level": "error",
+          "code": "ACTION_OUT_OF_RANGE",
+          "message": "run expects frame index 7, but only 2 frames exist"
+        },
+        {
+          "level": "error",
+          "code": "ACTION_OUT_OF_RANGE",
+          "message": "hit expects frame index 9, but only 2 frames exist"
+        },
+        {
+          "level": "error",
+          "code": "ACTION_OUT_OF_RANGE",
+          "message": "death expects frame index 13, but only 2 frames exist"
+        }
+      ]
+    },
+    {
+      "characterId": "mutated-beast",
+      "displayName": "Mutated Beast",
+      "status": "error",
+      "expectedFrames": 16,
+      "actualFrames": 2,
+      "issues": [
+        {
+          "level": "warning",
+          "code": "FRAME_COUNT_MISMATCH",
+          "message": "expected 16 frames from config grid, found 2"
+        },
+        {
+          "level": "error",
+          "code": "ACTION_OUT_OF_RANGE",
+          "message": "idle expects frame index 3, but only 2 frames exist"
+        },
+        {
+          "level": "error",
+          "code": "ACTION_OUT_OF_RANGE",
+          "message": "run expects frame index 7, but only 2 frames exist"
+        },
+        {
+          "level": "error",
+          "code": "ACTION_OUT_OF_RANGE",
+          "message": "hit expects frame index 9, but only 2 frames exist"
+        },
+        {
+          "level": "error",
+          "code": "ACTION_OUT_OF_RANGE",
+          "message": "death expects frame index 13, but only 2 frames exist"
+        }
+      ]
+    },
+    {
+      "characterId": "samuel",
+      "displayName": "Samuel",
+      "status": "error",
+      "expectedFrames": 16,
+      "actualFrames": 2,
+      "issues": [
+        {
+          "level": "warning",
+          "code": "FRAME_COUNT_MISMATCH",
+          "message": "expected 16 frames from config grid, found 2"
+        },
+        {
+          "level": "error",
+          "code": "ACTION_OUT_OF_RANGE",
+          "message": "idle expects frame index 3, but only 2 frames exist"
+        },
+        {
+          "level": "error",
+          "code": "ACTION_OUT_OF_RANGE",
+          "message": "run expects frame index 7, but only 2 frames exist"
+        },
+        {
+          "level": "error",
+          "code": "ACTION_OUT_OF_RANGE",
+          "message": "hit expects frame index 9, but only 2 frames exist"
+        },
+        {
+          "level": "error",
+          "code": "ACTION_OUT_OF_RANGE",
+          "message": "death expects frame index 13, but only 2 frames exist"
+        }
+      ]
+    }
+  ],
+  "rule": "Assets are runtime-ready only when no error-level audit issue exists."
+}

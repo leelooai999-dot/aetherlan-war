@@ -1,0 +1,34 @@
+{
+  "characterId": "moon-deer",
+  "displayName": "Moon Deer",
+  "referenceImage": "../../../frontend/public/characters/moon-deer.png",
+  "profileImage": "../../../frontend/public/characters/deer-profile-pic.png",
+  "mapModule": {
+    "sheet": "../../../frontend/public/characters/moon-deer-sprite.png",
+    "frameWidth": 256,
+    "frameHeight": 256,
+    "rows": 4,
+    "columns": 4,
+    "actions": {
+      "idle": { "start": 0, "count": 4, "fps": 8, "loop": true },
+      "run": { "start": 4, "count": 4, "fps": 10, "loop": true },
+      "hit": { "start": 8, "count": 2, "fps": 12, "loop": false },
+      "death": { "start": 10, "count": 4, "fps": 8, "loop": false }
+    },
+    "anchor": { "x": 0.5, "y": 0.8 },
+    "scale": 1
+  },
+  "performanceModule": {
+    "actions": []
+  },
+  "generation": {
+    "style": "Amadis-style mystical deer companion, luminous fantasy creature sprite feel",
+    "prompts": {
+      "master": "full body moon deer, front view, clean silhouette, glowing antlers, consistent markings, plain background",
+      "idle": "subtle magical idle loop, glowing deer companion, transparent background",
+      "run": "graceful fantasy deer run cycle, transparent background",
+      "hit": "brief stagger hit reaction, magical deer, transparent background",
+      "death": "gentle collapse sequence, magical deer, transparent background"
+    }
+  }
+}

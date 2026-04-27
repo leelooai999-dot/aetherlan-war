@@ -1,0 +1,251 @@
+import { mkdir, readdir, readFile, writeFile, copyFile, access, rm } from 'node:fs/promises';
+import { dirname, join, resolve, basename, extname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { execFile } from 'node:child_process';
+import { promisify } from 'node:util';
+import { imageSize } from 'image-size';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const rootDir = resolve(__dirname, '..');
+const queueDir = join(rootDir, 'queue');
+const resultsDir = join(rootDir, 'output', 'queue-results');
+const jobsRoot = join(rootDir, 'jobs');
+const hetznerUploadsRoot = join(rootDir, 'staging', 'hetzner-uploads');
+const frontendGeneratedPreviewsDir = resolve(rootDir, '..', '..', 'frontend', 'public', 'generated-previews');
+const execFileAsync = promisify(execFile);
+const preprocessScript = join(rootDir, 'python', 'preprocess_frames.py');
+const venvPython = join(rootDir, '.venv', 'bin', 'python');
+
+function providerAdapter(provider) {
+  if (typeof provider !== 'string') return 'unassigned-adapter';
+  const normalized = provider.toLowerCase();
+  if (normalized.includes('doubao')) return 'doubao-adapter';
+  if (normalized.includes('openai')) return 'openai-images-adapter';
+  if (normalized.includes('gemini')) return 'gemini-images-adapter';
+  return 'custom-adapter';
+}
+
+async function exists(path) {
+  try {
+    await access(path);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function mapRemoteUploadToLocalPath(uploadPath) {
+  if (typeof uploadPath !== 'string') return null;
+  const marker = '/opt/aetherlan-war/uploads/';
+  if (!uploadPath.includes(marker)) return uploadPath;
+  return join(hetznerUploadsRoot, uploadPath.split(marker)[1]);
+}
+
+async function preprocessUploadIfImage(sourcePath, outputsDir) {
+  const ext = extname(sourcePath).toLowerCase();
+  if (!['.png', '.webp'].includes(ext)) return null;
+  if (!(await exists(venvPython)) || !(await exists(preprocessScript))) return null;
+
+  const processedDir = join(outputsDir, 'processed');
+  await mkdir(processedDir, { recursive: true });
+
+  try {
+    const { stdout } = await execFileAsync(venvPython, [preprocessScript, sourcePath, processedDir], {
+      cwd: rootDir,
+      timeout: 120000,
+    });
+    const lastLine = stdout.trim().split('\n').filter(Boolean).at(-1);
+    return lastLine ? JSON.parse(lastLine) : null;
+  } catch (error) {
+    return {
+      ok: false,
+      error: error instanceof Error ? error.message : String(error),
+      input: sourcePath,
+    };
+  }
+}
+
+async function copyPreviewArtifacts(jobId, copiedUploads, preprocessResults) {
+  await mkdir(frontendGeneratedPreviewsDir, { recursive: true });
+
+  const firstUpload = copiedUploads[0]?.jobInputPath;
+  const successfulPreprocess = preprocessResults.find((item) => item?.ok && item?.output);
+  const previewUrl = firstUpload ? `/generated-previews/${jobId}${extname(firstUpload).toLowerCase() || '.png'}` : null;
+  const processedPreviewUrl = successfulPreprocess?.output ? `/generated-previews/${jobId}.processed.png` : null;
+
+  if (firstUpload && previewUrl) {
+    await copyFile(firstUpload, join(frontendGeneratedPreviewsDir, `${jobId}${extname(firstUpload).toLowerCase() || '.png'}`));
+  }
+
+  if (successfulPreprocess?.output) {
+    await copyFile(successfulPreprocess.output, join(frontendGeneratedPreviewsDir, `${jobId}.processed.png`));
+    const staleFixed = join(frontendGeneratedPreviewsDir, `${jobId}.processed.fixed.png`);
+    if (await exists(staleFixed)) {
+      await rm(staleFixed, { force: true });
+    }
+  }
+
+  return { previewUrl, processedPreviewUrl };
+}
+
+export async function processQueue() {
+  await mkdir(queueDir, { recursive: true });
+  await mkdir(resultsDir, { recursive: true });
+  await mkdir(jobsRoot, { recursive: true });
+
+  const files = (await readdir(queueDir)).filter((file) => file.endsWith('.json') && file !== 'index.json').sort();
+  let processed = 0;
+
+  for (const file of files) {
+    const fullPath = join(queueDir, file);
+    const job = JSON.parse(await readFile(fullPath, 'utf8'));
+    if (job.status !== 'queued') continue;
+
+    const jobDir = join(jobsRoot, job.id);
+    const inputsDir = join(jobDir, 'inputs');
+    const outputsDir = join(jobDir, 'outputs');
+    const logsDir = join(jobDir, 'logs');
+
+    await mkdir(inputsDir, { recursive: true });
+    await mkdir(outputsDir, { recursive: true });
+    await mkdir(logsDir, { recursive: true });
+
+    const copiedUploads = [];
+    const preprocessResults = [];
+    let successfulPreprocess = null;
+    for (const upload of job.uploads ?? []) {
+      const resolvedSource = mapRemoteUploadToLocalPath(upload?.path);
+      if (!resolvedSource || !(await exists(resolvedSource))) continue;
+      const dest = join(inputsDir, basename(resolvedSource));
+      await copyFile(resolvedSource, dest);
+      copiedUploads.push({
+        originalName: upload.name,
+        sourcePath: resolvedSource,
+        remotePersistentPath: upload.path,
+        jobInputPath: dest,
+        size: upload.size,
+        type: upload.type,
+      });
+      const preprocessResult = await preprocessUploadIfImage(dest, outputsDir);
+      if (preprocessResult) {
+        preprocessResults.push(preprocessResult);
+        if (!successfulPreprocess && preprocessResult?.ok && preprocessResult?.output) {
+          successfulPreprocess = preprocessResult;
+        }
+      }
+    }
+
+    job.status = 'processing';
+    job.updatedAt = new Date().toISOString();
+    job.jobDir = jobDir;
+    job.adapter = providerAdapter(job.request?.provider);
+    job.inputs = copiedUploads;
+    await writeFile(fullPath, `${JSON.stringify(job, null, 2)}\n`, 'utf8');
+
+    const stubFrames = Array.from({ length: Number(job.request?.frameCount || 0) || 4 }, (_, index) => ({
+      index,
+      file: `frame_${String(index).padStart(3, '0')}.png`,
+      status: 'planned',
+    }));
+
+    const atlasJson = {
+      meta: {
+        app: 'aetherlan-animation-pipeline',
+        version: 'stub-1',
+        image: 'atlas.png',
+        scale: '1',
+      },
+      frames: Object.fromEntries(
+        stubFrames.map((frame, index) => [frame.file, {
+          frame: { x: index * 10, y: 0, w: 256, h: 256 },
+          sourceSize: { w: 256, h: 256 },
+          spriteSourceSize: { x: 0, y: 0, w: 256, h: 256 },
+        }])
+      ),
+    };
+
+    const downloadBundle = {
+      jobId: job.id,
+      contents: ['atlas.json', 'atlas.png', 'frames/*.png', 'output-manifest.json'],
+      status: 'planned',
+    };
+
+    const outputManifest = {
+      jobId: job.id,
+      generatedAt: new Date().toISOString(),
+      adapter: job.adapter,
+      request: job.request,
+      placeholders: {
+        transparentFramesDir: outputsDir,
+        atlasJson: join(outputsDir, 'atlas.json'),
+        atlasPng: join(outputsDir, 'atlas.png'),
+        zipBundle: join(outputsDir, `${job.id}.zip`),
+      },
+      preprocessResults,
+      framePlan: stubFrames,
+    };
+
+    await writeFile(join(outputsDir, 'frames.stub.json'), `${JSON.stringify(stubFrames, null, 2)}\n`, 'utf8');
+    await writeFile(join(outputsDir, 'atlas.json'), `${JSON.stringify(atlasJson, null, 2)}\n`, 'utf8');
+    await writeFile(join(outputsDir, 'bundle.stub.json'), `${JSON.stringify(downloadBundle, null, 2)}\n`, 'utf8');
+    await writeFile(join(outputsDir, 'output-manifest.json'), `${JSON.stringify(outputManifest, null, 2)}\n`, 'utf8');
+    await writeFile(join(jobDir, 'job.json'), `${JSON.stringify(job, null, 2)}\n`, 'utf8');
+    await writeFile(
+      join(logsDir, 'consumer.log'),
+      `Processed ${job.id} with ${job.adapter}\nCopied uploads: ${copiedUploads.length}\nPreprocess results: ${preprocessResults.length}\nStub frames planned: ${stubFrames.length}\n`,
+      'utf8'
+    );
+
+    const previewArtifacts = await copyPreviewArtifacts(job.id, copiedUploads, preprocessResults);
+    const primarySheetPath = successfulPreprocess?.output ?? copiedUploads[0]?.jobInputPath ?? null;
+    const sheetDimensions = primarySheetPath ? imageSize(primarySheetPath) : null;
+
+    const result = {
+      jobId: job.id,
+      createdAt: new Date().toISOString(),
+      status: 'done',
+      adapter: job.adapter,
+      note: 'Queue consumer created job workspace, copied uploaded inputs, emitted stub frame/atlas/bundle manifests, and now attempts image trim preprocessing for uploaded PNG/WebP sources.',
+      request: job.request,
+      uploads: copiedUploads,
+      source: {
+        intakeStorage: job.storage ?? 'unknown',
+        queueJobPath: fullPath,
+      },
+      workspace: {
+        root: jobDir,
+        inputs: inputsDir,
+        outputs: outputsDir,
+        logs: logsDir,
+      },
+      sheetWidth: sheetDimensions?.width ?? null,
+      sheetHeight: sheetDimensions?.height ?? null,
+      outputs: {
+        transparentFrames: preprocessResults.some((item) => item?.ok),
+        atlasPacked: false,
+        zipReady: false,
+        manifest: join(outputsDir, 'output-manifest.json'),
+        atlasJson: join(outputsDir, 'atlas.json'),
+        framePlan: join(outputsDir, 'frames.stub.json'),
+        bundlePlan: join(outputsDir, 'bundle.stub.json'),
+        preprocessReport: join(outputsDir, 'output-manifest.json'),
+      },
+      previewUrl: previewArtifacts.previewUrl,
+      processedPreviewUrl: previewArtifacts.processedPreviewUrl,
+    };
+
+    job.status = 'done';
+    job.updatedAt = new Date().toISOString();
+    job.resultPath = `output/queue-results/${job.id}.result.json`;
+
+    await writeFile(fullPath, `${JSON.stringify(job, null, 2)}\n`, 'utf8');
+    await writeFile(join(resultsDir, `${job.id}.result.json`), `${JSON.stringify(result, null, 2)}\n`, 'utf8');
+    processed += 1;
+  }
+
+  console.log(`queue-processed: ${processed}`);
+}
+
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  await processQueue();
+}

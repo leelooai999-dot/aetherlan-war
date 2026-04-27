@@ -1,0 +1,57 @@
+{
+  "generatedAt": "2026-04-26T19:27:26.148Z",
+  "rows": [
+    {
+      "characterId": "isolde",
+      "displayName": "Isolde",
+      "status": "error",
+      "expectedFrames": 16,
+      "actualFrames": 2,
+      "actions": {
+        "idle": "missing",
+        "run": "missing",
+        "hit": "missing",
+        "death": "missing"
+      }
+    },
+    {
+      "characterId": "moon-deer",
+      "displayName": "Moon Deer",
+      "status": "error",
+      "expectedFrames": 16,
+      "actualFrames": 2,
+      "actions": {
+        "idle": "missing",
+        "run": "missing",
+        "hit": "missing",
+        "death": "missing"
+      }
+    },
+    {
+      "characterId": "mutated-beast",
+      "displayName": "Mutated Beast",
+      "status": "error",
+      "expectedFrames": 16,
+      "actualFrames": 2,
+      "actions": {
+        "idle": "missing",
+        "run": "missing",
+        "hit": "missing",
+        "death": "missing"
+      }
+    },
+    {
+      "characterId": "samuel",
+      "displayName": "Samuel",
+      "status": "error",
+      "expectedFrames": 16,
+      "actualFrames": 2,
+      "actions": {
+        "idle": "missing",
+        "run": "missing",
+        "hit": "missing",
+        "death": "missing"
+      }
+    }
+  ]
+}

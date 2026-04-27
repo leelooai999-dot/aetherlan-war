@@ -1,0 +1,49 @@
+{
+  "generatedAt": "2026-04-26T19:27:26.147Z",
+  "characterId": "samuel",
+  "displayName": "Samuel",
+  "shots": [
+    {
+      "id": "master-reference",
+      "type": "reference",
+      "goal": "Lock identity before animation production",
+      "prompt": "full body hero, A-pose, front view, transparent or plain background, same face, same armor, same sword, consistent proportions",
+      "output": "single master PNG"
+    },
+    {
+      "id": "shot-1",
+      "type": "idle",
+      "goal": "Produce usable idle material for animation pipeline",
+      "prompt": "subtle breathing idle loop, fantasy warrior, same costume, transparent background",
+      "output": "animation frame sequence or sheet"
+    },
+    {
+      "id": "shot-2",
+      "type": "run",
+      "goal": "Produce usable run material for animation pipeline",
+      "prompt": "side-facing tactical run cycle, fantasy warrior, same costume, transparent background",
+      "output": "animation frame sequence or sheet"
+    },
+    {
+      "id": "shot-3",
+      "type": "hit",
+      "goal": "Produce usable hit material for animation pipeline",
+      "prompt": "brief recoil hit reaction, fantasy warrior, same costume, transparent background",
+      "output": "animation frame sequence or sheet"
+    },
+    {
+      "id": "shot-4",
+      "type": "death",
+      "goal": "Produce usable death material for animation pipeline",
+      "prompt": "falling defeat sequence, fantasy warrior, same costume, transparent background",
+      "output": "animation frame sequence or sheet"
+    },
+    {
+      "id": "shot-5",
+      "type": "attackFx",
+      "goal": "Produce usable attackFx material for animation pipeline",
+      "prompt": "bright sword slash arc, alpha background, fantasy hit effect",
+      "output": "animation frame sequence or sheet"
+    }
+  ]
+}

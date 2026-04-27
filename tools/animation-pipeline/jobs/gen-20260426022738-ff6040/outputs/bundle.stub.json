@@ -1,0 +1,10 @@
+{
+  "jobId": "gen-20260426022738-ff6040",
+  "contents": [
+    "atlas.json",
+    "atlas.png",
+    "frames/*.png",
+    "output-manifest.json"
+  ],
+  "status": "planned"
+}

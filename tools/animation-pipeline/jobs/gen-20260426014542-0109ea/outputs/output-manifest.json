@@ -1,0 +1,68 @@
+{
+  "jobId": "gen-20260426014542-0109ea",
+  "generatedAt": "2026-04-26T04:29:53.436Z",
+  "adapter": "doubao-adapter",
+  "request": {
+    "role": "人类战士",
+    "action": "受击",
+    "frameCount": "8",
+    "provider": "Doubao",
+    "notes": "multipart smoke after 413 fix",
+    "intent": "battle-animation-assets"
+  },
+  "placeholders": {
+    "transparentFramesDir": "/root/.openclaw/workspace/projects/aetherlan-war/tools/animation-pipeline/jobs/gen-20260426014542-0109ea/outputs",
+    "atlasJson": "/root/.openclaw/workspace/projects/aetherlan-war/tools/animation-pipeline/jobs/gen-20260426014542-0109ea/outputs/atlas.json",
+    "atlasPng": "/root/.openclaw/workspace/projects/aetherlan-war/tools/animation-pipeline/jobs/gen-20260426014542-0109ea/outputs/atlas.png",
+    "zipBundle": "/root/.openclaw/workspace/projects/aetherlan-war/tools/animation-pipeline/jobs/gen-20260426014542-0109ea/outputs/gen-20260426014542-0109ea.zip"
+  },
+  "preprocessResults": [
+    {
+      "ok": false,
+      "error": "Command failed: /root/.openclaw/workspace/projects/aetherlan-war/tools/animation-pipeline/.venv/bin/python /root/.openclaw/workspace/projects/aetherlan-war/tools/animation-pipeline/python/preprocess_frames.py /root/.openclaw/workspace/projects/aetherlan-war/tools/animation-pipeline/jobs/gen-20260426014542-0109ea/inputs/smoke.png /root/.openclaw/workspace/projects/aetherlan-war/tools/animation-pipeline/jobs/gen-20260426014542-0109ea/outputs/processed\nTraceback (most recent call last):\n  File \"/root/.openclaw/workspace/projects/aetherlan-war/tools/animation-pipeline/python/preprocess_frames.py\", line 62, in <module>\n    raise SystemExit(main())\n                     ^^^^^^\n  File \"/root/.openclaw/workspace/projects/aetherlan-war/tools/animation-pipeline/python/preprocess_frames.py\", line 44, in main\n    img = Image.open(input_path).convert(\"RGBA\")\n          ^^^^^^^^^^^^^^^^^^^^^^\n  File \"/root/.openclaw/workspace/projects/aetherlan-war/tools/animation-pipeline/.venv/lib/python3.12/site-packages/PIL/Image.py\", line 3711, in open\n    raise UnidentifiedImageError(msg)\nPIL.UnidentifiedImageError: cannot identify image file '/root/.openclaw/workspace/projects/aetherlan-war/tools/animation-pipeline/jobs/gen-20260426014542-0109ea/inputs/smoke.png'\n",
+      "input": "/root/.openclaw/workspace/projects/aetherlan-war/tools/animation-pipeline/jobs/gen-20260426014542-0109ea/inputs/smoke.png"
+    }
+  ],
+  "framePlan": [
+    {
+      "index": 0,
+      "file": "frame_000.png",
+      "status": "planned"
+    },
+    {
+      "index": 1,
+      "file": "frame_001.png",
+      "status": "planned"
+    },
+    {
+      "index": 2,
+      "file": "frame_002.png",
+      "status": "planned"
+    },
+    {
+      "index": 3,
+      "file": "frame_003.png",
+      "status": "planned"
+    },
+    {
+      "index": 4,
+      "file": "frame_004.png",
+      "status": "planned"
+    },
+    {
+      "index": 5,
+      "file": "frame_005.png",
+      "status": "planned"
+    },
+    {
+      "index": 6,
+      "file": "frame_006.png",
+      "status": "planned"
+    },
+    {
+      "index": 7,
+      "file": "frame_007.png",
+      "status": "planned"
+    }
+  ]
+}

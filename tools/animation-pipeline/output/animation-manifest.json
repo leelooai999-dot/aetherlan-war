@@ -1,0 +1,354 @@
+{
+  "generatedAt": "2026-04-26T19:27:26.137Z",
+  "characters": [
+    {
+      "characterId": "isolde",
+      "displayName": "Isolde",
+      "mapSheet": "../../../frontend/public/characters/isolde-sprite.png",
+      "performanceSources": [],
+      "metadata": "output/metadata/isolde.metadata.json",
+      "atlasPlan": "output/atlas/isolde.atlas-plan.json"
+    },
+    {
+      "characterId": "moon-deer",
+      "displayName": "Moon Deer",
+      "mapSheet": "../../../frontend/public/characters/moon-deer-sprite.png",
+      "performanceSources": [],
+      "metadata": "output/metadata/moon-deer.metadata.json",
+      "atlasPlan": "output/atlas/moon-deer.atlas-plan.json"
+    },
+    {
+      "characterId": "mutated-beast",
+      "displayName": "Mutated Beast",
+      "mapSheet": "../../../frontend/public/characters/mutated-beast-sprite.png",
+      "performanceSources": [],
+      "metadata": "output/metadata/mutated-beast.metadata.json",
+      "atlasPlan": "output/atlas/mutated-beast.atlas-plan.json"
+    },
+    {
+      "characterId": "samuel",
+      "displayName": "Samuel",
+      "mapSheet": "../../../frontend/public/characters/samuel-sprite.png",
+      "performanceSources": [
+        "../../../frontend/public/effects/samuel-attack.webm"
+      ],
+      "metadata": "output/metadata/samuel.metadata.json",
+      "atlasPlan": "output/atlas/samuel.atlas-plan.json"
+    }
+  ],
+  "atlases": [
+    {
+      "characterId": "isolde",
+      "atlasImage": "atlases/isolde-map-atlas.png",
+      "atlasData": "atlases/isolde-map-atlas.json",
+      "sourceSheets": [
+        {
+          "type": "map",
+          "path": "../../../frontend/public/characters/isolde-sprite.png",
+          "frameWidth": 256,
+          "frameHeight": 256,
+          "rows": 4,
+          "columns": 4
+        }
+      ],
+      "effects": [],
+      "notes": [
+        "This file is a pack plan for a later TexturePacker or custom Python pack step.",
+        "Current pipeline preserves existing sources and emits normalized pack metadata."
+      ]
+    },
+    {
+      "characterId": "moon-deer",
+      "atlasImage": "atlases/moon-deer-map-atlas.png",
+      "atlasData": "atlases/moon-deer-map-atlas.json",
+      "sourceSheets": [
+        {
+          "type": "map",
+          "path": "../../../frontend/public/characters/moon-deer-sprite.png",
+          "frameWidth": 256,
+          "frameHeight": 256,
+          "rows": 4,
+          "columns": 4
+        }
+      ],
+      "effects": [],
+      "notes": [
+        "This file is a pack plan for a later TexturePacker or custom Python pack step.",
+        "Current pipeline preserves existing sources and emits normalized pack metadata."
+      ]
+    },
+    {
+      "characterId": "mutated-beast",
+      "atlasImage": "atlases/mutated-beast-map-atlas.png",
+      "atlasData": "atlases/mutated-beast-map-atlas.json",
+      "sourceSheets": [
+        {
+          "type": "map",
+          "path": "../../../frontend/public/characters/mutated-beast-sprite.png",
+          "frameWidth": 256,
+          "frameHeight": 256,
+          "rows": 4,
+          "columns": 4
+        }
+      ],
+      "effects": [],
+      "notes": [
+        "This file is a pack plan for a later TexturePacker or custom Python pack step.",
+        "Current pipeline preserves existing sources and emits normalized pack metadata."
+      ]
+    },
+    {
+      "characterId": "samuel",
+      "atlasImage": "atlases/samuel-map-atlas.png",
+      "atlasData": "atlases/samuel-map-atlas.json",
+      "sourceSheets": [
+        {
+          "type": "map",
+          "path": "../../../frontend/public/characters/samuel-sprite.png",
+          "frameWidth": 256,
+          "frameHeight": 256,
+          "rows": 4,
+          "columns": 4
+        }
+      ],
+      "effects": [
+        {
+          "id": "attack",
+          "source": "../../../frontend/public/effects/samuel-attack.webm",
+          "packaging": "standalone"
+        }
+      ],
+      "notes": [
+        "This file is a pack plan for a later TexturePacker or custom Python pack step.",
+        "Current pipeline preserves existing sources and emits normalized pack metadata."
+      ]
+    }
+  ],
+  "queueResults": [
+    {
+      "jobId": "gen-20260425220734-152f61",
+      "status": "done",
+      "adapter": "doubao-adapter",
+      "request": {
+        "role": "人类战士",
+        "action": "受击",
+        "frameCount": "8",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "originalName": "smoke.txt",
+          "type": "text/plain",
+          "size": 15
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": null,
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260425223011-b36979",
+      "status": "done",
+      "adapter": "doubao-adapter",
+      "request": {
+        "role": "元素法师",
+        "action": "施法",
+        "frameCount": "8",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "originalName": "nginx-smoke.txt",
+          "type": "text/plain",
+          "size": 10
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": null,
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260426014542-0109ea",
+      "status": "done",
+      "adapter": "doubao-adapter",
+      "request": {
+        "role": "人类战士",
+        "action": "受击",
+        "frameCount": "8",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "originalName": "smoke.png",
+          "type": "image/png",
+          "size": 1450000
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260426014542-0109ea.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260426022445-6c7d7d",
+      "status": "done",
+      "adapter": "doubao-adapter",
+      "request": {
+        "role": "人类战士",
+        "action": "待机",
+        "frameCount": "16",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "originalName": "samuel profile pic男主头像.png",
+          "type": "image/png",
+          "size": 1525929
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260426022445-6c7d7d.png",
+      "processedPreviewUrl": "/generated-previews/gen-20260426022445-6c7d7d.processed.png"
+    },
+    {
+      "jobId": "gen-20260426022646-74f5d0",
+      "status": "done",
+      "adapter": "doubao-adapter",
+      "request": {
+        "role": "人类战士",
+        "action": "受击",
+        "frameCount": "8",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "originalName": "smoke.png",
+          "type": "image/png",
+          "size": 1000
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260426022646-74f5d0.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260426022711-1e1eba",
+      "status": "done",
+      "adapter": "doubao-adapter",
+      "request": {
+        "role": "人类战士",
+        "action": "受击",
+        "frameCount": "8",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "originalName": "smoke.png",
+          "type": "image/png",
+          "size": 1000
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260426022711-1e1eba.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260426022738-ff6040",
+      "status": "done",
+      "adapter": "doubao-adapter",
+      "request": {
+        "role": "人类战士",
+        "action": "待机",
+        "frameCount": "16",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "originalName": "samuel profile pic男主头像.png",
+          "type": "image/png",
+          "size": 1525929
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260426022738-ff6040.png",
+      "processedPreviewUrl": "/generated-previews/gen-20260426022738-ff6040.processed.png"
+    },
+    {
+      "jobId": "gen-20260426022811-e89052",
+      "status": "done",
+      "adapter": "doubao-adapter",
+      "request": {
+        "role": "人类战士",
+        "action": "待机",
+        "frameCount": "12",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "originalName": "samuel profile pic男主头像.png",
+          "type": "image/png",
+          "size": 1525929
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260426022811-e89052.png",
+      "processedPreviewUrl": "/generated-previews/gen-20260426022811-e89052.processed.png"
+    }
+  ],
+  "runtimeContract": {
+    "characterPublicDir": "frontend/public/characters",
+    "effectPublicDir": "frontend/public/effects",
+    "mapStates": [
+      "idle",
+      "run",
+      "hit",
+      "death"
+    ],
+    "cinematicStates": [
+      "jump",
+      "attack",
+      "skill",
+      "magic",
+      "ultimate"
+    ]
+  }
+}

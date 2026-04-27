@@ -1,0 +1,41 @@
+{
+  "generatedAt": "2026-04-26T19:27:26.145Z",
+  "ranked": [
+    {
+      "characterId": "samuel",
+      "displayName": "Samuel",
+      "status": "error",
+      "expectedFrames": 16,
+      "actualFrames": 2,
+      "score": 100,
+      "reason": "core humanoid battle presentation benchmark"
+    },
+    {
+      "characterId": "isolde",
+      "displayName": "Isolde",
+      "status": "error",
+      "expectedFrames": 16,
+      "actualFrames": 2,
+      "score": 90,
+      "reason": "second hero-class benchmark for style consistency"
+    },
+    {
+      "characterId": "mutated-beast",
+      "displayName": "Mutated Beast",
+      "status": "error",
+      "expectedFrames": 16,
+      "actualFrames": 2,
+      "score": 75,
+      "reason": "enemy readability benchmark for combat feedback"
+    },
+    {
+      "characterId": "moon-deer",
+      "displayName": "Moon Deer",
+      "status": "error",
+      "expectedFrames": 16,
+      "actualFrames": 2,
+      "score": 70,
+      "reason": "companion creature animation benchmark"
+    }
+  ]
+}

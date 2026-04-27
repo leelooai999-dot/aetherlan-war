@@ -1,143 +1,126 @@
-const heroes = [
+import { readFile } from 'node:fs/promises';
+import { resolve } from 'node:path';
+import { buildAnimationShowcase } from '../lib/animation-showcase';
+
+const entries = [
   {
-    name: '塞缪尔·艾利奥特',
-    role: '符文剑士 / 星辉守护者',
-    desc: '沉稳坚毅的长子，始终站在前线，为妹妹与同伴扛住裂隙来袭的第一波冲击。',
+    title: '游戏试玩首页',
+    href: '/prototype',
+    tag: 'Playable Demo',
+    desc: '直接进入第一关试玩，查看当前战斗表现与现有战棋体验。',
   },
   {
-    name: '伊索尔德·艾利奥特',
-    role: '风语术师 / 星月灵愈使',
-    desc: '17 岁的妹妹，继承了风系与治愈天赋，与月溪灵鹿并肩作战，是队伍的移动治愈核心。',
+    title: '战斗素材上传',
+    href: '/generator#battle-upload',
+    tag: 'Asset Upload',
+    desc: '上传角色参考图、动作参考或现有序列帧，开始进入战斗动画素材处理流程。',
   },
   {
-    name: '雷欧纳德·索恩',
-    role: '铁壁骑士 / 大地战将',
-    desc: '热血直率的王国战士，拥有强大的冲锋与守阵能力，是后续远征中的重装支柱。',
+    title: '制图追踪台',
+    href: '/pipeline',
+    tag: 'Pipeline',
+    desc: '查看当前素材生成、队列状态、缺口看板与最近一次上传回流结果。',
   },
   {
-    name: '莉奥拉·月影',
-    role: '月影游侠 / 森灵追猎者',
-    desc: '来自月影精灵森林的少女，擅长追踪、突袭与自然协同，是远征途中关键的侦查者。',
+    title: '世界观设定',
+    href: '/lore',
+    tag: 'Lore',
+    desc: '浏览埃瑟兰战记的角色、阵营与世界背景。',
   },
 ];
 
-const pillars = [
-  '兄妹双线成长与长篇章远征',
-  '人与魔兽的共鸣战斗系统',
-  '元素地形、羁绊与连携奥义',
-  '可持续扩展的网页 SRPG 关卡结构',
-];
+async function loadRecentQueueResults() {
+  try {
+    const fullPath = resolve(process.cwd(), '..', 'tools', 'animation-pipeline', 'output', 'animation-manifest.json');
+    const raw = await readFile(fullPath, 'utf8');
+    const data = JSON.parse(raw) as { queueResults?: unknown[] };
+    return Array.isArray(data.queueResults) ? data.queueResults : [];
+  } catch {
+    return [];
+  }
+}
 
-const milestones = [
-  '首页 + 世界观页已上线',
-  '第一关“星隐乡守卫战”已可试玩',
-  '敌我回合、联动技、增援事件已接入',
-  'Vercel 部署已完成，可直接试玩',
-];
+export default async function Home() {
+  const showcase = buildAnimationShowcase((await loadRecentQueueResults()) as never[]);
 
-export default function Home() {
   return (
     <main className="min-h-screen bg-[radial-gradient(circle_at_top,_#1e2a78,_#0b1024_55%,_#050816)] text-white">
       <section className="mx-auto flex max-w-7xl flex-col gap-10 px-6 py-16 lg:px-10">
-        <div className="grid gap-10 lg:grid-cols-[1.3fr_0.7fr] lg:items-start">
-          <div className="max-w-4xl space-y-6">
-            <span className="inline-flex rounded-full border border-cyan-300/30 bg-cyan-400/10 px-4 py-1 text-sm text-cyan-200">
-              Web SRPG Project • 高画质策略战棋
-            </span>
-            <div className="space-y-4">
-              <h1 className="text-5xl font-bold tracking-tight lg:text-7xl">
-                埃瑟兰战记：<span className="text-cyan-300">星尘之绊</span>
-              </h1>
-              <p className="max-w-3xl text-lg leading-8 text-slate-200 lg:text-xl">
-                在星隐乡的屏障崩裂之后，塞缪尔与妹妹伊索尔德被迫站上前线，带着魔兽伙伴和未来的远征同伴，
-                踏上横跨四国、追查暗影裂隙复苏真相的长征之路。
-              </p>
-            </div>
-            <div className="flex flex-wrap gap-4">
-              <a
-                href="/prototype"
-                className="rounded-full bg-cyan-400 px-6 py-3 font-semibold text-slate-950 transition hover:bg-cyan-300"
-              >
-                立即试玩第一关
-              </a>
-              <a
-                href="#milestones"
-                className="rounded-full border border-white/20 px-6 py-3 font-semibold text-white/90 transition hover:border-cyan-200 hover:text-cyan-200"
-              >
-                当前开发进度
-              </a>
-              <a
-                href="/lore"
-                className="rounded-full border border-cyan-300/30 bg-cyan-400/10 px-6 py-3 font-semibold text-cyan-100 transition hover:bg-cyan-400/20"
-              >
-                世界观设定
-              </a>
-            </div>
-          </div>
-
-          <aside className="rounded-3xl border border-white/10 bg-white/6 p-6 backdrop-blur-sm">
-            <p className="text-sm uppercase tracking-[0.35em] text-cyan-300">Playable Demo</p>
-            <h2 className="mt-3 text-3xl font-bold">第一关可试玩状态</h2>
-            <p className="mt-4 text-sm leading-7 text-slate-300 sm:text-base">
-              当前线上版本已包含第一关“星隐乡守卫战”，支持敌我回合、兄妹联动、灵鹿治疗协作、敌方增援与关卡结果反馈。
+        <div className="max-w-4xl space-y-6">
+          <span className="inline-flex rounded-full border border-cyan-300/30 bg-cyan-400/10 px-4 py-1 text-sm text-cyan-200">
+            Aetherlan War
+          </span>
+          <div className="space-y-4">
+            <h1 className="text-5xl font-bold tracking-tight lg:text-7xl">
+              埃瑟兰战记 <span className="text-cyan-300">试玩入口</span>
+            </h1>
+            <p className="max-w-3xl text-lg leading-8 text-slate-200 lg:text-xl">
+              这个站点当前同时承载《埃瑟兰战记》试玩、战斗素材上传入口与制图追踪台。试玩体验和素材生产流都在高优先级推进中，所以入口会先保持集中，等自动化链路稳定后再拆分。
             </p>
-            <div className="mt-6 grid gap-3">
-              <div className="rounded-2xl bg-slate-900/70 p-4">
-                <p className="text-xs uppercase tracking-[0.25em] text-cyan-200">Live Demo Route</p>
-                <p className="mt-2 text-lg font-semibold text-white">/prototype</p>
-              </div>
-              <div className="rounded-2xl bg-slate-900/70 p-4">
-                <p className="text-xs uppercase tracking-[0.25em] text-cyan-200">Core Loop</p>
-                <p className="mt-2 text-sm leading-6 text-slate-300">布阵、行动、治疗、连携、守点、击退增援。</p>
-              </div>
-            </div>
-          </aside>
-        </div>
-
-        <div id="vision" className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-          {pillars.map((item) => (
-            <div key={item} className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
-              <div className="mb-3 text-sm uppercase tracking-[0.3em] text-cyan-300">Core Pillar</div>
-              <p className="text-lg font-medium text-white">{item}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section id="milestones" className="mx-auto max-w-7xl px-6 py-4 lg:px-10 lg:py-10">
-        <div className="rounded-3xl border border-white/10 bg-white/5 p-6 lg:p-8">
-          <p className="text-sm uppercase tracking-[0.35em] text-cyan-300">Build Milestones</p>
-          <h2 className="mt-3 text-3xl font-bold lg:text-4xl">当前试玩版已完成的内容</h2>
-          <div className="mt-8 grid gap-4 md:grid-cols-2">
-            {milestones.map((item, index) => (
-              <div key={item} className="rounded-2xl border border-white/10 bg-slate-900/60 p-5">
-                <div className="text-sm text-cyan-300">Milestone {index + 1}</div>
-                <p className="mt-2 text-lg font-semibold text-white">{item}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section id="heroes" className="mx-auto max-w-7xl px-6 py-8 lg:px-10 lg:py-14">
-        <div className="mb-8 flex items-end justify-between gap-6">
-          <div>
-            <p className="text-sm uppercase tracking-[0.35em] text-cyan-300">Main Cast</p>
-            <h2 className="mt-2 text-3xl font-bold lg:text-4xl">主角团与远征核心成员</h2>
           </div>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2">
-          {heroes.map((hero) => (
-            <article
-              key={hero.name}
-              className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/8 to-white/4 p-6 shadow-2xl shadow-cyan-950/10"
+        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+          {entries.map((entry) => (
+            <a
+              key={entry.href}
+              href={entry.href}
+              className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/8 to-white/4 p-6 shadow-2xl shadow-cyan-950/10 transition hover:border-cyan-200/40 hover:bg-white/8"
             >
-              <div className="mb-3 text-sm text-cyan-300">{hero.role}</div>
-              <h3 className="text-2xl font-semibold text-white">{hero.name}</h3>
-              <p className="mt-4 leading-7 text-slate-200">{hero.desc}</p>
-            </article>
+              <div className="text-sm uppercase tracking-[0.3em] text-cyan-300">{entry.tag}</div>
+              <h2 className="mt-3 text-2xl font-semibold text-white">{entry.title}</h2>
+              <p className="mt-4 leading-7 text-slate-200">{entry.desc}</p>
+              <div className="mt-6 text-sm font-semibold text-cyan-200">进入 →</div>
+            </a>
           ))}
+        </div>
+
+        {showcase.length > 0 ? (
+          <section className="rounded-3xl border border-emerald-300/20 bg-emerald-400/10 p-6">
+            <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+              <div>
+                <p className="text-sm uppercase tracking-[0.3em] text-emerald-200">Animation handoff now live</p>
+                <h2 className="mt-2 text-3xl font-bold text-white">试玩页对应位置开始直接吃处理后的角色状态图</h2>
+                <p className="mt-3 max-w-3xl text-sm leading-7 text-emerald-50/90">
+                  下面这些卡片不再只是试玩占位说明，而是直接从 animation pipeline 最近结果里取图。像待机动作这种，处理完后就会优先用相应角色的 processed preview 顶掉原先的试玩占位展示。
+                </p>
+              </div>
+              <a href="/pipeline" className="rounded-full border border-white/15 px-5 py-3 text-sm font-semibold text-white transition hover:border-emerald-200 hover:text-emerald-200">
+                去追踪更多结果
+              </a>
+            </div>
+
+            <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+              {showcase.map((card) => (
+                <div key={card.key} className="overflow-hidden rounded-3xl border border-white/10 bg-slate-950/45">
+                  <div className="border-b border-white/10 px-4 py-3">
+                    <div className="flex items-center justify-between gap-3">
+                      <div>
+                        <div className="text-lg font-semibold text-white">{card.title}</div>
+                        <div className="text-xs text-emerald-100/80">{card.subtitle}</div>
+                      </div>
+                      <div className={`rounded-full px-3 py-1 text-xs font-semibold ${card.processed ? 'bg-emerald-300/20 text-emerald-100' : 'bg-amber-300/20 text-amber-100'}`}>
+                        {card.sourceLabel}
+                      </div>
+                    </div>
+                  </div>
+                  <img src={card.imageUrl} alt={card.title} className="h-64 w-full bg-slate-950/70 object-contain" />
+                  <div className="grid gap-2 px-4 py-4 text-sm text-slate-200">
+                    <div>动作：{card.actionLabel}</div>
+                    <div>接入方式：{card.processed ? '优先替换试玩占位态' : '先作为参考图回流'}</div>
+                    <div>任务：{card.jobId}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        ) : null}
+
+        <div className="rounded-3xl border border-amber-300/20 bg-amber-400/10 p-6 text-sm leading-7 text-amber-50">
+          <p className="text-xs uppercase tracking-[0.3em] text-amber-200">Current production reality</p>
+          <p className="mt-3">
+            现在首页已经重新把 `/generator` 与 `/pipeline` 暴露出来，因为战斗动画素材上传和处理正处于高优先级推进中。试玩、上传、追踪三条入口都要能直接到，不该再让人靠猜路径。
+          </p>
         </div>
       </section>
     </main>

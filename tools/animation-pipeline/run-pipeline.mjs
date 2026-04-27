@@ -1,0 +1,48 @@
+import { mkdir } from 'node:fs/promises';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { buildMetadata } from './scripts/build-metadata.mjs';
+import { splitFrames } from './scripts/split-frames.mjs';
+import { packAtlas } from './scripts/pack-atlas.mjs';
+import { buildManifest } from './scripts/build-manifest.mjs';
+import { auditAssets } from './scripts/audit-assets.mjs';
+import { buildGenerationTasks } from './scripts/build-generation-tasks.mjs';
+import { buildProductionReport } from './scripts/build-production-report.mjs';
+import { buildCharacterBriefs } from './scripts/build-character-briefs.mjs';
+import { prioritizeBriefs } from './scripts/prioritize-briefs.mjs';
+import { buildPriorityPacks } from './scripts/build-priority-packs.mjs';
+import { buildRuntimeGate } from './scripts/build-runtime-gate.mjs';
+import { buildShotlists } from './scripts/build-shotlists.mjs';
+import { buildGapMatrix } from './scripts/build-gap-matrix.mjs';
+import { buildGapBoard } from './scripts/build-gap-board.mjs';
+import { bootstrapPriorityProductionPacks } from './scripts/bootstrap-priority-production-packs.mjs';
+import { buildAllProductionPackTasks } from './scripts/build-all-production-pack-tasks.mjs';
+import { buildProgressSummary } from './scripts/build-progress-summary.mjs';
+import { processQueue } from './scripts/process-queue.mjs';
+import { buildQueueDashboard } from './scripts/build-queue-dashboard.mjs';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const outputDir = join(__dirname, 'output');
+
+await mkdir(outputDir, { recursive: true });
+await buildMetadata();
+await splitFrames();
+await packAtlas();
+await buildManifest();
+await auditAssets();
+await buildGenerationTasks();
+await buildProductionReport();
+await buildCharacterBriefs();
+await prioritizeBriefs();
+await buildPriorityPacks();
+await buildRuntimeGate();
+await buildShotlists();
+await buildGapMatrix();
+await buildGapBoard();
+await bootstrapPriorityProductionPacks();
+await buildAllProductionPackTasks();
+await buildProgressSummary();
+await processQueue();
+await buildQueueDashboard();
+
+console.log('Aetherlan animation pipeline finished.');

@@ -1,0 +1,61 @@
+{
+  "generatedAt": "2026-04-26T19:27:26.145Z",
+  "characterId": "samuel",
+  "displayName": "Samuel",
+  "priorityScore": 100,
+  "priorityReason": "core humanoid battle presentation benchmark",
+  "productionGoal": "Create the first production-usable tactical animation asset set for Aetherlan War.",
+  "deliverables": [
+    "master A-pose reference PNG",
+    "map sprite sheet with idle/run/hit/death",
+    "per-action metadata json",
+    "transparent-background skill effect frames when needed"
+  ],
+  "prompts": [
+    {
+      "action": "master",
+      "prompt": "full body hero, A-pose, front view, transparent or plain background, same face, same armor, same sword, consistent proportions",
+      "outputHint": "single transparent PNG"
+    },
+    {
+      "action": "idle",
+      "prompt": "subtle breathing idle loop, fantasy warrior, same costume, transparent background",
+      "outputHint": "animation frame sequence or sheet"
+    },
+    {
+      "action": "run",
+      "prompt": "side-facing tactical run cycle, fantasy warrior, same costume, transparent background",
+      "outputHint": "animation frame sequence or sheet"
+    },
+    {
+      "action": "hit",
+      "prompt": "brief recoil hit reaction, fantasy warrior, same costume, transparent background",
+      "outputHint": "animation frame sequence or sheet"
+    },
+    {
+      "action": "death",
+      "prompt": "falling defeat sequence, fantasy warrior, same costume, transparent background",
+      "outputHint": "animation frame sequence or sheet"
+    },
+    {
+      "action": "attackFx",
+      "prompt": "bright sword slash arc, alpha background, fantasy hit effect",
+      "outputHint": "animation frame sequence or sheet"
+    }
+  ],
+  "technicalSpec": {
+    "mapFrameWidth": 256,
+    "mapFrameHeight": 256,
+    "expectedRows": 4,
+    "expectedColumns": 4,
+    "alphaBackground": true,
+    "consistentCharacterIdentity": true
+  },
+  "acceptanceChecklist": [
+    "master reference locked",
+    "map sheet reaches full 4x4 target or approved equivalent",
+    "idle/run/hit/death frame coverage complete",
+    "transparent background verified",
+    "pipeline audit has no action overflow errors"
+  ]
+}

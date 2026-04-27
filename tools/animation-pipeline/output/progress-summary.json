@@ -1,0 +1,38 @@
+{
+  "generatedAt": "2026-04-26T19:27:26.154Z",
+  "overallCompletionPercent": 0,
+  "rows": [
+    {
+      "characterId": "isolde",
+      "displayName": "Isolde",
+      "status": "error",
+      "presentActions": 0,
+      "totalActions": 4,
+      "completionPercent": 0
+    },
+    {
+      "characterId": "moon-deer",
+      "displayName": "Moon Deer",
+      "status": "error",
+      "presentActions": 0,
+      "totalActions": 4,
+      "completionPercent": 0
+    },
+    {
+      "characterId": "mutated-beast",
+      "displayName": "Mutated Beast",
+      "status": "error",
+      "presentActions": 0,
+      "totalActions": 4,
+      "completionPercent": 0
+    },
+    {
+      "characterId": "samuel",
+      "displayName": "Samuel",
+      "status": "error",
+      "presentActions": 0,
+      "totalActions": 4,
+      "completionPercent": 0
+    }
+  ]
+}

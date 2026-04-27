@@ -1,0 +1,50 @@
+{
+  "id": "gen-20260425220734-152f61",
+  "createdAt": "2026-04-25T22:07:34.878245+00:00",
+  "status": "done",
+  "source": "public-generator-ui",
+  "storage": "hetzner-disk-persistent",
+  "request": {
+    "role": "人类战士",
+    "action": "受击",
+    "frameCount": "8",
+    "provider": "Doubao",
+    "notes": "smoke test from server",
+    "intent": "battle-animation-assets"
+  },
+  "uploads": [
+    {
+      "name": "smoke.txt",
+      "size": 15,
+      "type": "text/plain",
+      "path": "/opt/aetherlan-war/uploads/gen-20260425220734-152f61/smoke.txt"
+    }
+  ],
+  "workerPayload": {
+    "jobId": "gen-20260425220734-152f61",
+    "role": "人类战士",
+    "action": "受击",
+    "provider": "Doubao",
+    "uploadCount": 1,
+    "uploadNames": [
+      "smoke.txt"
+    ],
+    "status": "persistent-intake-received",
+    "nextStep": "dispatch-worker-from-queue"
+  },
+  "nextStep": "Queued on persistent Hetzner intake. Worker dispatch is the next integration step.",
+  "updatedAt": "2026-04-26T04:29:53.264Z",
+  "jobDir": "/root/.openclaw/workspace/projects/aetherlan-war/tools/animation-pipeline/jobs/gen-20260425220734-152f61",
+  "adapter": "doubao-adapter",
+  "inputs": [
+    {
+      "originalName": "smoke.txt",
+      "sourcePath": "/root/.openclaw/workspace/projects/aetherlan-war/tools/animation-pipeline/staging/hetzner-uploads/gen-20260425220734-152f61/smoke.txt",
+      "remotePersistentPath": "/opt/aetherlan-war/uploads/gen-20260425220734-152f61/smoke.txt",
+      "jobInputPath": "/root/.openclaw/workspace/projects/aetherlan-war/tools/animation-pipeline/jobs/gen-20260425220734-152f61/inputs/smoke.txt",
+      "size": 15,
+      "type": "text/plain"
+    }
+  ],
+  "resultPath": "output/queue-results/gen-20260425220734-152f61.result.json"
+}

@@ -1,0 +1,14 @@
+{
+  "name": "aetherlan-animation-pipeline",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "pipeline": "node ./run-pipeline.mjs",
+    "metadata": "node ./scripts/build-metadata.mjs",
+    "split": "node ./scripts/split-frames.mjs",
+    "atlas": "node ./scripts/pack-atlas.mjs",
+    "manifest": "node ./scripts/build-manifest.mjs",
+    "audit": "node ./scripts/audit-assets.mjs",
+    "tasks": "node ./scripts/build-generation-tasks.mjs"
+  }
+}

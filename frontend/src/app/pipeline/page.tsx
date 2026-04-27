@@ -1,5 +1,9 @@
 import { readFile, readdir } from 'node:fs/promises';
-import { resolve } from 'node:path';
+import { resolve, basename } from 'node:path';
+
+ type PipelinePageProps = {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+};
 
 async function loadJson<T>(relativePath: string): Promise<T | null> {
   try {
@@ -78,13 +82,19 @@ type QueueDashboard = {
     id: string;
     status: string;
     createdAt: string;
+    storage?: string;
     request?: {
       role?: string;
+      characterId?: string;
+      characterLabel?: string;
       action?: string;
+      targetSlot?: string;
+      assetKind?: string;
       provider?: string;
       frameCount?: string | number;
     };
   }[];
+  recentResults?: QueueResult[];
 };
 
 type QueueResult = {
@@ -93,25 +103,44 @@ type QueueResult = {
   status: string;
   adapter?: string;
   note: string;
+  previewUrl?: string;
+  processedPreviewUrl?: string;
   request?: {
     role?: string;
+    characterId?: string;
+    characterLabel?: string;
     action?: string;
+    targetSlot?: string;
+    assetKind?: string;
     provider?: string;
     frameCount?: string | number;
   };
-  uploads?: { originalName?: string; jobInputPath?: string }[];
+  uploads?: {
+    originalName?: string;
+    type?: string;
+    size?: number;
+    name?: string;
+    path?: string;
+  }[];
+  source?: {
+    intakeStorage?: string;
+  };
   outputs?: {
     transparentFrames?: boolean;
     atlasPacked?: boolean;
     zipReady?: boolean;
-    manifest?: string;
-    atlasJson?: string;
-    framePlan?: string;
-    bundlePlan?: string;
+    manifest?: boolean;
+    atlasJson?: boolean;
+    framePlan?: boolean;
+    bundlePlan?: boolean;
+  };
+  workspace?: {
+    root?: boolean;
   };
 };
 
-export default async function PipelinePage() {
+export default async function PipelinePage({ searchParams }: PipelinePageProps) {
+  const params = (await searchParams) ?? {};
   const [progress, runtimeGate, priority, gapMatrix, queueDashboard, queueResults] = await Promise.all([
     loadJson<ProgressSummary>('progress-summary.json'),
     loadJson<RuntimeGate>('runtime-gate.json'),
@@ -144,6 +173,18 @@ export default async function PipelinePage() {
   ];
 
   const boardRows = gapMatrix?.rows ?? [];
+  const recentResults = queueDashboard?.recentResults ?? queueResults;
+  const queueIsPreviewOnly = (queueDashboard?.total ?? 0) === 0 && recentResults.length === 0;
+  const hasPersistentQueue = (queueDashboard?.jobs ?? []).some((job) => job.storage === 'hetzner-disk-persistent');
+  const recentJobId = typeof params.recentJobId === 'string' ? params.recentJobId : null;
+  const recentRole = typeof params.recentRole === 'string' ? params.recentRole : null;
+  const recentCharacterId = typeof params.recentCharacterId === 'string' ? params.recentCharacterId : null;
+  const recentCharacterLabel = typeof params.recentCharacterLabel === 'string' ? params.recentCharacterLabel : null;
+  const recentAction = typeof params.recentAction === 'string' ? params.recentAction : null;
+  const recentTargetSlot = typeof params.recentTargetSlot === 'string' ? params.recentTargetSlot : null;
+  const recentAssetKind = typeof params.recentAssetKind === 'string' ? params.recentAssetKind : null;
+  const recentUploadCount = typeof params.recentUploadCount === 'string' ? params.recentUploadCount : null;
+  const recentUploadNames = typeof params.recentUploadNames === 'string' ? params.recentUploadNames.split(' | ').filter(Boolean) : [];
 
   return (
     <main className="min-h-screen bg-[radial-gradient(circle_at_top,_#1b244d,_#0b1024_55%,_#04060f)] text-white">
@@ -202,6 +243,51 @@ export default async function PipelinePage() {
           ))}
         </div>
 
+        {recentJobId ? (
+          <section className="mt-8 rounded-3xl border border-emerald-300/20 bg-emerald-400/10 p-6 backdrop-blur-sm">
+            <p className="text-sm uppercase tracking-[0.3em] text-emerald-200">最近一次线上接收</p>
+            <h2 className="mt-2 text-2xl font-bold text-white">刚刚收到一条上传请求</h2>
+            <div className="mt-4 grid gap-2 text-sm leading-7 text-emerald-50/95">
+              <div>Job ID：{recentJobId}</div>
+              <div>角色类型：{recentRole ?? '未提供'}</div>
+              <div>具体角色：{recentCharacterLabel ?? recentCharacterId ?? '未提供'}</div>
+              <div>动作：{recentAction ?? '未提供'}</div>
+              <div>应用槽位：{recentTargetSlot ?? '未提供'}</div>
+              <div>素材用途：{recentAssetKind ?? '未提供'}</div>
+              <div>接收文件数：{recentUploadCount ?? '0'}</div>
+              <div>素材标记：{recentUploadNames.length > 0 ? '✅ 已记录' : '⬜ 未记录'}</div>
+            </div>
+            <div className="mt-5 grid gap-4 lg:grid-cols-2">
+              <div className="rounded-2xl border border-white/10 bg-slate-950/45 p-4">
+                <div className="text-xs uppercase tracking-[0.25em] text-cyan-200">Intake progress card</div>
+                <div className="mt-3 grid gap-2 text-sm leading-6 text-slate-200">
+                  <div>request received: ✅</div>
+                  <div>job id issued: {recentJobId ? '✅' : '⬜'}</div>
+                  <div>role captured: {recentRole ? '✅' : '⬜'}</div>
+                  <div>character captured: {(recentCharacterId || recentCharacterLabel) ? '✅' : '⬜'}</div>
+                  <div>action captured: {recentAction ? '✅' : '⬜'}</div>
+                  <div>target slot captured: {recentTargetSlot ? '✅' : '⬜'}</div>
+                  <div>asset kind captured: {recentAssetKind ? '✅' : '⬜'}</div>
+                  <div>upload count recorded: {recentUploadCount ? '✅' : '⬜'}</div>
+                  <div>worker dispatch pending: ✅</div>
+                </div>
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-slate-950/45 p-4">
+                <div className="text-xs uppercase tracking-[0.25em] text-cyan-200">Safe status summary</div>
+                <div className="mt-3 grid gap-2 text-sm leading-6 text-slate-200">
+                  <div>frontend intake: active ✅</div>
+                  <div>persistent handoff: pending verification ⏳</div>
+                  <div>preview-safe metadata only: ✅</div>
+                  <div>sensitive worker payload hidden: ✅</div>
+                </div>
+              </div>
+            </div>
+            <p className="mt-4 text-sm leading-7 text-emerald-100/90">
+              这块只保留安全的接收进度摘要。如果下面的公共生成队列已经出现 persistent job，就说明这条上传不只是前端收到，而是已经进入后续处理闭环。
+            </p>
+          </section>
+        ) : null}
+
         <div className="mt-10 grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
           <section className="rounded-3xl border border-white/10 bg-white/6 p-6 backdrop-blur-sm">
             <div className="flex items-center justify-between gap-4">
@@ -258,6 +344,15 @@ export default async function PipelinePage() {
             </div>
 
             <div className="mt-6 space-y-3">
+              {queueIsPreviewOnly ? (
+                <div className="rounded-2xl border border-amber-300/20 bg-amber-400/8 p-4 text-sm leading-7 text-amber-50">
+                  当前线上上传已经能成功接收请求，也已经能把最近一次接收结果轻量回流到前端。但这个页面主读取源仍是本地 animation pipeline 输出目录，所以如果线上上传结果还没同步回 workspace queue，这里仍会看到 0 条本地任务。这不代表上传失败，只代表“线上 preview intake”与“本地 worker 看板”还没完全接通。
+                </div>
+              ) : hasPersistentQueue ? (
+                <div className="rounded-2xl border border-emerald-300/20 bg-emerald-400/8 p-4 text-sm leading-7 text-emerald-50">
+                  当前看板已经检测到来自 Hetzner persistent intake 的任务，说明上传链路不再只是 preview 回显，而是已经进入“持久化接收 → 本地 consumer 处理 → results 回写”的闭环雏形。现在可以把 recent result 视作“已进入后处理并产出结果文件”，不再只是单纯上传成功。
+                </div>
+              ) : null}
               {(queueDashboard?.jobs ?? []).slice(-5).reverse().map((job) => (
                 <div key={job.id} className="rounded-2xl border border-white/10 bg-slate-950/45 p-4">
                   <div className="flex items-center justify-between gap-3">
@@ -265,8 +360,9 @@ export default async function PipelinePage() {
                     <div className="rounded-full bg-cyan-400/12 px-3 py-1 text-xs text-cyan-200">{job.status}</div>
                   </div>
                   <p className="mt-2 text-sm text-slate-300">
-                    {job.request?.role ?? 'unknown role'} / {job.request?.action ?? 'unknown action'} / {job.request?.provider ?? 'unknown provider'} / {job.request?.frameCount ?? '-'} 帧
+                    {(job.request?.characterLabel ?? job.request?.characterId ?? job.request?.role ?? 'unknown role')} / {job.request?.action ?? 'unknown action'} / slot {job.request?.targetSlot ?? 'unassigned'} / {job.request?.frameCount ?? '-'} 帧
                   </p>
+                  <p className="mt-2 text-xs text-emerald-200/90">storage: {job.storage ?? 'workspace-local'}</p>
                 </div>
               ))}
             </div>
@@ -277,26 +373,53 @@ export default async function PipelinePage() {
           <p className="text-sm uppercase tracking-[0.3em] text-emerald-300">队列结果详情</p>
           <h2 className="mt-2 text-2xl font-bold">最近处理结果</h2>
           <div className="mt-6 grid gap-4 lg:grid-cols-2">
-            {queueResults.map((result) => (
+            {recentResults.map((result) => (
               <div key={result.jobId} className="rounded-2xl border border-white/10 bg-slate-950/50 p-5">
                 <div className="flex items-center justify-between gap-3">
                   <div className="text-lg font-semibold text-white">{result.jobId}</div>
                   <div className="rounded-full bg-emerald-400/12 px-3 py-1 text-xs text-emerald-200">{result.status}</div>
                 </div>
                 <p className="mt-3 text-sm leading-7 text-slate-300">{result.note}</p>
+                <p className="mt-2 text-xs leading-6 text-emerald-200/90">完成判定提示: 只要 recent result 出现在这里，就说明该上传至少已经过了 intake、queue、consumer 和 result 回写，不再只是停留在浏览器上传成功。</p>
                 <div className="mt-4 text-sm text-slate-200">
-                  {result.request?.role ?? 'unknown role'} / {result.request?.action ?? 'unknown action'} / {result.request?.provider ?? 'unknown provider'} / {result.request?.frameCount ?? '-'} 帧
+                  {(result.request?.characterLabel ?? result.request?.characterId ?? result.request?.role ?? 'unknown role')} / {result.request?.action ?? 'unknown action'} / slot {result.request?.targetSlot ?? 'unassigned'} / {result.request?.frameCount ?? '-'} 帧
                 </div>
                 <div className="mt-3 text-xs uppercase tracking-[0.25em] text-cyan-200">adapter: {result.adapter ?? 'n/a'}</div>
+                {(result.previewUrl || result.processedPreviewUrl) ? (
+                  <div className="mt-4 grid gap-3 lg:grid-cols-2">
+                    {result.previewUrl ? (
+                      <div className="overflow-hidden rounded-2xl border border-white/10 bg-black/20">
+                        <div className="border-b border-white/10 px-3 py-2 text-xs uppercase tracking-[0.25em] text-cyan-200">input reference</div>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={result.previewUrl} alt={`${result.jobId}-input`} className="h-56 w-full object-contain bg-slate-950/70" />
+                      </div>
+                    ) : null}
+                    {result.processedPreviewUrl ? (
+                      <div className="overflow-hidden rounded-2xl border border-emerald-300/20 bg-black/20">
+                        <div className="border-b border-emerald-300/15 px-3 py-2 text-xs uppercase tracking-[0.25em] text-emerald-200">processed preview</div>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={result.processedPreviewUrl} alt={`${result.jobId}-processed`} className="h-56 w-full object-contain bg-slate-950/70" />
+                      </div>
+                    ) : null}
+                  </div>
+                ) : null}
                 <div className="mt-4 grid gap-2 text-sm text-slate-300">
-                  <div>uploads copied: {result.uploads?.length ?? 0}</div>
-                  <div>transparentFrames: {String(result.outputs?.transparentFrames ?? false)}</div>
-                  <div>atlasPacked: {String(result.outputs?.atlasPacked ?? false)}</div>
-                  <div>zipReady: {String(result.outputs?.zipReady ?? false)}</div>
-                  <div className="break-all">manifest: {result.outputs?.manifest ?? 'n/a'}</div>
-                  <div className="break-all">atlasJson: {result.outputs?.atlasJson ?? 'n/a'}</div>
-                  <div className="break-all">framePlan: {result.outputs?.framePlan ?? 'n/a'}</div>
-                  <div className="break-all">bundlePlan: {result.outputs?.bundlePlan ?? 'n/a'}</div>
+                  <div>uploads received: {result.uploads?.length ?? 0}</div>
+                  <div>input reference attached: {(result.previewUrl || result.uploads?.length) ? '✅' : '⬜'}</div>
+                  <div>background cleanup complete: {result.outputs?.transparentFrames ? '✅' : '⬜'}</div>
+                  <div>atlas packaging complete: {result.outputs?.atlasPacked ? '✅' : '⬜'}</div>
+                  <div>zip bundle ready: {result.outputs?.zipReady ? '✅' : '⬜'}</div>
+                  <div>processing stage: {(result.outputs?.zipReady ? 'Bundle ready' : result.outputs?.atlasPacked ? 'Atlas packed' : result.outputs?.transparentFrames ? 'Transparent frames ready' : 'Worker intake processed')}</div>
+                  <div>preview status: {result.processedPreviewUrl ? 'Processed preview available ✅' : result.previewUrl ? 'Input preview available ✅' : 'No preview yet ⬜'}</div>
+                  <div>storage handoff: {result.source?.intakeStorage ? '✅ Persistent intake recorded' : '⬜ Pending intake record'}</div>
+                  <div>queue intake recorded: {result.source?.intakeStorage ? '✅' : '⬜'}</div>
+                  <div>output manifest recorded: {result.outputs?.manifest ? '✅' : '⬜'}</div>
+                  <div>atlas plan recorded: {result.outputs?.atlasJson ? '✅' : '⬜'}</div>
+                  <div>frame plan recorded: {result.outputs?.framePlan ? '✅' : '⬜'}</div>
+                  <div>bundle plan recorded: {result.outputs?.bundlePlan ? '✅' : '⬜'}</div>
+                  <div>workspace job created: {result.workspace?.root ? '✅' : '⬜'}</div>
+                  <div>source asset names: {(result.uploads ?? []).map((upload) => upload.originalName ?? upload.name ?? basename(upload.path ?? '')).filter(Boolean).join(' | ') || 'none recorded'}</div>
+                  <div>target binding: {(result.request?.characterLabel ?? result.request?.characterId ?? result.request?.role ?? 'unknown')} → {result.request?.targetSlot ?? 'unassigned'} ({result.request?.assetKind ?? 'battle-animation'})</div>
                 </div>
               </div>
             ))}

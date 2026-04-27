@@ -1,0 +1,275 @@
+{
+  "generatedAt": "2026-04-26T19:27:26.138Z",
+  "summary": {
+    "totalCharacters": 4,
+    "ok": 0,
+    "warning": 0,
+    "error": 4
+  },
+  "characters": [
+    {
+      "characterId": "isolde",
+      "displayName": "Isolde",
+      "status": "error",
+      "expectedFrames": 16,
+      "actualFrames": 2,
+      "actions": [
+        {
+          "id": "idle",
+          "start": 0,
+          "count": 4,
+          "fps": 8,
+          "loop": true
+        },
+        {
+          "id": "run",
+          "start": 4,
+          "count": 4,
+          "fps": 10,
+          "loop": true
+        },
+        {
+          "id": "hit",
+          "start": 8,
+          "count": 2,
+          "fps": 12,
+          "loop": false
+        },
+        {
+          "id": "death",
+          "start": 10,
+          "count": 4,
+          "fps": 8,
+          "loop": false
+        }
+      ],
+      "sourceSheet": "../../../frontend/public/characters/isolde-sprite.png",
+      "sourceBytes": 480786,
+      "issues": [
+        {
+          "level": "warning",
+          "code": "FRAME_COUNT_MISMATCH",
+          "message": "expected 16 frames from config grid, found 2"
+        },
+        {
+          "level": "error",
+          "code": "ACTION_OUT_OF_RANGE",
+          "message": "idle expects frame index 3, but only 2 frames exist"
+        },
+        {
+          "level": "error",
+          "code": "ACTION_OUT_OF_RANGE",
+          "message": "run expects frame index 7, but only 2 frames exist"
+        },
+        {
+          "level": "error",
+          "code": "ACTION_OUT_OF_RANGE",
+          "message": "hit expects frame index 9, but only 2 frames exist"
+        },
+        {
+          "level": "error",
+          "code": "ACTION_OUT_OF_RANGE",
+          "message": "death expects frame index 13, but only 2 frames exist"
+        }
+      ]
+    },
+    {
+      "characterId": "moon-deer",
+      "displayName": "Moon Deer",
+      "status": "error",
+      "expectedFrames": 16,
+      "actualFrames": 2,
+      "actions": [
+        {
+          "id": "idle",
+          "start": 0,
+          "count": 4,
+          "fps": 8,
+          "loop": true
+        },
+        {
+          "id": "run",
+          "start": 4,
+          "count": 4,
+          "fps": 10,
+          "loop": true
+        },
+        {
+          "id": "hit",
+          "start": 8,
+          "count": 2,
+          "fps": 12,
+          "loop": false
+        },
+        {
+          "id": "death",
+          "start": 10,
+          "count": 4,
+          "fps": 8,
+          "loop": false
+        }
+      ],
+      "sourceSheet": "../../../frontend/public/characters/moon-deer-sprite.png",
+      "sourceBytes": 300861,
+      "issues": [
+        {
+          "level": "warning",
+          "code": "FRAME_COUNT_MISMATCH",
+          "message": "expected 16 frames from config grid, found 2"
+        },
+        {
+          "level": "error",
+          "code": "ACTION_OUT_OF_RANGE",
+          "message": "idle expects frame index 3, but only 2 frames exist"
+        },
+        {
+          "level": "error",
+          "code": "ACTION_OUT_OF_RANGE",
+          "message": "run expects frame index 7, but only 2 frames exist"
+        },
+        {
+          "level": "error",
+          "code": "ACTION_OUT_OF_RANGE",
+          "message": "hit expects frame index 9, but only 2 frames exist"
+        },
+        {
+          "level": "error",
+          "code": "ACTION_OUT_OF_RANGE",
+          "message": "death expects frame index 13, but only 2 frames exist"
+        }
+      ]
+    },
+    {
+      "characterId": "mutated-beast",
+      "displayName": "Mutated Beast",
+      "status": "error",
+      "expectedFrames": 16,
+      "actualFrames": 2,
+      "actions": [
+        {
+          "id": "idle",
+          "start": 0,
+          "count": 4,
+          "fps": 8,
+          "loop": true
+        },
+        {
+          "id": "run",
+          "start": 4,
+          "count": 4,
+          "fps": 10,
+          "loop": true
+        },
+        {
+          "id": "hit",
+          "start": 8,
+          "count": 2,
+          "fps": 12,
+          "loop": false
+        },
+        {
+          "id": "death",
+          "start": 10,
+          "count": 4,
+          "fps": 8,
+          "loop": false
+        }
+      ],
+      "sourceSheet": "../../../frontend/public/characters/mutated-beast-sprite.png",
+      "sourceBytes": 374818,
+      "issues": [
+        {
+          "level": "warning",
+          "code": "FRAME_COUNT_MISMATCH",
+          "message": "expected 16 frames from config grid, found 2"
+        },
+        {
+          "level": "error",
+          "code": "ACTION_OUT_OF_RANGE",
+          "message": "idle expects frame index 3, but only 2 frames exist"
+        },
+        {
+          "level": "error",
+          "code": "ACTION_OUT_OF_RANGE",
+          "message": "run expects frame index 7, but only 2 frames exist"
+        },
+        {
+          "level": "error",
+          "code": "ACTION_OUT_OF_RANGE",
+          "message": "hit expects frame index 9, but only 2 frames exist"
+        },
+        {
+          "level": "error",
+          "code": "ACTION_OUT_OF_RANGE",
+          "message": "death expects frame index 13, but only 2 frames exist"
+        }
+      ]
+    },
+    {
+      "characterId": "samuel",
+      "displayName": "Samuel",
+      "status": "error",
+      "expectedFrames": 16,
+      "actualFrames": 2,
+      "actions": [
+        {
+          "id": "idle",
+          "start": 0,
+          "count": 4,
+          "fps": 8,
+          "loop": true
+        },
+        {
+          "id": "run",
+          "start": 4,
+          "count": 4,
+          "fps": 10,
+          "loop": true
+        },
+        {
+          "id": "hit",
+          "start": 8,
+          "count": 2,
+          "fps": 12,
+          "loop": false
+        },
+        {
+          "id": "death",
+          "start": 10,
+          "count": 4,
+          "fps": 8,
+          "loop": false
+        }
+      ],
+      "sourceSheet": "../../../frontend/public/characters/samuel-sprite.png",
+      "sourceBytes": 356020,
+      "issues": [
+        {
+          "level": "warning",
+          "code": "FRAME_COUNT_MISMATCH",
+          "message": "expected 16 frames from config grid, found 2"
+        },
+        {
+          "level": "error",
+          "code": "ACTION_OUT_OF_RANGE",
+          "message": "idle expects frame index 3, but only 2 frames exist"
+        },
+        {
+          "level": "error",
+          "code": "ACTION_OUT_OF_RANGE",
+          "message": "run expects frame index 7, but only 2 frames exist"
+        },
+        {
+          "level": "error",
+          "code": "ACTION_OUT_OF_RANGE",
+          "message": "hit expects frame index 9, but only 2 frames exist"
+        },
+        {
+          "level": "error",
+          "code": "ACTION_OUT_OF_RANGE",
+          "message": "death expects frame index 13, but only 2 frames exist"
+        }
+      ]
+    }
+  ]
+}

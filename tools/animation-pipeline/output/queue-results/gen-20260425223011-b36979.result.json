@@ -1,0 +1,28 @@
+{
+  "jobId": "gen-20260425223011-b36979",
+  "createdAt": "2026-04-26T04:29:53.267Z",
+  "status": "done",
+  "adapter": "doubao-adapter",
+  "note": "Queue consumer created job workspace, copied uploaded inputs, emitted stub frame/atlas/bundle manifests, and now attempts image trim preprocessing for uploaded PNG/WebP sources.",
+  "request": {
+    "role": "元素法师",
+    "action": "施法",
+    "frameCount": "8",
+    "provider": "Doubao",
+    "notes": "",
+    "intent": "battle-animation-assets"
+  },
+  "uploads": [
+    {
+      "originalName": "nginx-smoke.txt",
+      "size": 10,
+      "type": "text/plain"
+    }
+  ],
+  "source": {
+    "intakeStorage": "hetzner-disk-persistent"
+  },
+  "workspace": {},
+  "previewUrl": null,
+  "processedPreviewUrl": null
+}

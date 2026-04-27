@@ -1,0 +1,78 @@
+{
+  "characterId": "isolde",
+  "displayName": "Isolde",
+  "generatedAt": "2026-04-26T19:27:25.696Z",
+  "inputs": {
+    "referenceImage": "../../../frontend/public/characters/isolde.png",
+    "profileImage": "../../../frontend/public/characters/isolde-profile-pic.png",
+    "mapSheet": "../../../frontend/public/characters/isolde-sprite.png",
+    "performanceSources": []
+  },
+  "filesVerified": {
+    "referenceImage": true,
+    "profileImage": true,
+    "mapSheet": true,
+    "performanceSources": []
+  },
+  "mapModule": {
+    "frameWidth": 256,
+    "frameHeight": 256,
+    "rows": 4,
+    "columns": 4,
+    "anchor": {
+      "x": 0.5,
+      "y": 0.82
+    },
+    "scale": 1,
+    "actions": [
+      {
+        "id": "idle",
+        "start": 0,
+        "count": 4,
+        "fps": 8,
+        "loop": true
+      },
+      {
+        "id": "run",
+        "start": 4,
+        "count": 4,
+        "fps": 10,
+        "loop": true
+      },
+      {
+        "id": "hit",
+        "start": 8,
+        "count": 2,
+        "fps": 12,
+        "loop": false
+      },
+      {
+        "id": "death",
+        "start": 10,
+        "count": 4,
+        "fps": 8,
+        "loop": false
+      }
+    ]
+  },
+  "performanceModule": [],
+  "generation": {
+    "style": "Amadis-style tactical JRPG battle animation, elegant fantasy heroine sprite feel",
+    "prompts": {
+      "master": "full body heroine, A-pose, front view, transparent or plain background, same face, same dress or armor, same weapon, consistent proportions",
+      "idle": "subtle breathing idle loop, fantasy heroine, same costume, transparent background",
+      "run": "side-facing tactical run cycle, fantasy heroine, same costume, transparent background",
+      "hit": "brief recoil hit reaction, fantasy heroine, same costume, transparent background",
+      "death": "falling defeat sequence, fantasy heroine, same costume, transparent background"
+    }
+  },
+  "runtime": {
+    "mapStates": [
+      "idle",
+      "run",
+      "hit",
+      "death"
+    ],
+    "cinematicStates": []
+  }
+}

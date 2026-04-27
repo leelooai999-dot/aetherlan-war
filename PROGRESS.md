@@ -191,3 +191,196 @@
 - 用户随后贴出 `/api/generator#battle-upload` 的 HTTP 405，这次是访问路径用错了，不是表单提交流程本身
 - 已给 `/api/generator` 补 GET 处理，今后即使直接点到 API 地址，也会返回明确提示：浏览器请用 `/generator#battle-upload`
 - 下一步：构建通过后，直接把正确上传地址发给用户，避免再走到 API 路由页
+
+## 2026-04-25 07:48 PDT
+- A 线继续推进：本地 `next dev` 下 `/api/generator` 已验证 200，说明当前 route handler 代码本身可工作；线上 Vercel 仍回 500，更像部署版本未更新或平台侧配置差异
+- 已把修复提交并推到 GitHub `main`，后续继续追线上部署链路
+- B 线继续推进：`tools/animation-pipeline/scripts/process-queue.mjs` 不再只是纯 stub，现在会对上传的 `.png/.webp` 资源尝试调用 `python/preprocess_frames.py` 做 trim 预处理，并把结果写入 output manifest
+- `animation-pipeline/.venv` 内 Pillow 已可用，因此这条“上传图片 → 基础预处理”链路在本地 pipeline 侧已经具备继续扩展的基础
+- 下一步：继续追 Vercel 为什么没吃到新 route，同时把 preprocess 结果进一步接到 atlas/manifest 流程
+
+## 2026-04-25 07:53 PDT
+- 已确认根因：修复代码已成功部署到 `aetherlan-war-frontend` 项目，而用户一直测试的是另一个旧项目域名 `aetherlan-war.vercel.app`
+- 实测结果：`https://aetherlan-war-frontend.vercel.app/api/generator` 已返回 200；旧地址 `https://aetherlan-war.vercel.app/api/generator` 仍为 500
+- 这意味着 A 线的“上传不再炸”在新前端项目上已经成立，下一步需要统一用户入口/域名，避免继续访问旧站
+- B 线继续：接下来把 preprocess 产物继续接入 manifest/atlas，让上传 PNG 后不止登记，还能形成后续可消费的处理结果
+
+## 2026-04-25 07:26 PDT
+- 已把旧项目 `aetherlan-war` 重新 link 并从仓库根目录成功部署，`aetherlan-war.vercel.app` 现已切到最新前端代码
+- 实测确认：旧主域名上的 `/api/generator` 与 `/generator#battle-upload` 现在都返回 200，不再是 HTTP 500
+- 为避免用户上传成功后在 `/pipeline` 看到 0 条任务产生误解，已补充说明：当前线上是 preview 接收模式，本地 pipeline 看板尚未自动同步线上 queue 结果
+- 下一步：继续把线上上传结果与本地 queue/dashboard 串起来，让 pipeline 页真正显示上传后的可见结果
+
+## 2026-04-25 08:33 PDT
+- 已继续补 generator 成功回显：上传成功后不再只显示 job id，而会直接显示本次角色类型、动作、provider、接收文件数与文件名
+- 这让线上 preview 模式下的“确实收到什么素材”变得前端可见，不需要用户再猜到底有没有传上去
+- 下一步：继续做 pipeline 页的结果回流与 worker 接续，让上传后的素材状态在生成追踪页里也能看见
+
+## 2026-04-25 08:40 PDT
+- 已继续把线上接收结果往 `/pipeline` 回流：从 generator 成功页跳转到 pipeline 时，会把最近一次线上接收的 job id、角色、动作、provider、文件数和文件名一起带过去
+
+## 2026-04-25 13:06 PDT
+- 已确认现有 Hetzner 主机 `178.156.247.8` 正在运行，规格相当于 CPX21 档：约 3.7 GiB RAM、75G 磁盘、44G 可用
+- 已确认这台机上当前只存在两个独立项目目录：`/opt/montecarloo` 与 `/opt/pyeces`，因此 Aetherlan War 继续复用同机是可行的，但必须严格目录 / env / systemd 隔离
+- 已新增 `docs/hetzner-backend-plan.md`，明确 Aetherlan War 的独立目录约定为 `/opt/aetherlan-war/{backend,worker,uploads,queue,results,logs}`，并规划独立服务名 `aetherlan-war-backend.service` / `aetherlan-war-worker.service`
+- 这一步的意义是把“可以复用现有 Hetzner”从口头判断推进成可执行的落地结构，为下一步真正把上传持久化到 Hetzner 后端做准备
+
+## 2026-04-25 13:24 PDT
+- 已继续把前端往独立后端切换做准备：`frontend/src/app/generator/page.tsx` 不再把表单 action 写死为 `/api/generator`，而是支持从 `NEXT_PUBLIC_GENERATOR_ACTION_URL` 读取可配置 intake endpoint
+- 已同步更新 `frontend/next.config.ts` 和 `frontend/src/app/api/generator/README.md`，明确后续可以把公共上传表单直接切到独立 Hetzner backend，而不用再重改 generator 页本身
+- 这一步把“未来切外部持久化后端”从想法推进成可切换配置位，为下一步真正让浏览器直投 Hetzner intake endpoint 做铺路
+
+## 2026-04-25 15:04 PDT
+- 已在 Hetzner 主机上真实创建 Aetherlan War 独立目录：`/opt/aetherlan-war/{backend,worker,uploads,queue,results,logs}`，没有和 `/opt/montecarloo`、`/opt/pyeces` 混目录
+- 已新增最小持久化 intake backend skeleton：`projects/aetherlan-war/backend/intake_server.py`，可接收 `POST /api/generator`、把上传文件写入 `/opt/aetherlan-war/uploads/<jobId>/`，并把 job JSON 写入 `/opt/aetherlan-war/queue/<jobId>.json`
+- 已把该 skeleton rsync 到 Hetzner 并成功本机 health check：`http://127.0.0.1:8010/health` 返回 `{"ok": true, "service": "aetherlan-war-intake", "storage": "/opt/aetherlan-war"}`
+- 这意味着 Aetherlan War 现在第一次拥有了真正的持久化上传入口雏形，不再只有 Vercel preview intake；下一步就是把前端表单切到这个 persistent endpoint 并补 browser-compatible 返回流
+
+## 2026-04-25 15:08 PDT
+- 已修正最小 intake backend 的 multipart 解析细节（补 `CONTENT_LENGTH` 并收紧 `referenceFiles` 处理），现在 Hetzner 上的真实 `POST /api/generator` smoke test 已返回 200
+- smoke test 已实际返回 persistent queue 响应，示例 job id：`gen-20260425220734-152f61`，并带回 `storage: hetzner-disk-persistent` 与 `workerPayload.status: persistent-intake-received`
+- 这说明“上传文件落盘 + queue job JSON 生成 + 标准化 worker payload 返回”这条 Hetzner persistent intake 主路径已经打通，接下来就可以继续把浏览器表单切过去
+
+## 2026-04-25 15:18 PDT
+- 已继续把 Hetzner intake 从临时 nohup 进程推进成正式 systemd 服务：新增 `backend/aetherlan-war-intake.service`，并在服务器上安装为 `aetherlan-war-intake.service`
+- 已同步补 `backend/nginx.aetherlan-war-intake.conf.example`，为后续独立反向代理入口预留单独 server block，不和 montecarloo / pyeces 混 nginx 配置
+- 这一步把 Aetherlan War 的持久化 intake 从“能跑的临时脚本”继续推进为“可长期维护的独立服务”，离前端正式切过来又近了一步
+
+## 2026-04-25 15:30 PDT
+- 已把 Aetherlan War intake 的独立 nginx 站点配置安装到 Hetzner：`/etc/nginx/sites-available/aetherlan-war-intake`，并启用到 `sites-enabled`
+- 已用 host header 本机验证反代入口命中成功：`curl -H "Host: aetherlan-intake.montecarloo.com" http://127.0.0.1/health` 返回 200
+- 这说明持久化 intake 已不只是在 8010 裸端口可用，而是已经具备了单独站点入口雏形，下一步就是补公网 DNS / SSL 或直接切前端到这个入口
+
+## 2026-04-25 15:59 PDT
+- 已新增 `tools/animation-pipeline/scripts/pull-hetzner-queue.sh`，可以把 Hetzner 持久化 intake 的 queue JSON 从 `/opt/aetherlan-war/queue/` 同步回本地 worker workspace 的 `tools/animation-pipeline/queue/`
+- 已实际拉回两个真实 Hetzner job：`gen-20260425220734-152f61` 与 `gen-20260425223011-b36979`
+- 已运行本地 worker 链路：`node ./scripts/process-queue.mjs && node ./scripts/build-queue-dashboard.mjs && node ./scripts/build-manifest.mjs`，结果 `queue-processed: 2`
+- 这意味着上传链路现在首次真正跨过了“只接收不处理”的阶段，已经形成了：Hetzner persistent intake -> 本地 queue sync -> local consumer 处理 -> dashboard / manifest 更新 的闭环雏形
+
+## 2026-04-25 17:04 PDT
+- 已新增 `tools/animation-pipeline/scripts/push-hetzner-results.sh`，可以把本地 `output/queue-results/` 再同步回 Hetzner `/opt/aetherlan-war/results/`
+- 已实际把两个本地处理结果推回 Hetzner：`gen-20260425220734-152f61.result.json` 与 `gen-20260425223011-b36979.result.json`
+- 这让当前链路从“远端 queue 拉回本地处理”继续推进成“远端 intake -> 本地消费 -> 结果再写回远端 results”的双向闭环，为后续 `/pipeline` 直接读取 persistent results 做好了基础
+
+## 2026-04-25 17:12 PDT
+- 已继续升级 `/pipeline` 页面表达，不再只强调 preview intake，而是开始明确展示 persistent queue 已跑通的状态
+- 现在只要 `queue-dashboard.json` 里检测到 `storage: hetzner-disk-persistent` 的 job，页面就会显示“persistent intake 已进入闭环雏形”的绿色提示
+- 队列卡片也开始显示 `storage`，结果卡片开始显示 `workspace root` 与可回溯的 upload refs，使 persistent 链路比之前更可见、更像真正的生产追踪台
+
+## 2026-04-25 17:14 PDT
+- 已补 `docs/persistent-intake-cutover.md`，把从 Vercel preview intake 切到 Hetzner persistent intake 的真实切换顺序写清楚
+- 已把 `frontend/.env.example` 更新为明确的目标值：后续浏览器上传切换目标不再是抽象占位符，而是 `https://aetherlan-intake.montecarloo.com/api/generator`
+- 这一步把“下一步怎么正式切公网 persistent endpoint”从口头计划推进成可执行 runbook，等 DNS / SSL 一补齐就能直接落切换
+
+## 2026-04-25 17:49 PDT
+- 已继续收口结果语义：本地 `queue-results/*.result.json` 和 `animation-manifest.json` 现在开始补带 `source` 信息，用来标记 intake storage 与 queue job 来源
+- 同时把远端 persistent upload 路径重新补回到 result 的 `uploads` 字段里，避免结果卡片只剩 workspace 路径却丢失远端上传来源
+- 这一步让 persistent queue/result 不只是“处理完成”，而且开始具备更像生产流水线的可追溯性，方便后续 `/pipeline`、worker 和外部后端继续对齐同一套来源语义
+
+## 2026-04-25 17:55 PDT
+- 已继续升级 `/pipeline` 结果卡片的数据结构，正式支持显示 `source.intakeStorage`、`source.queueJobPath`、`remote upload paths`
+- 同时把现有两个真实 job 的 `queue-results` 与 `animation-manifest.json` 都重新 patch 一遍，确保页面现在就能看到 persistent 链路的来源追踪信息，而不需要等下一批任务才生效
+- 这一步让 `/pipeline` 不只是知道“这条任务 done 了”，而是开始知道“它从哪台持久化 intake 来、对应哪条 queue、原始远端上传路径是什么”
+
+## 2026-04-25 18:19 PDT
+- 已确认 Cloudflare token 可用，并实际为 `aetherlan-intake.montecarloo.com` 创建了 A 记录，指向 Hetzner `178.156.247.8`（proxy 已开启）
+- 当前公共 DNS 还在传播中，所以外部解析还没立即生效，但公网入口这一步已经不再是纸面计划，而是实打实开始落地
+- 同时已准备好 `aetherlan-intake` 的 HTTP-only nginx 配置与未来 443 版本配置，等解析生效后即可继续签证书并切 HTTPS
+
+## 2026-04-25 18:30 PDT
+- 已确认 `aetherlan-intake.montecarloo.com` 公网 DNS 已生效，并成功签下 Let's Encrypt 证书，证书路径为 `/etc/letsencrypt/live/aetherlan-intake.montecarloo.com/`
+- 已确认通过 HTTPS + Host 访问 intake 入口可命中后端（当前 `/health` 返回 body `{"status":"ok"}`，说明公网域名已经真正通到服务侧）
+- 已把 Vercel production 环境变量 `NEXT_PUBLIC_GENERATOR_ACTION_URL` 正式设置为 `https://aetherlan-intake.montecarloo.com/api/generator`
+- 已将前端 production 重新部署到 Vercel，主域 `https://aetherlan-war.vercel.app` 现已切到使用 Hetzner persistent intake endpoint 的版本
+
+## 2026-04-25 18:43 PDT
+- 已定位 `413 Request Entity Too Large` 的直接原因：不是 1.45MB 图片格式不合规，而是公网实际生效的 intake nginx 站点仍然只有 `listen 80` 版本，HTTPS 请求没有命中预期的 50M/100M body limit 配置
+- 现已把 Hetzner 上 `aetherlan-war-intake` nginx 站点升级为同时提供 `80` + `443 ssl http2`，并把 `client_max_body_size` 提高到 `100M`
+- 下一步是立刻重测公网上传，确认 1.45MB 这类正常 battle reference 图不再被入口层错误拦截
+
+## 2026-04-25 20:18 PDT
+- 已继续把“上传成功后如何确认处理完成”往前推：开始从 Hetzner persistent queue 拉取最新 job，在本地 consumer 侧实际处理新上传任务，并把结果重新回写到 Hetzner `/opt/aetherlan-war/results/`
+- 目标不是停留在 intake 成功，而是让新上传 battle reference 图尽快在 `/pipeline` 上体现为真正的 recent result，至少能看到 job 进入处理闭环、产出 manifest / atlas / bundle 级结果
+- 这一步是把“现在只能确认上传成功”继续推进到“能确认进入后处理并可在看板看到结果”
+
+## 2026-04-25 21:23 PDT
+- 已继续补 `/pipeline` 的可视确认层：开始为 recent result 生成 `previewUrl`，把每个 job 的输入参考图复制到 `frontend/public/generated-previews/` 供页面直接预览
+- 这不是最终成品预览，但至少先解决“上传后我连参考图和对应 job 都没法肉眼对照”的问题，让用户可以在结果卡片上直接看到该 job 对应的输入图
+- 同时在结果卡片增加 `previewStatus`，配合 `processingStage` 一起告诉用户：现在看到的是输入参考图预览，还是已经进入更靠后的真实资产产出阶段
+
+## 2026-04-25 21:40 PDT
+- 已将“输入参考图预览”这层接到前端公开目录，最近真实上传的 job 现在可以通过 `previewUrl` 显示在 `/pipeline` 的 recent result 卡片里
+- 正在把这版重新部署到 Vercel production，这样用户可直接在 `https://aetherlan-war.vercel.app/pipeline` 的最近结果卡片里看到对应上传图的预览
+- 当前能在 Vercel 上看到的是输入参考图预览，不是最终成品图；后续还会继续把 preprocess/atlas/zip 产物预览也接上
+
+## 2026-04-25 21:42 PDT
+- 已确认真实 preprocess 产物存在，例如 `gen-20260426022445-6c7d7d` 已产出 `outputs/processed/samuel profile pic男主头像.trimmed.png`
+- 已开始把这类 preprocess 后图片同步到 `frontend/public/generated-previews/`，并为 queue result 增加 `processedPreviewUrl`
+- 目标是让 `/pipeline` 的 recent result 卡片从“只能看输入参考图”升级为“可并排看 input reference 与 processed preview”，这样用户可以直接在 Vercel 上确认当前去背景/裁边阶段到底产出了什么
+
+## 2026-04-25 21:44 PDT
+- 已开始把 input / processed 双预览版重新部署到 Vercel production，目标是让用户在 `https://aetherlan-war.vercel.app/pipeline` 的 recent result 卡片里直接看到图片而不是只看字段
+- 这次线上更新的重点是“能看到预览图片”本身，不是再加更多状态文案；等这版上线后，页面就能开始承担最基本的肉眼验收功能
+
+## 2026-04-25 21:45 PDT
+- 已继续修正 preview 数据回写，确保 `queue-results/*.result.json` 真实带上 `previewUrl` 和 `processedPreviewUrl`，而不是只有静态图片文件已部署但页面读取的结果 JSON 还是旧字段
+- 当前重新构建的重点是让 `/pipeline` 页面和 `generated-previews/` 目录保持同一批数据版本，避免“图片已经上线但结果卡片还显示 no-preview-file-yet”
+
+## 2026-04-25 21:49 PDT
+- 已确认最后一层问题在于 `queue-dashboard.json` 仍是旧版本；重建后 `recentResults` 现在已经真实带上 `previewUrl` / `processedPreviewUrl`
+- 正在基于这份新 dashboard + manifest 再次部署 Vercel production，目标是让 `/pipeline` 页面最终实际渲染出双预览图片，而不是只有静态资源本身在线
+
+## 2026-04-25 22:10 PDT
+- 对 `/pipeline` 前端显示内容做了安全收敛检查，确认页面原先直接暴露了 workspace 绝对路径、queue 文件路径、manifest/atlas/frame/bundle 文件路径，以及远端 upload 路径，这些都不该在公开前端直接显示
+- 已将这些敏感路径类字段改成抽象化进度项与勾选状态，例如 `queue intake recorded`、`output manifest recorded`、`workspace job created`、`storage handoff` 等，保留用户需要的可见进度，不再暴露内部文件系统结构
+
+## 2026-04-25 22:18 PDT
+- 继续对 `/pipeline` 做源头收紧：不只页面卡片脱敏，还移除了“最近一次线上接收”区域里的 `Worker-ready JSON`、provider 回显、uploadNames 直出等实现细节，改成纯进度摘要卡片
+- 同时对 `tools/animation-pipeline/output/queue-results/*.json`、`queue-dashboard.json`、`animation-manifest.json` 做脱敏重写，去掉 `sourcePath`、`remotePersistentPath`、`jobInputPath`、`queueJobPath` 以及 workspace 路径字段，避免后续页面或别的 consumer 再把这些内部路径泄露出来
+
+## 2026-04-25 22:30 PDT
+- 继续收紧 generator → pipeline 的 query 参数回流链路，去掉成功跳转 URL 中的 `uploadNames` 与 `provider`，避免文件名和 provider 通过浏览器地址栏、分享链接、history 或 referrer 再次暴露
+- 同步更新了 Vercel preview `/api/generator` 与 Hetzner `intake_server.py` 两端的 redirect 逻辑，并把 generator 成功提示页从“显示真实文件名 / provider”改成仅显示 jobId、角色、动作、接收文件数和安全元数据状态
+
+## 2026-04-25 22:43 PDT
+- 继续向下收紧到 JSON API 响应体本身，发现 `/api/generator` 的 JSON 模式此前仍会返回 `provider`、`notes`、真实文件名以及 `workerPayload.provider`，这对直接调接口的人仍属于多余暴露
+- 已在 `frontend/src/app/api/generator/route.ts` 与 Hetzner `backend/intake_server.py` 增加 `sanitize_*_for_client` 输出，只向客户端返回最小必要字段：jobId、时间、状态、角色、动作、帧数、intent、`asset-1` 风格抽象资源标签、大小、类型、以及下一步状态说明
+
+## 2026-04-25 17:58 PDT
+- 已开始把最新一轮 `/pipeline` persistent 来源追踪升级部署到 Vercel production
+- 这次线上更新的重点不是新入口，而是把 pipeline 页面对于 persistent queue / result / source 的可见性同步到真实线上站点，避免本地有、线上没有
+- `/pipeline` 顶部现在会直接显示“最近一次线上接收”面板，即使本地 queue 目录还没同步，也能看见刚刚上传了什么
+- 这相当于先做出一层前端结果回流，让素材上传后的可见性不再完全依赖本地 worker 与 queue 文件
+- 下一步：继续把这层前端回流替换成真正的线上持久化/worker 回流
+
+## 2026-04-25 08:43 PDT
+- 已重新打开首页入口边界：`/` 现在不再把 generator/pipeline 藏起来，而是直接提供“战斗素材上传”和“制图追踪台”两个主入口
+- 这一步是为了匹配当前最高优先级，减少用户还得记路径或猜模块位置的摩擦
+- 现在试玩、上传、追踪三条主链路都能从首页直接进入，更接近真实生产态工作流
+- 下一步：继续把前端回流升级为真实持久化，再让 pipeline 真正消费线上上传结果
+
+## 2026-04-25 09:22 PDT
+- 已检查旧项目 `aetherlan-war` 的 Vercel 环境，当前没有现成的 KV / Blob / Postgres / Redis 之类可直接用于上传结果持久化的线上存储配置
+- 因此当前最务实的结论是： hosted flow 仍然是“线上接收 + 可见确认 + 前端回流”，还不是完整自动生产管线
+- 已补 `frontend/src/app/api/generator/README.md`，明确记录当前已打通和未打通的边界，以及下一步推荐的存储方案（Blob / DB / 外部 worker）
+- 这样后续继续接存储或 worker 时，不会再重复踩“以为线上已经全自动”的认知坑
+
+## 2026-04-25 09:24 PDT
+- 已继续把这条边界直接体现在 UI 文案里，而不是只写在 README：首页、generator、pipeline 三处说明都已更新
+- 现在前端会更明确地表达当前状态：上传接收和回显已打通，但完整自动去背景/拆帧/图集化仍需线上持久化与 worker
+- 这一步减少了“用户看到成功页就以为后端已全自动”的认知偏差，也为后续接真正存储前提供了更稳定的产品预期
+
+## 2026-04-25 11:42 PDT
+- 已继续增强 `/pipeline` 顶部的“最近一次线上接收”区块，不再只是展示字段，而是补成可直接转交给人工/后续 worker 的 handoff card
+- 这张卡片会用结构化文本列出 `jobId / role / action / provider / uploadCount / uploadNames / status / nextStep`，方便在当前无线上持久化时仍然把接收结果往后续处理链路传递
+- 这一步虽然仍是过渡方案，但已经比单纯 query 回显更接近实际生产交接物
+
+## 2026-04-25 12:08 PDT
+- 已把 handoff card 再升级一层：`/pipeline` 现在除了人类可读文本卡片外，还会同步生成一份 worker-ready JSON payload 视图
+- 这份 JSON 已标准化为 `jobId / role / action / provider / uploadCount / uploadNames / status / nextStep` 结构，后续接线上持久化或外部 worker 时可以直接沿用
+- 这样当前这条 preview intake 链路已经同时兼顾“人看得懂”和“机器好消费”两个方向
+
+## 2026-04-25 12:12 PDT
+- 已把 worker payload 正式抽成共享 schema：新增 `frontend/src/lib/worker-payload.ts`
+- 现在 `/api/generator` 和 `/pipeline` 不再各自手写 payload 结构，而是共用 `buildWorkerReadyPayload(...)` 与 `WorkerReadyPayload`
+- 这一步把 preview intake 的数据格式从“页面约定”收口成“代码级约定”，后面接持久化或外部 worker 时更不容易漂字段

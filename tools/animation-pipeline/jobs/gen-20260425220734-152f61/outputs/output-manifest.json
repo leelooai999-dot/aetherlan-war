@@ -1,0 +1,62 @@
+{
+  "jobId": "gen-20260425220734-152f61",
+  "generatedAt": "2026-04-26T04:29:53.260Z",
+  "adapter": "doubao-adapter",
+  "request": {
+    "role": "人类战士",
+    "action": "受击",
+    "frameCount": "8",
+    "provider": "Doubao",
+    "notes": "smoke test from server",
+    "intent": "battle-animation-assets"
+  },
+  "placeholders": {
+    "transparentFramesDir": "/root/.openclaw/workspace/projects/aetherlan-war/tools/animation-pipeline/jobs/gen-20260425220734-152f61/outputs",
+    "atlasJson": "/root/.openclaw/workspace/projects/aetherlan-war/tools/animation-pipeline/jobs/gen-20260425220734-152f61/outputs/atlas.json",
+    "atlasPng": "/root/.openclaw/workspace/projects/aetherlan-war/tools/animation-pipeline/jobs/gen-20260425220734-152f61/outputs/atlas.png",
+    "zipBundle": "/root/.openclaw/workspace/projects/aetherlan-war/tools/animation-pipeline/jobs/gen-20260425220734-152f61/outputs/gen-20260425220734-152f61.zip"
+  },
+  "preprocessResults": [],
+  "framePlan": [
+    {
+      "index": 0,
+      "file": "frame_000.png",
+      "status": "planned"
+    },
+    {
+      "index": 1,
+      "file": "frame_001.png",
+      "status": "planned"
+    },
+    {
+      "index": 2,
+      "file": "frame_002.png",
+      "status": "planned"
+    },
+    {
+      "index": 3,
+      "file": "frame_003.png",
+      "status": "planned"
+    },
+    {
+      "index": 4,
+      "file": "frame_004.png",
+      "status": "planned"
+    },
+    {
+      "index": 5,
+      "file": "frame_005.png",
+      "status": "planned"
+    },
+    {
+      "index": 6,
+      "file": "frame_006.png",
+      "status": "planned"
+    },
+    {
+      "index": 7,
+      "file": "frame_007.png",
+      "status": "planned"
+    }
+  ]
+}

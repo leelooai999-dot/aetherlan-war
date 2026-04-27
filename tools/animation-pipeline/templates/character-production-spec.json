@@ -1,0 +1,40 @@
+{
+  "characterId": "template-character",
+  "displayName": "Template Character",
+  "masterReference": {
+    "required": true,
+    "view": "front",
+    "pose": "A-pose",
+    "background": "plain or transparent",
+    "consistencyRules": [
+      "same face",
+      "same costume",
+      "same weapon",
+      "same silhouette",
+      "same proportions"
+    ]
+  },
+  "mapModule": {
+    "sheetRequired": true,
+    "frameWidth": 256,
+    "frameHeight": 256,
+    "rows": 4,
+    "columns": 4,
+    "actions": [
+      { "id": "idle", "frameCount": 4, "loop": true },
+      { "id": "run", "frameCount": 4, "loop": true },
+      { "id": "hit", "frameCount": 2, "loop": false },
+      { "id": "death", "frameCount": 4, "loop": false }
+    ]
+  },
+  "performanceModule": {
+    "separateAssets": ["attack", "skill", "magic", "ultimate"],
+    "background": "transparent",
+    "delivery": ["sheet or sequence", "metadata json"]
+  },
+  "fxModule": {
+    "optional": true,
+    "effects": ["slash", "fire", "ice", "lightning"],
+    "background": "transparent"
+  }
+}

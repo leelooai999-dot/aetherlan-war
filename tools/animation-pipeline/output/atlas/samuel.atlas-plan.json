@@ -1,0 +1,26 @@
+{
+  "characterId": "samuel",
+  "atlasImage": "atlases/samuel-map-atlas.png",
+  "atlasData": "atlases/samuel-map-atlas.json",
+  "sourceSheets": [
+    {
+      "type": "map",
+      "path": "../../../frontend/public/characters/samuel-sprite.png",
+      "frameWidth": 256,
+      "frameHeight": 256,
+      "rows": 4,
+      "columns": 4
+    }
+  ],
+  "effects": [
+    {
+      "id": "attack",
+      "source": "../../../frontend/public/effects/samuel-attack.webm",
+      "packaging": "standalone"
+    }
+  ],
+  "notes": [
+    "This file is a pack plan for a later TexturePacker or custom Python pack step.",
+    "Current pipeline preserves existing sources and emits normalized pack metadata."
+  ]
+}

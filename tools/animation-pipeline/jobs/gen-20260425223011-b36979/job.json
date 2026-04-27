@@ -1,0 +1,49 @@
+{
+  "id": "gen-20260425223011-b36979",
+  "createdAt": "2026-04-25T22:30:11.872835+00:00",
+  "status": "processing",
+  "source": "public-generator-ui",
+  "storage": "hetzner-disk-persistent",
+  "request": {
+    "role": "元素法师",
+    "action": "施法",
+    "frameCount": "8",
+    "provider": "Doubao",
+    "notes": "nginx host-header smoke test",
+    "intent": "battle-animation-assets"
+  },
+  "uploads": [
+    {
+      "name": "nginx-smoke.txt",
+      "size": 10,
+      "type": "text/plain",
+      "path": "/opt/aetherlan-war/uploads/gen-20260425223011-b36979/nginx-smoke.txt"
+    }
+  ],
+  "workerPayload": {
+    "jobId": "gen-20260425223011-b36979",
+    "role": "元素法师",
+    "action": "施法",
+    "provider": "Doubao",
+    "uploadCount": 1,
+    "uploadNames": [
+      "nginx-smoke.txt"
+    ],
+    "status": "persistent-intake-received",
+    "nextStep": "dispatch-worker-from-queue"
+  },
+  "nextStep": "Queued on persistent Hetzner intake. Worker dispatch is the next integration step.",
+  "updatedAt": "2026-04-26T04:29:53.265Z",
+  "jobDir": "/root/.openclaw/workspace/projects/aetherlan-war/tools/animation-pipeline/jobs/gen-20260425223011-b36979",
+  "adapter": "doubao-adapter",
+  "inputs": [
+    {
+      "originalName": "nginx-smoke.txt",
+      "sourcePath": "/root/.openclaw/workspace/projects/aetherlan-war/tools/animation-pipeline/staging/hetzner-uploads/gen-20260425223011-b36979/nginx-smoke.txt",
+      "remotePersistentPath": "/opt/aetherlan-war/uploads/gen-20260425223011-b36979/nginx-smoke.txt",
+      "jobInputPath": "/root/.openclaw/workspace/projects/aetherlan-war/tools/animation-pipeline/jobs/gen-20260425223011-b36979/inputs/nginx-smoke.txt",
+      "size": 10,
+      "type": "text/plain"
+    }
+  ]
+}

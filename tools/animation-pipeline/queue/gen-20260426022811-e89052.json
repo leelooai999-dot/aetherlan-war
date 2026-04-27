@@ -1,0 +1,50 @@
+{
+  "id": "gen-20260426022811-e89052",
+  "createdAt": "2026-04-26T02:28:11.157668+00:00",
+  "status": "done",
+  "source": "public-generator-ui",
+  "storage": "hetzner-disk-persistent",
+  "request": {
+    "role": "人类战士",
+    "action": "待机",
+    "frameCount": "12",
+    "provider": "Doubao",
+    "notes": "",
+    "intent": "battle-animation-assets"
+  },
+  "uploads": [
+    {
+      "name": "samuel profile pic男主头像.png",
+      "size": 1525929,
+      "type": "image/png",
+      "path": "/opt/aetherlan-war/uploads/gen-20260426022811-e89052/samuel profile pic男主头像.png"
+    }
+  ],
+  "workerPayload": {
+    "jobId": "gen-20260426022811-e89052",
+    "role": "人类战士",
+    "action": "待机",
+    "provider": "Doubao",
+    "uploadCount": 1,
+    "uploadNames": [
+      "samuel profile pic男主头像.png"
+    ],
+    "status": "persistent-intake-received",
+    "nextStep": "dispatch-worker-from-queue"
+  },
+  "nextStep": "Queued on persistent Hetzner intake. Worker dispatch is the next integration step.",
+  "updatedAt": "2026-04-26T04:29:55.891Z",
+  "jobDir": "/root/.openclaw/workspace/projects/aetherlan-war/tools/animation-pipeline/jobs/gen-20260426022811-e89052",
+  "adapter": "doubao-adapter",
+  "inputs": [
+    {
+      "originalName": "samuel profile pic男主头像.png",
+      "sourcePath": "/root/.openclaw/workspace/projects/aetherlan-war/tools/animation-pipeline/staging/hetzner-uploads/gen-20260426022811-e89052/samuel profile pic男主头像.png",
+      "remotePersistentPath": "/opt/aetherlan-war/uploads/gen-20260426022811-e89052/samuel profile pic男主头像.png",
+      "jobInputPath": "/root/.openclaw/workspace/projects/aetherlan-war/tools/animation-pipeline/jobs/gen-20260426022811-e89052/inputs/samuel profile pic男主头像.png",
+      "size": 1525929,
+      "type": "image/png"
+    }
+  ],
+  "resultPath": "output/queue-results/gen-20260426022811-e89052.result.json"
+}

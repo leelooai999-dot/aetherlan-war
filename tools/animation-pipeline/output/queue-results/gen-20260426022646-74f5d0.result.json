@@ -1,0 +1,28 @@
+{
+  "jobId": "gen-20260426022646-74f5d0",
+  "createdAt": "2026-04-26T04:29:54.099Z",
+  "status": "done",
+  "adapter": "doubao-adapter",
+  "note": "Queue consumer created job workspace, copied uploaded inputs, emitted stub frame/atlas/bundle manifests, and now attempts image trim preprocessing for uploaded PNG/WebP sources.",
+  "request": {
+    "role": "人类战士",
+    "action": "受击",
+    "frameCount": "8",
+    "provider": "Doubao",
+    "notes": "",
+    "intent": "battle-animation-assets"
+  },
+  "uploads": [
+    {
+      "originalName": "smoke.png",
+      "size": 1000,
+      "type": "image/png"
+    }
+  ],
+  "source": {
+    "intakeStorage": "hetzner-disk-persistent"
+  },
+  "workspace": {},
+  "previewUrl": "/generated-previews/gen-20260426022646-74f5d0.png",
+  "processedPreviewUrl": null
+}

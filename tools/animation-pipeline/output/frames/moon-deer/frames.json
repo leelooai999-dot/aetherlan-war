@@ -1,0 +1,77 @@
+{
+  "sheet": "/root/.openclaw/workspace/projects/aetherlan-war/frontend/public/characters/moon-deer-sprite.png",
+  "sheetSize": {
+    "width": 640,
+    "height": 427
+  },
+  "frameSize": {
+    "width": 256,
+    "height": 256
+  },
+  "grid": {
+    "columns": 2,
+    "rows": 1
+  },
+  "frames": [
+    {
+      "index": 0,
+      "file": "frame_000.png",
+      "x": 0,
+      "y": 0,
+      "width": 256,
+      "height": 256
+    },
+    {
+      "index": 1,
+      "file": "frame_001.png",
+      "x": 256,
+      "y": 0,
+      "width": 256,
+      "height": 256
+    }
+  ],
+  "actions": [
+    {
+      "id": "idle",
+      "fps": 8,
+      "loop": true,
+      "frames": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "id": "run",
+      "fps": 10,
+      "loop": true,
+      "frames": [
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    {
+      "id": "hit",
+      "fps": 12,
+      "loop": false,
+      "frames": [
+        8,
+        9
+      ]
+    },
+    {
+      "id": "death",
+      "fps": 8,
+      "loop": false,
+      "frames": [
+        10,
+        11,
+        12,
+        13
+      ]
+    }
+  ]
+}

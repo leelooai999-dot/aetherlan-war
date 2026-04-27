@@ -1,0 +1,19 @@
+[Unit]
+Description=Aetherlan War Persistent Intake Backend
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/aetherlan-war/backend
+Environment=AETHERLAN_BASE_DIR=/opt/aetherlan-war
+Environment=AETHERLAN_HOST=0.0.0.0
+Environment=AETHERLAN_PORT=8010
+ExecStart=/usr/bin/python3 /opt/aetherlan-war/backend/intake_server.py
+Restart=always
+RestartSec=3
+StandardOutput=append:/opt/aetherlan-war/logs/intake.log
+StandardError=append:/opt/aetherlan-war/logs/intake.log
+
+[Install]
+WantedBy=multi-user.target
