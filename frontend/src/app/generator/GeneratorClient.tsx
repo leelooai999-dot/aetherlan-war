@@ -2,6 +2,14 @@
 
 import { FormEvent, useMemo, useState } from 'react';
 
+ type UploadItemStatus = {
+  id: string;
+  name: string;
+  size: number;
+  status: 'pending' | 'uploading' | 'queued' | 'processing' | 'done' | 'error';
+  progress: number;
+};
+
 type UploadStatus = {
   jobId: string;
   status: string;
@@ -106,6 +114,7 @@ export default function GeneratorClient({
   const [queueDepth, setQueueDepth] = useState(initialQueueDepth ?? '-');
   const [status, setStatus] = useState<UploadStatus | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [uploadItems, setUploadItems] = useState<UploadItemStatus[]>([]);
 
   const selectedTarget = useMemo(
     () => replacementTargets.find((item) => item.id === selectedTargetId) ?? replacementTargets[0] ?? null,
@@ -158,13 +167,23 @@ export default function GeneratorClient({
     setAssetKind(nextTarget.assetKind);
   }
 
+  function setAllUploadItems(statusValue: UploadItemStatus['status'], progress: number) {
+    setUploadItems((items) => items.map((item) => ({ ...item, status: statusValue, progress })));
+  }
+
   async function pollStatus(nextJobId: string) {
     for (let i = 0; i < 25; i += 1) {
       const res = await fetch(`/api/generator/status?jobId=${encodeURIComponent(nextJobId)}`, { cache: 'no-store' });
       const data = await res.json();
       if (data?.ok) {
         setStatus(data);
+        if (data.status === 'queued') {
+          setAllUploadItems('queued', 22);
+        } else if (data.status === 'processing' || data.progress?.percent >= 35) {
+          setAllUploadItems('processing', Math.max(35, data.progress?.percent ?? 35));
+        }
         if (data.progress?.percent >= 65 || data.status === 'done' || data.processedPreviewUrl) {
+          setAllUploadItems('done', 100);
           return;
         }
       }
@@ -182,6 +201,13 @@ export default function GeneratorClient({
       const form = event.currentTarget;
       const formData = new FormData(form);
       const files = formData.getAll('referenceFiles').filter((item): item is File => item instanceof File && item.size > 0);
+      setUploadItems(files.map((file, index) => ({
+        id: `${file.name}-${index}-${file.size}`,
+        name: file.name,
+        size: file.size,
+        status: 'pending',
+        progress: 5,
+      })));
       setUploadCount(String(files.length));
       setRole(String(formData.get('role') ?? ''));
       setCharacterId(String(formData.get('characterId') ?? ''));
@@ -189,6 +215,8 @@ export default function GeneratorClient({
       setAction(String(formData.get('action') ?? ''));
       setTargetSlot(String(formData.get('targetSlot') ?? ''));
       setAssetKind(String(formData.get('assetKind') ?? ''));
+
+      setAllUploadItems('uploading', 12);
 
       const response = await fetch(actionUrl, {
         method: 'POST',
@@ -206,6 +234,7 @@ export default function GeneratorClient({
       const nextJobId = data.job.id as string;
       setJobId(nextJobId);
       setQueueDepth(String(data.queueDepth ?? '-'));
+      setAllUploadItems('queued', 20);
       setStatus({
         jobId: nextJobId,
         status: data.status ?? 'queued',
@@ -227,6 +256,7 @@ export default function GeneratorClient({
 
       await pollStatus(nextJobId);
     } catch (err) {
+      setAllUploadItems('error', 100);
       setError(err instanceof Error ? err.message : String(err));
     } finally {
       setSubmitting(false);
@@ -346,6 +376,29 @@ export default function GeneratorClient({
             <input name="referenceFiles" type="file" multiple className="rounded-2xl border border-dashed border-cyan-300/25 bg-slate-950/60 px-4 py-6" />
           </label>
 
+          {uploadItems.length > 0 ? (
+            <div className="rounded-2xl border border-white/10 bg-slate-950/35 p-4">
+              <div className="text-xs uppercase tracking-[0.25em] text-cyan-200">本次上传队列</div>
+              <div className="mt-3 space-y-3">
+                {uploadItems.map((item) => (
+                  <div key={item.id} className="rounded-2xl border border-white/8 bg-black/15 p-3">
+                    <div className="flex items-center justify-between gap-3 text-sm text-slate-100">
+                      <span className="truncate">{item.name}</span>
+                      <span className="text-xs text-slate-400">{Math.max(1, Math.round(item.size / 1024))} KB</span>
+                    </div>
+                    <div className="mt-2 h-2 overflow-hidden rounded-full bg-black/30">
+                      <div className="h-full rounded-full bg-cyan-300 transition-all duration-500" style={{ width: `${item.progress}%` }} />
+                    </div>
+                    <div className="mt-2 flex items-center justify-between text-xs text-slate-300">
+                      <span>{item.status}</span>
+                      <span>{item.progress}%</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : null}
+
           <input type="hidden" name="intent" value="battle-animation-assets" />
 
           <label className="grid gap-2 text-sm text-slate-200">
@@ -383,10 +436,10 @@ export default function GeneratorClient({
               <span>{status?.progress?.percent ?? 0}%</span>
             </div>
             <div className="mt-4 grid gap-2 text-sm text-emerald-50/90 md:grid-cols-2">
-              <div>1. 已上传到服务器 {status ? '✅' : '⬜'}</div>
-              <div>2. 已进入队列 {status?.found ? '✅' : '⬜'}</div>
-              <div>3. 后台处理中 {(status?.progress?.percent ?? 0) >= 35 ? '✅' : '⬜'}</div>
-              <div>4. 已可应用到前端 {(status?.processedPreviewUrl || (status?.progress?.percent ?? 0) >= 65) ? '✅' : '⬜'}</div>
+              <div>1. 已上传到服务器 {status || uploadItems.some((item) => item.status !== 'pending') ? '✅' : '⬜'}</div>
+              <div>2. 已进入队列 {status?.found || uploadItems.some((item) => item.status === 'queued' || item.status === 'processing' || item.status === 'done') ? '✅' : '⬜'}</div>
+              <div>3. 后台处理中 {(status?.progress?.percent ?? 0) >= 35 || uploadItems.some((item) => item.status === 'processing' || item.status === 'done') ? '✅' : '⬜'}</div>
+              <div>4. 已可应用到前端 {(status?.processedPreviewUrl || (status?.progress?.percent ?? 0) >= 65 || uploadItems.some((item) => item.status === 'done')) ? '✅' : '⬜'}</div>
             </div>
             <div className="mt-4 rounded-2xl border border-white/10 bg-black/15 p-4 text-sm leading-7 text-emerald-50/90">
               <div className="text-xs uppercase tracking-[0.25em] text-emerald-200">本次绑定目标</div>
