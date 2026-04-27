@@ -238,6 +238,11 @@ export default function GeneratorClient({
                 <div><span className="text-slate-400">说明：</span>{selectedTarget.notesHint ?? '未提供'}</div>
               </div>
             ) : null}
+            <div className="mt-4 rounded-2xl border border-amber-300/15 bg-amber-400/8 p-4 text-sm leading-7 text-amber-50/90">
+              <div className="text-xs uppercase tracking-[0.25em] text-amber-200">上传命名规则</div>
+              <p className="mt-2">建议文件名直接带上：角色 + 动作 + 替换项目，例如：</p>
+              <p className="mt-1 font-mono text-xs text-amber-100">samuel_attack_replacement.png / isolde_fullscreen_spell.png / mutated_beast_hit.png</p>
+            </div>
           </div>
 
           <div className="grid gap-4 md:grid-cols-2">
