@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useMemo, useState } from 'react';
+import { FormEvent, useMemo, useRef, useState } from 'react';
 
  type UploadItemStatus = {
   id: string;
@@ -81,6 +81,36 @@ type Props = {
   initialQueueDepth?: string | null;
 };
 
+function uploadWithProgress(url: string, formData: FormData, onProgress: (percent: number) => void): Promise<any> {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', url);
+    xhr.setRequestHeader('accept', 'application/json');
+
+    xhr.upload.onprogress = (event) => {
+      if (!event.lengthComputable) return;
+      const percent = Math.min(100, Math.max(1, Math.round((event.loaded / event.total) * 100)));
+      onProgress(percent);
+    };
+
+    xhr.onload = () => {
+      try {
+        const data = JSON.parse(xhr.responseText || '{}');
+        if (xhr.status >= 200 && xhr.status < 300) {
+          resolve(data);
+        } else {
+          reject(new Error(data?.message || 'Upload failed'));
+        }
+      } catch (error) {
+        reject(error instanceof Error ? error : new Error('Invalid upload response'));
+      }
+    };
+
+    xhr.onerror = () => reject(new Error('Network error during upload'));
+    xhr.send(formData);
+  });
+}
+
 export default function GeneratorClient({
   actionUrl,
   roles,
@@ -115,6 +145,7 @@ export default function GeneratorClient({
   const [status, setStatus] = useState<UploadStatus | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [uploadItems, setUploadItems] = useState<UploadItemStatus[]>([]);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const selectedTarget = useMemo(
     () => replacementTargets.find((item) => item.id === selectedTargetId) ?? replacementTargets[0] ?? null,
@@ -171,6 +202,20 @@ export default function GeneratorClient({
     setUploadItems((items) => items.map((item) => ({ ...item, status: statusValue, progress })));
   }
 
+  function setUploadProgress(percent: number) {
+    const normalized = Math.max(1, Math.min(100, percent));
+    setUploadItems((items) =>
+      items.map((item, index) => {
+        const spread = Math.min(8, index * 3);
+        return {
+          ...item,
+          status: normalized >= 100 ? 'queued' : 'uploading',
+          progress: Math.max(item.progress, Math.max(1, normalized - spread)),
+        };
+      }),
+    );
+  }
+
   async function pollStatus(nextJobId: string) {
     for (let i = 0; i < 25; i += 1) {
       const res = await fetch(`/api/generator/status?jobId=${encodeURIComponent(nextJobId)}`, { cache: 'no-store' });
@@ -216,18 +261,12 @@ export default function GeneratorClient({
       setTargetSlot(String(formData.get('targetSlot') ?? ''));
       setAssetKind(String(formData.get('assetKind') ?? ''));
 
-      setAllUploadItems('uploading', 12);
+      setAllUploadItems('uploading', 8);
 
-      const response = await fetch(actionUrl, {
-        method: 'POST',
-        body: formData,
-        headers: {
-          accept: 'application/json',
-        },
+      const data = await uploadWithProgress(actionUrl, formData, (percent) => {
+        setUploadProgress(percent);
       });
-
-      const data = await response.json();
-      if (!response.ok || !data?.job?.id) {
+      if (!data?.job?.id) {
         throw new Error(data?.message || 'Upload failed');
       }
 
@@ -373,7 +412,23 @@ export default function GeneratorClient({
 
           <label className="grid gap-2 text-sm text-slate-200">
             参考图 / 动画素材上传（现在会保存到 job 目录）
-            <input name="referenceFiles" type="file" multiple className="rounded-2xl border border-dashed border-cyan-300/25 bg-slate-950/60 px-4 py-6" />
+            <input
+              ref={fileInputRef}
+              name="referenceFiles"
+              type="file"
+              multiple
+              onChange={(event) => {
+                const files = Array.from(event.target.files ?? []);
+                setUploadItems(files.map((file, index) => ({
+                  id: `${file.name}-${index}-${file.size}`,
+                  name: file.name,
+                  size: file.size,
+                  status: 'pending',
+                  progress: 0,
+                })));
+              }}
+              className="rounded-2xl border border-dashed border-cyan-300/25 bg-slate-950/60 px-4 py-6"
+            />
           </label>
 
           {uploadItems.length > 0 ? (
