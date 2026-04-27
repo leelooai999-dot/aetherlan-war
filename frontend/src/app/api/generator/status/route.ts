@@ -18,6 +18,11 @@ type QueueResult = {
   };
   sheetWidth?: number | null;
   sheetHeight?: number | null;
+  detectedFrameCount?: number | null;
+  detectedColumns?: number | null;
+  detectedRows?: number | null;
+  detectedFrameWidth?: number | null;
+  detectedFrameHeight?: number | null;
   previewUrl?: string | null;
   processedPreviewUrl?: string | null;
   outputs?: {
@@ -100,6 +105,11 @@ export async function GET(request: Request) {
     processedPreviewUrl: result?.processedPreviewUrl ?? null,
     sheetWidth: result?.sheetWidth ?? null,
     sheetHeight: result?.sheetHeight ?? null,
+    detectedFrameCount: result?.detectedFrameCount ?? null,
+    detectedColumns: result?.detectedColumns ?? null,
+    detectedRows: result?.detectedRows ?? null,
+    detectedFrameWidth: result?.detectedFrameWidth ?? null,
+    detectedFrameHeight: result?.detectedFrameHeight ?? null,
     outputs: result?.outputs ?? null,
     storage: job?.storage ?? null,
   });

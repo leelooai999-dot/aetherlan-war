@@ -17,6 +17,11 @@ type QueueResult = {
   };
   sheetWidth?: number;
   sheetHeight?: number;
+  detectedFrameCount?: number;
+  detectedColumns?: number;
+  detectedRows?: number;
+  detectedFrameWidth?: number;
+  detectedFrameHeight?: number;
   previewUrl?: string | null;
   processedPreviewUrl?: string | null;
 };
@@ -92,6 +97,11 @@ async function loadShowcaseByUnit(): Promise<ShowcaseByUnit> {
         frameCount: result.request?.frameCount ?? (slot === 'hit' ? 2 : 4),
         width: result.sheetWidth,
         height: result.sheetHeight,
+        detectedFrameCount: result.detectedFrameCount,
+        detectedColumns: result.detectedColumns,
+        detectedRows: result.detectedRows,
+        detectedFrameWidth: result.detectedFrameWidth,
+        detectedFrameHeight: result.detectedFrameHeight,
         action,
         targetSlot: result.request?.targetSlot ?? slot,
       });

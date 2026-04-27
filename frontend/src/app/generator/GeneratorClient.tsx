@@ -24,6 +24,11 @@ type UploadStatus = {
   processedPreviewUrl?: string | null;
   sheetWidth?: number | null;
   sheetHeight?: number | null;
+  detectedFrameCount?: number | null;
+  detectedColumns?: number | null;
+  detectedRows?: number | null;
+  detectedFrameWidth?: number | null;
+  detectedFrameHeight?: number | null;
 };
 
 type CharacterOption = { id: string; label: string; role: string };
@@ -304,7 +309,9 @@ export default function GeneratorClient({
                   <img src={status.processedPreviewUrl} alt="processed preview" className="h-48 w-full object-contain" />
                   <div className="mt-3 text-xs leading-6 text-emerald-100/85">
                     <div>sheet: {status.sheetWidth ?? '?'} × {status.sheetHeight ?? '?'}</div>
-                    <div>frameCount: {status.request?.frameCount ?? '?'}</div>
+                    <div>frameCount: {status.detectedFrameCount ?? status.request?.frameCount ?? '?'}</div>
+                    <div>grid: {status.detectedColumns ?? '?'} × {status.detectedRows ?? '?'}</div>
+                    <div>frame: {status.detectedFrameWidth ?? '?'} × {status.detectedFrameHeight ?? '?'}</div>
                   </div>
                 </div>
               </div>

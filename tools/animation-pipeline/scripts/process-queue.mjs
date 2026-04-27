@@ -14,6 +14,7 @@ const hetznerUploadsRoot = join(rootDir, 'staging', 'hetzner-uploads');
 const frontendGeneratedPreviewsDir = resolve(rootDir, '..', '..', 'frontend', 'public', 'generated-previews');
 const execFileAsync = promisify(execFile);
 const preprocessScript = join(rootDir, 'python', 'preprocess_frames.py');
+const detectSheetScript = join(rootDir, 'python', 'detect_sheet_layout.py');
 const venvPython = join(rootDir, '.venv', 'bin', 'python');
 
 function providerAdapter(provider) {
@@ -51,6 +52,28 @@ async function preprocessUploadIfImage(sourcePath, outputsDir) {
 
   try {
     const { stdout } = await execFileAsync(venvPython, [preprocessScript, sourcePath, processedDir], {
+      cwd: rootDir,
+      timeout: 120000,
+    });
+    const lastLine = stdout.trim().split('\n').filter(Boolean).at(-1);
+    return lastLine ? JSON.parse(lastLine) : null;
+  } catch (error) {
+    return {
+      ok: false,
+      error: error instanceof Error ? error.message : String(error),
+      input: sourcePath,
+    };
+  }
+}
+
+async function detectSheetLayout(sourcePath, hintedFrameCount) {
+  if (!sourcePath) return null;
+  if (!(await exists(venvPython)) || !(await exists(detectSheetScript))) return null;
+
+  try {
+    const args = [detectSheetScript, sourcePath];
+    if (hintedFrameCount) args.push(String(hintedFrameCount));
+    const { stdout } = await execFileAsync(venvPython, args, {
       cwd: rootDir,
       timeout: 120000,
     });
@@ -199,6 +222,7 @@ export async function processQueue() {
     const previewArtifacts = await copyPreviewArtifacts(job.id, copiedUploads, preprocessResults);
     const primarySheetPath = successfulPreprocess?.output ?? copiedUploads[0]?.jobInputPath ?? null;
     const sheetDimensions = primarySheetPath ? imageSize(primarySheetPath) : null;
+    const detectedSheet = await detectSheetLayout(primarySheetPath, job.request?.frameCount);
 
     const result = {
       jobId: job.id,
@@ -218,8 +242,13 @@ export async function processQueue() {
         outputs: outputsDir,
         logs: logsDir,
       },
-      sheetWidth: sheetDimensions?.width ?? null,
-      sheetHeight: sheetDimensions?.height ?? null,
+      sheetWidth: detectedSheet?.width ?? sheetDimensions?.width ?? null,
+      sheetHeight: detectedSheet?.height ?? sheetDimensions?.height ?? null,
+      detectedFrameCount: detectedSheet?.frameCount ?? null,
+      detectedColumns: detectedSheet?.columns ?? null,
+      detectedRows: detectedSheet?.rows ?? null,
+      detectedFrameWidth: detectedSheet?.frameWidth ?? null,
+      detectedFrameHeight: detectedSheet?.frameHeight ?? null,
       outputs: {
         transparentFrames: preprocessResults.some((item) => item?.ok),
         atlasPacked: false,

@@ -17,6 +17,11 @@ export function inferSpriteSheetLayout(input: {
   frameCount?: unknown;
   width?: unknown;
   height?: unknown;
+  detectedFrameCount?: unknown;
+  detectedColumns?: unknown;
+  detectedRows?: unknown;
+  detectedFrameWidth?: unknown;
+  detectedFrameHeight?: unknown;
   action?: string | null;
   targetSlot?: string | null;
 }): SpriteSheetGuess {
@@ -24,6 +29,29 @@ export function inferSpriteSheetLayout(input: {
   const hintedFrameCount = positiveInt(input.frameCount) ?? 1;
   const width = positiveInt(input.width);
   const height = positiveInt(input.height);
+  const detectedFrameCount = positiveInt(input.detectedFrameCount);
+  const detectedColumns = positiveInt(input.detectedColumns);
+  const detectedRows = positiveInt(input.detectedRows);
+  const detectedFrameWidth = positiveInt(input.detectedFrameWidth);
+  const detectedFrameHeight = positiveInt(input.detectedFrameHeight);
+
+  if (detectedColumns && detectedRows) {
+    return {
+      frameCount: detectedFrameCount ?? detectedColumns * detectedRows,
+      columns: detectedColumns,
+      rows: detectedRows,
+      frameWidth: detectedFrameWidth ?? (width ? Math.floor(width / detectedColumns) : undefined),
+      frameHeight: detectedFrameHeight ?? (height ? Math.floor(height / detectedRows) : undefined),
+      fps: action === '行走' || action === '冲刺' || action === 'run'
+        ? 10
+        : action === '普攻' || action === '重击' || action === '施法' || action === '技能' || action === 'attack' || action === 'fullscreen-attack'
+          ? 12
+          : action === '受击' || action === '僵直' || action === '死亡' || action === 'hit' || action === 'death'
+            ? 12
+            : 8,
+      isSpriteSheet: (detectedFrameCount ?? detectedColumns * detectedRows) > 1,
+    };
+  }
 
   let columns = hintedFrameCount;
   let rows = 1;
