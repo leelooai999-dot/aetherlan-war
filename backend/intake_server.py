@@ -27,11 +27,25 @@ def fallback_job_key() -> str:
     return f"gen-{datetime.now(timezone.utc).strftime('%Y%m%d%H%M%S')}-{uuid4().hex[:6]}"
 
 
-def build_worker_payload(job_id: str, role: str | None, action: str | None, provider: str | None, upload_names: list[str]) -> dict:
+def build_worker_payload(
+    job_id: str,
+    role: str | None,
+    character_id: str | None,
+    character_label: str | None,
+    action: str | None,
+    target_slot: str | None,
+    asset_kind: str | None,
+    provider: str | None,
+    upload_names: list[str],
+) -> dict:
     return {
         'jobId': job_id,
         'role': role or '未提供',
+        'characterId': character_id,
+        'characterLabel': character_label,
         'action': action or '未提供',
+        'targetSlot': target_slot,
+        'assetKind': asset_kind,
         'provider': provider or '未提供',
         'uploadCount': len(upload_names),
         'status': 'persistent-intake-received',
@@ -49,7 +63,11 @@ def sanitize_job_for_client(job: dict) -> dict:
         'storage': job.get('storage'),
         'request': {
             'role': (job.get('request') or {}).get('role'),
+            'characterId': (job.get('request') or {}).get('characterId'),
+            'characterLabel': (job.get('request') or {}).get('characterLabel'),
             'action': (job.get('request') or {}).get('action'),
+            'targetSlot': (job.get('request') or {}).get('targetSlot'),
+            'assetKind': (job.get('request') or {}).get('assetKind'),
             'frameCount': (job.get('request') or {}).get('frameCount'),
             'intent': (job.get('request') or {}).get('intent'),
         },
@@ -69,7 +87,11 @@ def sanitize_worker_payload_for_client(payload: dict) -> dict:
     return {
         'jobId': payload.get('jobId'),
         'role': payload.get('role'),
+        'characterId': payload.get('characterId'),
+        'characterLabel': payload.get('characterLabel'),
         'action': payload.get('action'),
+        'targetSlot': payload.get('targetSlot'),
+        'assetKind': payload.get('assetKind'),
         'uploadCount': payload.get('uploadCount'),
         'status': payload.get('status'),
         'nextStep': payload.get('nextStep'),
@@ -134,7 +156,11 @@ class IntakeHandler(BaseHTTPRequestHandler):
             return
 
         role = form.getfirst('role')
+        character_id = form.getfirst('characterId')
+        character_label = form.getfirst('characterLabel')
         action = form.getfirst('action')
+        target_slot = form.getfirst('targetSlot')
+        asset_kind = form.getfirst('assetKind')
         provider = form.getfirst('provider')
         frame_count = form.getfirst('frameCount')
         notes = form.getfirst('notes')
@@ -169,7 +195,17 @@ class IntakeHandler(BaseHTTPRequestHandler):
                 'path': str(target),
             })
 
-        worker_payload = build_worker_payload(job_id, role, action, provider, upload_names)
+        worker_payload = build_worker_payload(
+            job_id,
+            role,
+            character_id,
+            character_label,
+            action,
+            target_slot,
+            asset_kind,
+            provider,
+            upload_names,
+        )
         job = {
             'id': job_id,
             'createdAt': datetime.now(timezone.utc).isoformat(),
@@ -178,7 +214,11 @@ class IntakeHandler(BaseHTTPRequestHandler):
             'storage': 'hetzner-disk-persistent',
             'request': {
                 'role': role,
+                'characterId': character_id,
+                'characterLabel': character_label,
                 'action': action,
+                'targetSlot': target_slot,
+                'assetKind': asset_kind,
                 'frameCount': frame_count,
                 'provider': provider,
                 'notes': notes,
@@ -200,6 +240,10 @@ class IntakeHandler(BaseHTTPRequestHandler):
                 'uploadCount': str(len(upload_names)),
                 'action': action or '',
                 'role': role or '',
+                'characterId': character_id or '',
+                'characterLabel': character_label or '',
+                'targetSlot': target_slot or '',
+                'assetKind': asset_kind or '',
             }
             from urllib.parse import urlencode
             location = f"{PUBLIC_APP_ORIGIN.rstrip('/')}/generator?{urlencode(redirect_params)}"
