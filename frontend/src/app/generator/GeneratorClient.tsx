@@ -33,6 +33,17 @@ type UploadStatus = {
 
 type CharacterOption = { id: string; label: string; role: string };
 type SlotOption = { id: string; label: string };
+type ReplacementTarget = {
+  id: string;
+  label: string;
+  characterId: string;
+  characterLabel: string;
+  role: string;
+  action: string;
+  targetSlot: string;
+  assetKind: string;
+  notesHint?: string;
+};
 
 type Props = {
   actionUrl: string;
@@ -42,6 +53,7 @@ type Props = {
   characters: CharacterOption[];
   targetSlots: SlotOption[];
   assetKinds: string[];
+  replacementTargets: ReplacementTarget[];
   initialJobId?: string | null;
   initialRole?: string | null;
   initialAction?: string | null;
@@ -61,6 +73,7 @@ export default function GeneratorClient({
   characters,
   targetSlots,
   assetKinds,
+  replacementTargets,
   initialJobId,
   initialRole,
   initialAction,
@@ -72,17 +85,24 @@ export default function GeneratorClient({
   initialQueueDepth,
 }: Props) {
   const [submitting, setSubmitting] = useState(false);
+  const initialReplacementTarget = replacementTargets.find((item) => item.characterId === (initialCharacterId ?? characters[0]?.id ?? '') && item.targetSlot === (initialTargetSlot ?? targetSlots[0]?.id ?? '')) ?? replacementTargets[0];
   const [jobId, setJobId] = useState(initialJobId ?? '');
-  const [role, setRole] = useState(initialRole ?? roles[0] ?? '');
-  const [characterId, setCharacterId] = useState(initialCharacterId ?? characters[0]?.id ?? '');
-  const [characterLabel, setCharacterLabel] = useState(initialCharacterLabel ?? characters[0]?.label ?? '');
-  const [action, setAction] = useState(initialAction ?? '受击');
-  const [targetSlot, setTargetSlot] = useState(initialTargetSlot ?? targetSlots[0]?.id ?? '');
-  const [assetKind, setAssetKind] = useState(initialAssetKind ?? assetKinds[0] ?? 'battle-animation');
+  const [selectedTargetId, setSelectedTargetId] = useState(initialReplacementTarget?.id ?? replacementTargets[0]?.id ?? '');
+  const [role, setRole] = useState(initialRole ?? initialReplacementTarget?.role ?? roles[0] ?? '');
+  const [characterId, setCharacterId] = useState(initialCharacterId ?? initialReplacementTarget?.characterId ?? characters[0]?.id ?? '');
+  const [characterLabel, setCharacterLabel] = useState(initialCharacterLabel ?? initialReplacementTarget?.characterLabel ?? characters[0]?.label ?? '');
+  const [action, setAction] = useState(initialAction ?? initialReplacementTarget?.action ?? '受击');
+  const [targetSlot, setTargetSlot] = useState(initialTargetSlot ?? initialReplacementTarget?.targetSlot ?? targetSlots[0]?.id ?? '');
+  const [assetKind, setAssetKind] = useState(initialAssetKind ?? initialReplacementTarget?.assetKind ?? assetKinds[0] ?? 'battle-animation');
   const [uploadCount, setUploadCount] = useState(initialUploadCount ?? '0');
   const [queueDepth, setQueueDepth] = useState(initialQueueDepth ?? '-');
   const [status, setStatus] = useState<UploadStatus | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  const selectedTarget = useMemo(
+    () => replacementTargets.find((item) => item.id === selectedTargetId) ?? replacementTargets[0] ?? null,
+    [replacementTargets, selectedTargetId],
+  );
 
   const pipelineHref = useMemo(() => {
     const params = new URLSearchParams({
@@ -97,6 +117,18 @@ export default function GeneratorClient({
     });
     return `/pipeline?${params.toString()}`;
   }, [jobId, role, action, uploadCount, characterId, characterLabel, targetSlot, assetKind]);
+
+  function applyReplacementTarget(targetId: string) {
+    const nextTarget = replacementTargets.find((item) => item.id === targetId);
+    if (!nextTarget) return;
+    setSelectedTargetId(nextTarget.id);
+    setRole(nextTarget.role);
+    setCharacterId(nextTarget.characterId);
+    setCharacterLabel(nextTarget.characterLabel);
+    setAction(nextTarget.action);
+    setTargetSlot(nextTarget.targetSlot);
+    setAssetKind(nextTarget.assetKind);
+  }
 
   async function pollStatus(nextJobId: string) {
     for (let i = 0; i < 25; i += 1) {
@@ -180,58 +212,56 @@ export default function GeneratorClient({
         <h2 className="mt-2 text-2xl font-bold">配置这次生成任务</h2>
 
         <form onSubmit={onSubmit} encType="multipart/form-data" className="mt-6 grid gap-4">
-          <div className="grid gap-4 md:grid-cols-2">
-            <label className="grid gap-2 text-sm text-slate-200">
-              角色类型
-              <select name="role" value={role} onChange={(event) => setRole(event.target.value)} className="rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 outline-none">
-                {roles.map((item) => (
-                  <option key={item}>{item}</option>
-                ))}
-              </select>
-            </label>
-            <label className="grid gap-2 text-sm text-slate-200">
-              具体角色
+          <div className="rounded-3xl border border-cyan-300/15 bg-cyan-400/5 p-4">
+            <div className="text-sm uppercase tracking-[0.25em] text-cyan-200">准确替换项目</div>
+            <p className="mt-2 text-sm leading-7 text-slate-200">先直接选择你要替换的具体项目。选中后，角色 / 动作 / 槽位 / 用途会自动绑定，上传时更不容易传错。</p>
+            <label className="mt-4 grid gap-2 text-sm text-slate-200">
+              替换目标
               <select
-                name="characterId"
-                value={characterId}
-                onChange={(event) => {
-                  const nextId = event.target.value;
-                  const matched = characters.find((item) => item.id === nextId);
-                  setCharacterId(nextId);
-                  setCharacterLabel(matched?.label ?? '');
-                  if (matched?.role) setRole(matched.role);
-                }}
-                className="rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 outline-none"
+                name="replacementTarget"
+                value={selectedTargetId}
+                onChange={(event) => applyReplacementTarget(event.target.value)}
+                className="rounded-2xl border border-cyan-300/20 bg-slate-950/70 px-4 py-3 outline-none"
               >
-                {characters.map((item) => (
+                {replacementTargets.map((item) => (
                   <option key={item.id} value={item.id}>{item.label}</option>
                 ))}
               </select>
+            </label>
+            {selectedTarget ? (
+              <div className="mt-4 grid gap-2 rounded-2xl border border-white/10 bg-black/15 p-4 text-sm leading-7 text-slate-100 md:grid-cols-2">
+                <div><span className="text-slate-400">角色：</span>{selectedTarget.characterLabel}</div>
+                <div><span className="text-slate-400">职业：</span>{selectedTarget.role}</div>
+                <div><span className="text-slate-400">动作：</span>{selectedTarget.action}</div>
+                <div><span className="text-slate-400">替换槽位：</span>{selectedTarget.targetSlot}</div>
+                <div><span className="text-slate-400">素材用途：</span>{selectedTarget.assetKind}</div>
+                <div><span className="text-slate-400">说明：</span>{selectedTarget.notesHint ?? '未提供'}</div>
+              </div>
+            ) : null}
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-2">
+            <label className="grid gap-2 text-sm text-slate-200">
+              角色类型
+              <input name="role" value={role} readOnly className="rounded-2xl border border-white/10 bg-slate-950/40 px-4 py-3 text-slate-300 outline-none" />
+            </label>
+            <label className="grid gap-2 text-sm text-slate-200">
+              具体角色
+              <input value={characterLabel} readOnly className="rounded-2xl border border-white/10 bg-slate-950/40 px-4 py-3 text-slate-300 outline-none" />
+              <input type="hidden" name="characterId" value={characterId} />
               <input type="hidden" name="characterLabel" value={characterLabel} />
             </label>
             <label className="grid gap-2 text-sm text-slate-200">
               动作
-              <select name="action" value={action} onChange={(event) => setAction(event.target.value)} className="rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 outline-none">
-                {actions.map((item) => (
-                  <option key={item}>{item}</option>
-                ))}
-              </select>
+              <input name="action" value={action} readOnly className="rounded-2xl border border-white/10 bg-slate-950/40 px-4 py-3 text-slate-300 outline-none" />
             </label>
             <label className="grid gap-2 text-sm text-slate-200">
               应用槽位
-              <select name="targetSlot" value={targetSlot} onChange={(event) => setTargetSlot(event.target.value)} className="rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 outline-none">
-                {targetSlots.map((item) => (
-                  <option key={item.id} value={item.id}>{item.label}</option>
-                ))}
-              </select>
+              <input name="targetSlot" value={targetSlot} readOnly className="rounded-2xl border border-white/10 bg-slate-950/40 px-4 py-3 text-slate-300 outline-none" />
             </label>
             <label className="grid gap-2 text-sm text-slate-200">
               素材用途
-              <select name="assetKind" value={assetKind} onChange={(event) => setAssetKind(event.target.value)} className="rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 outline-none">
-                {assetKinds.map((item) => (
-                  <option key={item} value={item}>{item}</option>
-                ))}
-              </select>
+              <input name="assetKind" value={assetKind} readOnly className="rounded-2xl border border-white/10 bg-slate-950/40 px-4 py-3 text-slate-300 outline-none" />
             </label>
             <label className="grid gap-2 text-sm text-slate-200">
               帧数
@@ -259,7 +289,7 @@ export default function GeneratorClient({
             <textarea
               name="notes"
               rows={4}
-              placeholder="比如：Samuel 普攻/受击参考，保留当前角色比例；需要透明背景；优先适配战斗全屏演出与棋盘内 sprite。"
+              placeholder={selectedTarget?.notesHint ? `${selectedTarget.notesHint} 例如：保留当前角色比例；需要透明背景；优先适配当前替换项目。` : '比如：Samuel 普攻/受击参考，保留当前角色比例；需要透明背景；优先适配战斗全屏演出与棋盘内 sprite。'}
               className="rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 outline-none"
             />
           </label>
