@@ -45,6 +45,14 @@ type ReplacementTarget = {
   notesHint?: string;
 };
 
+const assetKindLabel: Record<string, string> = {
+  'map-sprite': '地图动作 / map sprite',
+  'battle-animation': '战斗动作 / battle animation',
+  'fullscreen-fx': '全屏演出 / fullscreen FX',
+  portrait: '立绘 / portrait',
+  profile: '头像 / profile',
+};
+
 type Props = {
   actionUrl: string;
   roles: string[];
@@ -103,6 +111,26 @@ export default function GeneratorClient({
     () => replacementTargets.find((item) => item.id === selectedTargetId) ?? replacementTargets[0] ?? null,
     [replacementTargets, selectedTargetId],
   );
+
+  const groupedTargets = useMemo(() => {
+    const byCharacter = new Map<string, { characterLabel: string; buckets: Record<string, ReplacementTarget[]> }>();
+    for (const item of replacementTargets) {
+      const current = byCharacter.get(item.characterId) ?? {
+        characterLabel: item.characterLabel,
+        buckets: {
+          'map-sprite': [],
+          'battle-animation': [],
+          'fullscreen-fx': [],
+          portrait: [],
+          profile: [],
+        },
+      };
+      current.buckets[item.assetKind] ??= [];
+      current.buckets[item.assetKind].push(item);
+      byCharacter.set(item.characterId, current);
+    }
+    return Array.from(byCharacter.entries()).map(([characterId, value]) => ({ characterId, ...value }));
+  }, [replacementTargets]);
 
   const pipelineHref = useMemo(() => {
     const params = new URLSearchParams({
@@ -216,7 +244,7 @@ export default function GeneratorClient({
             <div className="text-sm uppercase tracking-[0.25em] text-cyan-200">准确替换项目</div>
             <p className="mt-2 text-sm leading-7 text-slate-200">先直接选择你要替换的具体项目。选中后，角色 / 动作 / 槽位 / 用途会自动绑定，上传时更不容易传错。</p>
             <label className="mt-4 grid gap-2 text-sm text-slate-200">
-              替换目标
+              当前选中的替换目标
               <select
                 name="replacementTarget"
                 value={selectedTargetId}
@@ -228,6 +256,37 @@ export default function GeneratorClient({
                 ))}
               </select>
             </label>
+            <div className="mt-4 grid gap-4">
+              {groupedTargets.map((group) => (
+                <div key={group.characterId} className="rounded-2xl border border-white/10 bg-black/15 p-4">
+                  <div className="text-sm font-semibold text-white">{group.characterLabel}</div>
+                  <div className="mt-3 grid gap-3 lg:grid-cols-2">
+                    {Object.entries(group.buckets).map(([kind, items]) =>
+                      items.length ? (
+                        <div key={kind} className="rounded-2xl border border-white/8 bg-slate-950/40 p-3">
+                          <div className="text-xs uppercase tracking-[0.2em] text-cyan-200">{assetKindLabel[kind] ?? kind}</div>
+                          <div className="mt-2 flex flex-wrap gap-2">
+                            {items.map((item) => {
+                              const active = item.id === selectedTargetId;
+                              return (
+                                <button
+                                  key={item.id}
+                                  type="button"
+                                  onClick={() => applyReplacementTarget(item.id)}
+                                  className={`rounded-full border px-3 py-1.5 text-xs transition ${active ? 'border-cyan-300 bg-cyan-400/20 text-cyan-100' : 'border-white/10 bg-white/5 text-slate-200 hover:border-cyan-300/40 hover:text-cyan-100'}`}
+                                >
+                                  {item.label.replace(/^.* · /, '')}
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      ) : null,
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
             {selectedTarget ? (
               <div className="mt-4 grid gap-2 rounded-2xl border border-white/10 bg-black/15 p-4 text-sm leading-7 text-slate-100 md:grid-cols-2">
                 <div><span className="text-slate-400">角色：</span>{selectedTarget.characterLabel}</div>
