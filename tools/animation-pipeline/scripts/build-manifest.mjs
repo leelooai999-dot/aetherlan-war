@@ -45,6 +45,8 @@ function sanitizeQueueResult(result) {
           atlasJson: Boolean(result.outputs.atlasJson),
           framePlan: Boolean(result.outputs.framePlan),
           bundlePlan: Boolean(result.outputs.bundlePlan),
+          transparentFramesDir: result.outputs.transparentFramesDir,
+          transparentFrameUrls: result.outputs.transparentFrameUrls,
         }
       : undefined,
     failureReason: result.failureReason,

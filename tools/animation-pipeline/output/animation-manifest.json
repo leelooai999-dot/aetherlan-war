@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-26T19:27:26.137Z",
+  "generatedAt": "2026-04-28T18:21:20.483Z",
   "characters": [
     {
       "characterId": "isolde",
@@ -145,10 +145,19 @@
       "source": {
         "intakeStorage": "hetzner-disk-persistent"
       },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
       "workspace": {
         "root": true
       },
-      "previewUrl": null,
+      "previewUrl": "/generated-previews/gen-20260425220734-152f61.txt",
       "processedPreviewUrl": null
     },
     {
@@ -171,10 +180,19 @@
       "source": {
         "intakeStorage": "hetzner-disk-persistent"
       },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
       "workspace": {
         "root": true
       },
-      "previewUrl": null,
+      "previewUrl": "/generated-previews/gen-20260425223011-b36979.txt",
       "processedPreviewUrl": null
     },
     {
@@ -196,6 +214,15 @@
       ],
       "source": {
         "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
       },
       "workspace": {
         "root": true
@@ -223,11 +250,20 @@
       "source": {
         "intakeStorage": "hetzner-disk-persistent"
       },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
       "workspace": {
         "root": true
       },
       "previewUrl": "/generated-previews/gen-20260426022445-6c7d7d.png",
-      "processedPreviewUrl": "/generated-previews/gen-20260426022445-6c7d7d.processed.png"
+      "processedPreviewUrl": null
     },
     {
       "jobId": "gen-20260426022646-74f5d0",
@@ -248,6 +284,15 @@
       ],
       "source": {
         "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
       },
       "workspace": {
         "root": true
@@ -275,6 +320,15 @@
       "source": {
         "intakeStorage": "hetzner-disk-persistent"
       },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
       "workspace": {
         "root": true
       },
@@ -301,11 +355,20 @@
       "source": {
         "intakeStorage": "hetzner-disk-persistent"
       },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
       "workspace": {
         "root": true
       },
       "previewUrl": "/generated-previews/gen-20260426022738-ff6040.png",
-      "processedPreviewUrl": "/generated-previews/gen-20260426022738-ff6040.processed.png"
+      "processedPreviewUrl": null
     },
     {
       "jobId": "gen-20260426022811-e89052",
@@ -327,11 +390,3687 @@
       "source": {
         "intakeStorage": "hetzner-disk-persistent"
       },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
       "workspace": {
         "root": true
       },
       "previewUrl": "/generated-previews/gen-20260426022811-e89052.png",
-      "processedPreviewUrl": "/generated-previews/gen-20260426022811-e89052.processed.png"
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260426190417-d02267",
+      "status": "done",
+      "adapter": "doubao-adapter",
+      "request": {
+        "role": "人类战士",
+        "action": "待机",
+        "frameCount": "8",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": null,
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260426190509-fb066c",
+      "status": "done",
+      "adapter": "doubao-adapter",
+      "request": {
+        "role": "人类战士",
+        "action": "待机",
+        "frameCount": "8",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "originalName": "samuel profile pic男主头像.png",
+          "type": "image/png",
+          "size": 1525929
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260426190509-fb066c.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260426191940-3d9a1f",
+      "status": "done",
+      "adapter": "openai-images-adapter",
+      "request": {
+        "role": "人类战士",
+        "action": "待机",
+        "frameCount": "16",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "originalName": "samuel profile pic男主头像.png",
+          "type": "image/png",
+          "size": 1525929
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260426191940-3d9a1f.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260427041916-c4187f",
+      "status": "done",
+      "adapter": "doubao-adapter",
+      "request": {
+        "role": "人类战士",
+        "action": "受击",
+        "frameCount": "8",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": null,
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260427041951-c0dc07",
+      "status": "done",
+      "adapter": "doubao-adapter",
+      "request": {
+        "role": "元素法师",
+        "action": "待机",
+        "frameCount": "16",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "originalName": "阿玛迪斯战记网页化方法 (1).png",
+          "type": "image/png",
+          "size": 2276214
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260427041951-c0dc07.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260427192536-e2ccaa",
+      "status": "done",
+      "adapter": "doubao-adapter",
+      "request": {
+        "role": "元素法师",
+        "action": "普攻",
+        "frameCount": "16",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "originalName": "ChatGPT Image 2026年4月27日 12_24_44.png",
+          "type": "image/png",
+          "size": 1671436
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260427192536-e2ccaa.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260427192939-8657c6",
+      "status": "done",
+      "adapter": "doubao-adapter",
+      "request": {
+        "role": "人类战士",
+        "action": "受击",
+        "frameCount": "8",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": null,
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260427192955-0a1194",
+      "status": "done",
+      "adapter": "doubao-adapter",
+      "request": {
+        "role": "人类战士",
+        "action": "普攻",
+        "frameCount": "16",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "originalName": "isolde 普通攻击.png",
+          "type": "image/png",
+          "size": 1671436
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260427192955-0a1194.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260427203304-ec511e",
+      "status": "done",
+      "adapter": "doubao-adapter",
+      "request": {
+        "role": "人类战士",
+        "action": "受击",
+        "frameCount": "16",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "originalName": "isolde 普通攻击.png",
+          "type": "image/png",
+          "size": 1671436
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260427203304-ec511e.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260427210220-c399be",
+      "status": "done",
+      "adapter": "doubao-adapter",
+      "request": {
+        "role": "元素法师",
+        "action": "普攻",
+        "frameCount": "16",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "originalName": "isolde 普通攻击.png",
+          "type": "image/png",
+          "size": 1671436
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260427210220-c399be.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260427212647-4f45aa",
+      "status": "done",
+      "adapter": "doubao-adapter",
+      "request": {
+        "role": "元素法师",
+        "action": "施法",
+        "frameCount": "16",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "originalName": "isolde 普通攻击.png",
+          "type": "image/png",
+          "size": 1671436
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260427212647-4f45aa.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260427212700-5eed98",
+      "status": "done",
+      "adapter": "doubao-adapter",
+      "request": {
+        "role": "元素法师",
+        "action": "施法",
+        "frameCount": "16",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "originalName": "isolde 普通攻击.png",
+          "type": "image/png",
+          "size": 1671436
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260427212700-5eed98.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260427215053-eaa183",
+      "status": "done",
+      "adapter": "doubao-adapter",
+      "request": {
+        "role": "元素法师",
+        "action": "施法",
+        "frameCount": "8",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "originalName": "isolde 普通攻击.png",
+          "type": "image/png",
+          "size": 1671436
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260427215053-eaa183.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260427222643-4ade37",
+      "status": "done",
+      "adapter": "doubao-adapter",
+      "request": {
+        "role": "元素法师",
+        "action": "施法",
+        "frameCount": "8",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "originalName": "isolde 普通攻击.png",
+          "type": "image/png",
+          "size": 1671436
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260427222643-4ade37.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260427222710-c80f61",
+      "status": "done",
+      "adapter": "doubao-adapter",
+      "request": {
+        "role": "元素法师",
+        "action": "施法",
+        "frameCount": "8",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "originalName": "isolde attack.png",
+          "type": "image/png",
+          "size": 1671436
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260427222710-c80f61.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260427223903-caee5e",
+      "status": "done",
+      "adapter": "custom-adapter",
+      "request": {
+        "role": "元素法师",
+        "action": "普攻",
+        "frameCount": "8",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "originalName": "isolde-sprite.png",
+          "type": "image/png",
+          "size": 480786
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260427223903-caee5e.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428005356-a11a7e",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "元素法师",
+        "action": "施法",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "test.png",
+          "type": "image/png",
+          "size": 210
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428005356-a11a7e.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428020749-6d758d",
+      "status": "done",
+      "adapter": "custom-adapter",
+      "request": {
+        "role": "元素法师",
+        "action": "普攻",
+        "frameCount": "4",
+        "intent": null
+      },
+      "uploads": [],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": null,
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428034831-76050d",
+      "status": "done",
+      "adapter": "openai-images-adapter",
+      "request": {
+        "role": "人类战士",
+        "action": "待机",
+        "frameCount": "1",
+        "intent": "healthcheck-smoke-test"
+      },
+      "uploads": [],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": null,
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428040220-67bade",
+      "status": "done",
+      "adapter": "custom-adapter",
+      "request": {
+        "role": "test-smoke",
+        "action": "idle",
+        "frameCount": "1",
+        "intent": "healthcheck smoke"
+      },
+      "uploads": [
+        {
+          "originalName": "smoke.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428040220-67bade.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428041945-796077",
+      "status": "done",
+      "adapter": "custom-adapter",
+      "request": {
+        "role": "test-smoke",
+        "action": "idle",
+        "frameCount": null,
+        "intent": "cron-healthcheck"
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428041945-796077.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428043218-99e5cf",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "unit",
+        "action": "idle",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428043218-99e5cf.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428044957-e488c2",
+      "status": "done",
+      "adapter": "openai-images-adapter",
+      "request": {
+        "role": "人类战士",
+        "action": "待机",
+        "frameCount": "1",
+        "intent": null
+      },
+      "uploads": [],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": null,
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428045014-9300ee",
+      "status": "done",
+      "adapter": "openai-images-adapter",
+      "request": {
+        "role": "人类战士",
+        "action": "待机",
+        "frameCount": "1",
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428045014-9300ee.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428050253-1f5895",
+      "status": "done",
+      "adapter": "custom-adapter",
+      "request": {
+        "role": "人类战士",
+        "action": "待机",
+        "frameCount": null,
+        "intent": "battle-asset-upload"
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428050253-1f5895.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428051855-997edb",
+      "status": "done",
+      "adapter": "openai-images-adapter",
+      "request": {
+        "role": "人类战士",
+        "action": "待机",
+        "frameCount": null,
+        "intent": "cron smoke test"
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428051855-997edb.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428053242-cf45ef",
+      "status": "done",
+      "adapter": "custom-adapter",
+      "request": {
+        "role": "人类战士",
+        "action": "待机",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": null,
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428061822-d72005",
+      "status": "done",
+      "adapter": "custom-adapter",
+      "request": {
+        "role": "人类战士",
+        "action": "待机",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": null,
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428063241-b64e6f",
+      "status": "done",
+      "adapter": "openai-images-adapter",
+      "request": {
+        "role": "人类战士",
+        "action": "普攻",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": null,
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428064913-da5cd1",
+      "status": "done",
+      "adapter": "doubao-adapter",
+      "request": {
+        "role": "人类战士",
+        "action": "待机",
+        "frameCount": "1",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "originalName": "healthcheck.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428064913-da5cd1.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428070159-ee5b6a",
+      "status": "done",
+      "adapter": "custom-adapter",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": "4",
+        "intent": "upload-healthcheck-smoke"
+      },
+      "uploads": [],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": null,
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428071831-f5fea4",
+      "status": "done",
+      "adapter": "custom-adapter",
+      "request": {
+        "role": null,
+        "action": "idle",
+        "frameCount": null,
+        "intent": "replace-character-asset"
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-smoke-6Nwc.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428071831-f5fea4.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428073216-815dce",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "character",
+        "action": "idle",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": null,
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428075030-396378",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428075030-396378.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428080150-bebf94",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "立绘",
+        "action": "idle",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "healthcheck.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428080150-bebf94.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428081747-76bbfb",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428081747-76bbfb.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428083139-885e82",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428083139-885e82.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428084742-8716e6",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428084742-8716e6.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428084759-370818",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428084759-370818.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428090146-308cc4",
+      "status": "done",
+      "adapter": "openai-images-adapter",
+      "request": {
+        "role": "元素法师",
+        "action": "施法",
+        "frameCount": "8",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "originalName": "healthcheck-smoke.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428090146-308cc4.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428090422-ab9362",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "tmp.Xrv3ZGIwGD.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428090422-ab9362.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428091752-942300",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428091752-942300.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428093135-115b38",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428093135-115b38.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428094723-03e07a",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428094723-03e07a.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428100139-c9dffa",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428100139-c9dffa.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428101738-f70385",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428101738-f70385.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428103129-4b030f",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": null,
+        "action": null,
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": null,
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428104634-91e247",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428104634-91e247.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428104816-1bb41f",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428104816-1bb41f.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428110135-10c878",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "人类战士",
+        "action": "待机",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-healthcheck.png",
+          "type": "image/png",
+          "size": 77
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428110135-10c878.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428111732-7a5642",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": null,
+        "action": null,
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": null,
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428111756-34394b",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428111756-34394b.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428113218-118795",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428113218-118795.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428114755-9135da",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428114755-9135da.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428120125-08b483",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "立绘",
+        "action": "idle",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428120125-08b483.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428121530-d375ea",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428121530-d375ea.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428121737-5f6380",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "人类战士",
+        "action": "待机",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "healthcheck.png",
+          "type": "image/png",
+          "size": 68
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428121737-5f6380.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428123151-0620c7",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428123151-0620c7.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428124348-8d76e6",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428124348-8d76e6.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428124424-a222ad",
+      "status": "done",
+      "adapter": "doubao-adapter",
+      "request": {
+        "role": "元素法师",
+        "action": "施法",
+        "frameCount": "16",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "originalName": "isolde__action__fullscreen-attack__fullscreen-fx__isolde-full-screen-attack.png",
+          "type": "image/png",
+          "size": 1671436
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428124424-a222ad.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428124532-b584ae",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428124532-b584ae.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428124611-a5e7e1",
+      "status": "done",
+      "adapter": "doubao-adapter",
+      "request": {
+        "role": "元素法师",
+        "action": "施法",
+        "frameCount": "16",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "originalName": "isolde__action__fullscreen-attack__fullscreen-fx__isolde-full-screen-attack.png",
+          "type": "image/png",
+          "size": 1671436
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428124611-a5e7e1.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428124801-52b884",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428124801-52b884.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428125050-3b7235",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428125050-3b7235.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428125051-ea35d0",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428125051-ea35d0.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428125206-1cef8a",
+      "status": "done",
+      "adapter": "doubao-adapter",
+      "request": {
+        "role": "元素法师",
+        "action": "施法",
+        "frameCount": "16",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "originalName": "isolde__action__fullscreen-attack__fullscreen-fx__isolde-full-screen-attack.png",
+          "type": "image/png",
+          "size": 1671436
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428125206-1cef8a.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428130109-270536",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "立绘",
+        "action": "smoke",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428130109-270536.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428131535-800050",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428131535-800050.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428131704-1cea28",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428131704-1cea28.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428132000-a352a4",
+      "status": "done",
+      "adapter": "doubao-adapter",
+      "request": {
+        "role": "元素法师",
+        "action": "施法",
+        "frameCount": "16",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "originalName": "isolde__action__fullscreen-attack__fullscreen-fx__isolde-full-screen-attack.png",
+          "type": "image/png",
+          "size": 1671436
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428132000-a352a4.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428132706-b7414c",
+      "status": "done",
+      "adapter": "doubao-adapter",
+      "request": {
+        "role": "元素法师",
+        "action": "施法",
+        "frameCount": "16",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "originalName": "isolde__action__attack__battle-animation__isolde-full-screen-attack.png",
+          "type": "image/png",
+          "size": 1671436
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428132706-b7414c.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428133107-0ad1d6",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": null,
+        "action": null,
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428133107-0ad1d6.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428133424-354915",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428133424-354915.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428134829-c87cee",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428134829-c87cee.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428140100-3d235e",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428140100-3d235e.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428141535-7f91f9",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428141535-7f91f9.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428141627-4bc49d",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428141627-4bc49d.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428141735-2c3b9b",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428141735-2c3b9b.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428143132-4dca7d",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428143132-4dca7d.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428144731-d35370",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428144731-d35370.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428150155-52c285",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428150155-52c285.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428150418-9aeb0c",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428150418-9aeb0c.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428151935-102aab",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428151935-102aab.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428153131-43713b",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "smoke.png",
+          "type": "image/png",
+          "size": 68
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428153131-43713b.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428153135-631554",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428153135-631554.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428153415-95c923",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428153415-95c923.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428154818-c8a71c",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428154818-c8a71c.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428160129-9593c2",
+      "status": "done",
+      "adapter": "doubao-adapter",
+      "request": {
+        "role": "月溪灵鹿",
+        "action": "普攻",
+        "frameCount": "16",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "originalName": "moon-deer__action__attack__battle-animation__b2d65dfc-411c-4091-9fa1-10a81ae268de.png",
+          "type": "image/png",
+          "size": 1424708
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428160129-9593c2.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428160257-73060c",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428160257-73060c.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428160340-901da7",
+      "status": "done",
+      "adapter": "doubao-adapter",
+      "request": {
+        "role": "月溪灵鹿",
+        "action": "普攻",
+        "frameCount": "16",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "originalName": "moon-deer__action__attack__battle-animation__b2d65dfc-411c-4091-9fa1-10a81ae268de.png",
+          "type": "image/png",
+          "size": 1424708
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428160340-901da7.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428161617-4d3a7b",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428161617-4d3a7b.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428161742-1487df",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428161742-1487df.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428163534-6f6e9a",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428163534-6f6e9a.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428163604-a878e5",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428163604-a878e5.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428164019-fb988e",
+      "status": "done",
+      "adapter": "doubao-adapter",
+      "request": {
+        "role": "月溪灵鹿",
+        "action": "普攻",
+        "frameCount": "8",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "originalName": "moon-deer__action__attack__battle-animation__deer-attack.png",
+          "type": "image/png",
+          "size": 1424708
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428164019-fb988e.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428164725-ec2891",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428164725-ec2891.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428170152-8ba479",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "healthcheck.png",
+          "type": "image/png",
+          "size": 68
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428170152-8ba479.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428170425-56ceec",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428170425-56ceec.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428171759-edfa9d",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "healthcheck.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428171759-edfa9d.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428172726-8af7c5",
+      "status": "done",
+      "adapter": "doubao-adapter",
+      "request": {
+        "role": "月溪灵鹿",
+        "action": "普攻",
+        "frameCount": "16",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "originalName": "moon-deer__action__attack__battle-animation__b2d65dfc-411c-4091-9fa1-10a81ae268de.png",
+          "type": "image/png",
+          "size": 1424708
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428172726-8af7c5.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428173141-8dc304",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": null,
+        "action": null,
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-healthcheck.png",
+          "type": "image/png",
+          "size": 68
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428173141-8dc304.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428173424-0461d0",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428173424-0461d0.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428174822-ded4b5",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": null,
+        "action": null,
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428174822-ded4b5.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428180131-93a2b5",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428180131-93a2b5.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428180416-51e919",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428180416-51e919.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428181059-54247f",
+      "status": "done",
+      "adapter": "doubao-adapter",
+      "request": {
+        "role": "月溪灵鹿",
+        "action": "普攻",
+        "frameCount": "8",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "originalName": "moon-deer__action__attack__battle-animation__deer-attack.png",
+          "type": "image/png",
+          "size": 1424708
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428181059-54247f.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428181608-3856cd",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428181608-3856cd.png",
+      "processedPreviewUrl": null
     }
   ],
   "runtimeContract": {

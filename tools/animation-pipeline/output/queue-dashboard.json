@@ -1,331 +1,4745 @@
 {
-  "generatedAt": "2026-04-26T19:27:26.158Z",
-  "total": 8,
+  "generatedAt": "2026-04-28T18:21:20.822Z",
+  "total": 115,
   "queued": 0,
   "processing": 0,
-  "done": 8,
+  "done": 115,
   "failed": 0,
+  "health": {
+    "ok": true,
+    "statusMismatchCount": 0,
+    "orphanResultCount": 0,
+    "activeJobCount": 0,
+    "oldestActiveJobAt": null,
+    "newestActiveJobAt": null,
+    "staleQueuedJobCount": 0,
+    "staleQueuedThresholdMinutes": 30,
+    "staleQueuedOverThresholdCount": 0
+  },
+  "statusMismatches": [],
+  "orphanResults": [],
+  "staleQueuedJobs": [],
   "jobs": [
     {
       "id": "gen-20260425220734-152f61",
       "status": "done",
       "createdAt": "2026-04-25T22:07:34.878245+00:00",
+      "updatedAt": "2026-04-28T12:50:33.876Z",
+      "resultPath": "output/queue-results/gen-20260425220734-152f61.result.json",
       "storage": "hetzner-disk-persistent",
       "request": {
         "role": "人类战士",
         "action": "受击",
         "frameCount": "8",
+        "provider": "Doubao",
         "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "smoke.txt",
+          "size": 15,
+          "type": "text/plain"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260425220734-152f61",
+        "role": "人类战士",
+        "action": "受击",
+        "provider": "Doubao",
+        "uploadCount": 1,
+        "uploadNames": [
+          "smoke.txt"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
       }
     },
     {
       "id": "gen-20260425223011-b36979",
       "status": "done",
       "createdAt": "2026-04-25T22:30:11.872835+00:00",
+      "updatedAt": "2026-04-28T12:50:33.883Z",
+      "resultPath": "output/queue-results/gen-20260425223011-b36979.result.json",
       "storage": "hetzner-disk-persistent",
       "request": {
         "role": "元素法师",
         "action": "施法",
         "frameCount": "8",
+        "provider": "Doubao",
         "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "nginx-smoke.txt",
+          "size": 10,
+          "type": "text/plain"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260425223011-b36979",
+        "role": "元素法师",
+        "action": "施法",
+        "provider": "Doubao",
+        "uploadCount": 1,
+        "uploadNames": [
+          "nginx-smoke.txt"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
       }
     },
     {
       "id": "gen-20260426014542-0109ea",
       "status": "done",
       "createdAt": "2026-04-26T01:45:42.694667+00:00",
+      "updatedAt": "2026-04-28T12:50:33.892Z",
+      "resultPath": "output/queue-results/gen-20260426014542-0109ea.result.json",
       "storage": "hetzner-disk-persistent",
       "request": {
         "role": "人类战士",
         "action": "受击",
         "frameCount": "8",
+        "provider": "Doubao",
         "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "smoke.png",
+          "size": 1450000,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260426014542-0109ea",
+        "role": "人类战士",
+        "action": "受击",
+        "provider": "Doubao",
+        "uploadCount": 1,
+        "uploadNames": [
+          "smoke.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
       }
     },
     {
       "id": "gen-20260426022445-6c7d7d",
       "status": "done",
       "createdAt": "2026-04-26T02:24:45.051966+00:00",
+      "updatedAt": "2026-04-28T12:50:33.901Z",
+      "resultPath": "output/queue-results/gen-20260426022445-6c7d7d.result.json",
       "storage": "hetzner-disk-persistent",
       "request": {
         "role": "人类战士",
         "action": "待机",
         "frameCount": "16",
+        "provider": "Doubao",
         "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "samuel profile pic男主头像.png",
+          "size": 1525929,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260426022445-6c7d7d",
+        "role": "人类战士",
+        "action": "待机",
+        "provider": "Doubao",
+        "uploadCount": 1,
+        "uploadNames": [
+          "samuel profile pic男主头像.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
       }
     },
     {
       "id": "gen-20260426022646-74f5d0",
       "status": "done",
       "createdAt": "2026-04-26T02:26:46.648387+00:00",
+      "updatedAt": "2026-04-28T12:50:33.905Z",
+      "resultPath": "output/queue-results/gen-20260426022646-74f5d0.result.json",
       "storage": "hetzner-disk-persistent",
       "request": {
         "role": "人类战士",
         "action": "受击",
         "frameCount": "8",
+        "provider": "Doubao",
         "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "smoke.png",
+          "size": 1000,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260426022646-74f5d0",
+        "role": "人类战士",
+        "action": "受击",
+        "provider": "Doubao",
+        "uploadCount": 1,
+        "uploadNames": [
+          "smoke.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
       }
     },
     {
       "id": "gen-20260426022711-1e1eba",
       "status": "done",
       "createdAt": "2026-04-26T02:27:11.216008+00:00",
+      "updatedAt": "2026-04-28T12:50:33.909Z",
+      "resultPath": "output/queue-results/gen-20260426022711-1e1eba.result.json",
       "storage": "hetzner-disk-persistent",
       "request": {
         "role": "人类战士",
         "action": "受击",
         "frameCount": "8",
+        "provider": "Doubao",
         "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "smoke.png",
+          "size": 1000,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260426022711-1e1eba",
+        "role": "人类战士",
+        "action": "受击",
+        "provider": "Doubao",
+        "uploadCount": 1,
+        "uploadNames": [
+          "smoke.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
       }
     },
     {
       "id": "gen-20260426022738-ff6040",
       "status": "done",
       "createdAt": "2026-04-26T02:27:38.419572+00:00",
+      "updatedAt": "2026-04-28T12:50:33.917Z",
+      "resultPath": "output/queue-results/gen-20260426022738-ff6040.result.json",
       "storage": "hetzner-disk-persistent",
       "request": {
         "role": "人类战士",
         "action": "待机",
         "frameCount": "16",
+        "provider": "Doubao",
         "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "samuel profile pic男主头像.png",
+          "size": 1525929,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260426022738-ff6040",
+        "role": "人类战士",
+        "action": "待机",
+        "provider": "Doubao",
+        "uploadCount": 1,
+        "uploadNames": [
+          "samuel profile pic男主头像.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
       }
     },
     {
       "id": "gen-20260426022811-e89052",
       "status": "done",
       "createdAt": "2026-04-26T02:28:11.157668+00:00",
+      "updatedAt": "2026-04-28T12:50:33.926Z",
+      "resultPath": "output/queue-results/gen-20260426022811-e89052.result.json",
       "storage": "hetzner-disk-persistent",
       "request": {
         "role": "人类战士",
         "action": "待机",
         "frameCount": "12",
+        "provider": "Doubao",
         "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "samuel profile pic男主头像.png",
+          "size": 1525929,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260426022811-e89052",
+        "role": "人类战士",
+        "action": "待机",
+        "provider": "Doubao",
+        "uploadCount": 1,
+        "uploadNames": [
+          "samuel profile pic男主头像.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260426190417-d02267",
+      "status": "done",
+      "createdAt": "2026-04-26T19:04:17.467629+00:00",
+      "updatedAt": "2026-04-28T12:50:33.929Z",
+      "resultPath": "output/queue-results/gen-20260426190417-d02267.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "人类战士",
+        "action": "待机",
+        "frameCount": "8",
+        "provider": "Doubao",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [],
+      "workerPayload": {
+        "jobId": "gen-20260426190417-d02267",
+        "role": "人类战士",
+        "action": "待机",
+        "provider": "Doubao",
+        "uploadCount": 0,
+        "uploadNames": [],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260426190509-fb066c",
+      "status": "done",
+      "createdAt": "2026-04-26T19:05:09.362927+00:00",
+      "updatedAt": "2026-04-28T12:50:33.936Z",
+      "resultPath": "output/queue-results/gen-20260426190509-fb066c.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "人类战士",
+        "action": "待机",
+        "frameCount": "8",
+        "provider": "Doubao",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "samuel profile pic男主头像.png",
+          "size": 1525929,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260426190509-fb066c",
+        "role": "人类战士",
+        "action": "待机",
+        "provider": "Doubao",
+        "uploadCount": 1,
+        "uploadNames": [
+          "samuel profile pic男主头像.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260426191940-3d9a1f",
+      "status": "done",
+      "createdAt": "2026-04-26T19:19:40.277165+00:00",
+      "updatedAt": "2026-04-28T12:50:33.944Z",
+      "resultPath": "output/queue-results/gen-20260426191940-3d9a1f.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "人类战士",
+        "action": "待机",
+        "frameCount": "16",
+        "provider": "OpenAI Images",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "samuel profile pic男主头像.png",
+          "size": 1525929,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260426191940-3d9a1f",
+        "role": "人类战士",
+        "action": "待机",
+        "provider": "OpenAI Images",
+        "uploadCount": 1,
+        "uploadNames": [
+          "samuel profile pic男主头像.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260427041916-c4187f",
+      "status": "done",
+      "createdAt": "2026-04-27T04:19:16.592922+00:00",
+      "updatedAt": "2026-04-28T12:50:33.947Z",
+      "resultPath": "output/queue-results/gen-20260427041916-c4187f.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "人类战士",
+        "action": "受击",
+        "frameCount": "8",
+        "provider": "Doubao",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [],
+      "workerPayload": {
+        "jobId": "gen-20260427041916-c4187f",
+        "role": "人类战士",
+        "action": "受击",
+        "provider": "Doubao",
+        "uploadCount": 0,
+        "uploadNames": [],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260427041951-c0dc07",
+      "status": "done",
+      "createdAt": "2026-04-27T04:19:51.187356+00:00",
+      "updatedAt": "2026-04-28T12:50:33.973Z",
+      "resultPath": "output/queue-results/gen-20260427041951-c0dc07.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "元素法师",
+        "action": "待机",
+        "frameCount": "16",
+        "provider": "Doubao",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "阿玛迪斯战记网页化方法 (1).png",
+          "size": 2276214,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260427041951-c0dc07",
+        "role": "元素法师",
+        "action": "待机",
+        "provider": "Doubao",
+        "uploadCount": 1,
+        "uploadNames": [
+          "阿玛迪斯战记网页化方法 (1).png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260427192536-e2ccaa",
+      "status": "done",
+      "createdAt": "2026-04-27T19:25:36.620555+00:00",
+      "updatedAt": "2026-04-28T12:50:33.981Z",
+      "resultPath": "output/queue-results/gen-20260427192536-e2ccaa.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "元素法师",
+        "action": "普攻",
+        "frameCount": "16",
+        "provider": "Doubao",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "ChatGPT Image 2026年4月27日 12_24_44.png",
+          "size": 1671436,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260427192536-e2ccaa",
+        "role": "元素法师",
+        "action": "普攻",
+        "provider": "Doubao",
+        "uploadCount": 1,
+        "uploadNames": [
+          "ChatGPT Image 2026年4月27日 12_24_44.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260427192939-8657c6",
+      "status": "done",
+      "createdAt": "2026-04-27T19:29:39.952404+00:00",
+      "updatedAt": "2026-04-28T12:50:33.984Z",
+      "resultPath": "output/queue-results/gen-20260427192939-8657c6.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "人类战士",
+        "action": "受击",
+        "frameCount": "8",
+        "provider": "Doubao",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [],
+      "workerPayload": {
+        "jobId": "gen-20260427192939-8657c6",
+        "role": "人类战士",
+        "action": "受击",
+        "provider": "Doubao",
+        "uploadCount": 0,
+        "uploadNames": [],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260427192955-0a1194",
+      "status": "done",
+      "createdAt": "2026-04-27T19:29:55.583996+00:00",
+      "updatedAt": "2026-04-28T12:50:33.993Z",
+      "resultPath": "output/queue-results/gen-20260427192955-0a1194.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "人类战士",
+        "action": "普攻",
+        "frameCount": "16",
+        "provider": "Doubao",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "isolde 普通攻击.png",
+          "size": 1671436,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260427192955-0a1194",
+        "role": "人类战士",
+        "action": "普攻",
+        "provider": "Doubao",
+        "uploadCount": 1,
+        "uploadNames": [
+          "isolde 普通攻击.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260427203304-ec511e",
+      "status": "done",
+      "createdAt": "2026-04-27T20:33:04.224477+00:00",
+      "updatedAt": "2026-04-28T12:50:34.003Z",
+      "resultPath": "output/queue-results/gen-20260427203304-ec511e.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "人类战士",
+        "action": "受击",
+        "frameCount": "16",
+        "provider": "Doubao",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "isolde 普通攻击.png",
+          "size": 1671436,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260427203304-ec511e",
+        "role": "人类战士",
+        "action": "受击",
+        "provider": "Doubao",
+        "uploadCount": 1,
+        "uploadNames": [
+          "isolde 普通攻击.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260427210220-c399be",
+      "status": "done",
+      "createdAt": "2026-04-27T21:02:20.333747+00:00",
+      "updatedAt": "2026-04-28T12:50:34.017Z",
+      "resultPath": "output/queue-results/gen-20260427210220-c399be.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "元素法师",
+        "action": "普攻",
+        "frameCount": "16",
+        "provider": "Doubao",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "isolde 普通攻击.png",
+          "size": 1671436,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260427210220-c399be",
+        "role": "元素法师",
+        "action": "普攻",
+        "provider": "Doubao",
+        "uploadCount": 1,
+        "uploadNames": [
+          "isolde 普通攻击.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260427212647-4f45aa",
+      "status": "done",
+      "createdAt": "2026-04-27T21:26:47.795218+00:00",
+      "updatedAt": "2026-04-28T12:50:34.026Z",
+      "resultPath": "output/queue-results/gen-20260427212647-4f45aa.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "元素法师",
+        "action": "施法",
+        "frameCount": "16",
+        "provider": "Doubao",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "isolde 普通攻击.png",
+          "size": 1671436,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260427212647-4f45aa",
+        "role": "元素法师",
+        "action": "施法",
+        "provider": "Doubao",
+        "uploadCount": 1,
+        "uploadNames": [
+          "isolde 普通攻击.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260427212700-5eed98",
+      "status": "done",
+      "createdAt": "2026-04-27T21:27:00.768122+00:00",
+      "updatedAt": "2026-04-28T12:50:34.035Z",
+      "resultPath": "output/queue-results/gen-20260427212700-5eed98.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "元素法师",
+        "action": "施法",
+        "frameCount": "16",
+        "provider": "Doubao",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "isolde 普通攻击.png",
+          "size": 1671436,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260427212700-5eed98",
+        "role": "元素法师",
+        "action": "施法",
+        "provider": "Doubao",
+        "uploadCount": 1,
+        "uploadNames": [
+          "isolde 普通攻击.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260427215053-eaa183",
+      "status": "done",
+      "createdAt": "2026-04-27T21:50:53.267477+00:00",
+      "updatedAt": "2026-04-28T12:50:34.044Z",
+      "resultPath": "output/queue-results/gen-20260427215053-eaa183.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "元素法师",
+        "action": "施法",
+        "frameCount": "8",
+        "provider": "Doubao",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "isolde 普通攻击.png",
+          "size": 1671436,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260427215053-eaa183",
+        "role": "元素法师",
+        "action": "施法",
+        "provider": "Doubao",
+        "uploadCount": 1,
+        "uploadNames": [
+          "isolde 普通攻击.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260427222643-4ade37",
+      "status": "done",
+      "createdAt": "2026-04-27T22:26:43.329784+00:00",
+      "updatedAt": "2026-04-28T12:50:34.053Z",
+      "resultPath": "output/queue-results/gen-20260427222643-4ade37.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "元素法师",
+        "action": "施法",
+        "frameCount": "8",
+        "provider": "Doubao",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "isolde 普通攻击.png",
+          "size": 1671436,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260427222643-4ade37",
+        "role": "元素法师",
+        "action": "施法",
+        "provider": "Doubao",
+        "uploadCount": 1,
+        "uploadNames": [
+          "isolde 普通攻击.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260427222710-c80f61",
+      "status": "done",
+      "createdAt": "2026-04-27T22:27:10.013301+00:00",
+      "updatedAt": "2026-04-28T12:50:34.061Z",
+      "resultPath": "output/queue-results/gen-20260427222710-c80f61.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "元素法师",
+        "action": "施法",
+        "frameCount": "8",
+        "provider": "Doubao",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "isolde attack.png",
+          "size": 1671436,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260427222710-c80f61",
+        "role": "元素法师",
+        "action": "施法",
+        "provider": "Doubao",
+        "uploadCount": 1,
+        "uploadNames": [
+          "isolde attack.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260427223903-caee5e",
+      "status": "done",
+      "createdAt": "2026-04-27T22:39:03.342371+00:00",
+      "updatedAt": "2026-04-28T12:50:34.065Z",
+      "resultPath": "output/queue-results/gen-20260427223903-caee5e.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "元素法师",
+        "action": "普攻",
+        "frameCount": "8",
+        "provider": "test",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "isolde-sprite.png",
+          "size": 480786,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260427223903-caee5e",
+        "role": "元素法师",
+        "action": "普攻",
+        "provider": "test",
+        "uploadCount": 1,
+        "uploadNames": [
+          "isolde-sprite.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428005356-a11a7e",
+      "status": "done",
+      "createdAt": "2026-04-28T00:53:56.252285+00:00",
+      "updatedAt": "2026-04-28T12:50:34.068Z",
+      "resultPath": "output/queue-results/gen-20260428005356-a11a7e.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "元素法师",
+        "action": "施法",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "test.png",
+          "size": 210,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428005356-a11a7e",
+        "role": "元素法师",
+        "action": "施法",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "test.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428020749-6d758d",
+      "status": "done",
+      "createdAt": "2026-04-28T02:07:49.292320+00:00",
+      "updatedAt": "2026-04-28T12:50:34.070Z",
+      "resultPath": "output/queue-results/gen-20260428020749-6d758d.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "元素法师",
+        "action": "普攻",
+        "frameCount": "4",
+        "provider": "manual-upload",
+        "intent": null
+      },
+      "uploads": [],
+      "workerPayload": {
+        "jobId": "gen-20260428020749-6d758d",
+        "role": "元素法师",
+        "action": "普攻",
+        "provider": "manual-upload",
+        "uploadCount": 0,
+        "uploadNames": [],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428034831-76050d",
+      "status": "done",
+      "createdAt": "2026-04-28T03:48:31.027339+00:00",
+      "updatedAt": "2026-04-28T12:50:34.071Z",
+      "resultPath": "output/queue-results/gen-20260428034831-76050d.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "人类战士",
+        "action": "待机",
+        "frameCount": "1",
+        "provider": "OpenAI Images",
+        "intent": "healthcheck-smoke-test"
+      },
+      "uploads": [],
+      "workerPayload": {
+        "jobId": "gen-20260428034831-76050d",
+        "role": "人类战士",
+        "action": "待机",
+        "provider": "OpenAI Images",
+        "uploadCount": 0,
+        "uploadNames": [],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428040220-67bade",
+      "status": "done",
+      "createdAt": "2026-04-28T04:02:20.510465+00:00",
+      "updatedAt": "2026-04-28T12:50:34.074Z",
+      "resultPath": "output/queue-results/gen-20260428040220-67bade.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "test-smoke",
+        "action": "idle",
+        "frameCount": "1",
+        "provider": "smoke-test",
+        "intent": "healthcheck smoke"
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "smoke.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428040220-67bade",
+        "role": "test-smoke",
+        "action": "idle",
+        "provider": "smoke-test",
+        "uploadCount": 1,
+        "uploadNames": [
+          "smoke.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428041945-796077",
+      "status": "done",
+      "createdAt": "2026-04-28T04:19:45.728042+00:00",
+      "updatedAt": "2026-04-28T12:50:34.077Z",
+      "resultPath": "output/queue-results/gen-20260428041945-796077.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "test-smoke",
+        "action": "idle",
+        "frameCount": null,
+        "provider": "healthcheck",
+        "intent": "cron-healthcheck"
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-male-lead.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428041945-796077",
+        "role": "test-smoke",
+        "action": "idle",
+        "provider": "healthcheck",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-male-lead.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428043218-99e5cf",
+      "status": "done",
+      "createdAt": "2026-04-28T04:32:18.431611+00:00",
+      "updatedAt": "2026-04-28T12:50:34.079Z",
+      "resultPath": "output/queue-results/gen-20260428043218-99e5cf.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "unit",
+        "action": "idle",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-male-lead.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428043218-99e5cf",
+        "role": "unit",
+        "action": "idle",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-male-lead.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428044957-e488c2",
+      "status": "done",
+      "createdAt": "2026-04-28T04:49:57.820653+00:00",
+      "updatedAt": "2026-04-28T12:50:34.081Z",
+      "resultPath": "output/queue-results/gen-20260428044957-e488c2.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "人类战士",
+        "action": "待机",
+        "frameCount": "1",
+        "provider": "OpenAI Images",
+        "intent": null
+      },
+      "uploads": [],
+      "workerPayload": {
+        "jobId": "gen-20260428044957-e488c2",
+        "role": "人类战士",
+        "action": "待机",
+        "provider": "OpenAI Images",
+        "uploadCount": 0,
+        "uploadNames": [],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428045014-9300ee",
+      "status": "done",
+      "createdAt": "2026-04-28T04:50:14.174722+00:00",
+      "updatedAt": "2026-04-28T12:50:34.084Z",
+      "resultPath": "output/queue-results/gen-20260428045014-9300ee.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "人类战士",
+        "action": "待机",
+        "frameCount": "1",
+        "provider": "OpenAI Images",
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-male-lead.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428045014-9300ee",
+        "role": "人类战士",
+        "action": "待机",
+        "provider": "OpenAI Images",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-male-lead.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428050253-1f5895",
+      "status": "done",
+      "createdAt": "2026-04-28T05:02:53.037852+00:00",
+      "updatedAt": "2026-04-28T12:50:34.086Z",
+      "resultPath": "output/queue-results/gen-20260428050253-1f5895.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "人类战士",
+        "action": "待机",
+        "frameCount": null,
+        "provider": "smoke-test",
+        "intent": "battle-asset-upload"
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-male-lead.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428050253-1f5895",
+        "role": "人类战士",
+        "action": "待机",
+        "provider": "smoke-test",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-male-lead.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428051855-997edb",
+      "status": "done",
+      "createdAt": "2026-04-28T05:18:55.566871+00:00",
+      "updatedAt": "2026-04-28T12:50:34.089Z",
+      "resultPath": "output/queue-results/gen-20260428051855-997edb.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "人类战士",
+        "action": "待机",
+        "frameCount": null,
+        "provider": "OpenAI Images",
+        "intent": "cron smoke test"
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-male-lead.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428051855-997edb",
+        "role": "人类战士",
+        "action": "待机",
+        "provider": "OpenAI Images",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-male-lead.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428053242-cf45ef",
+      "status": "done",
+      "createdAt": "2026-04-28T05:32:42.563697+00:00",
+      "updatedAt": "2026-04-28T12:50:34.092Z",
+      "resultPath": "output/queue-results/gen-20260428053242-cf45ef.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "人类战士",
+        "action": "待机",
+        "frameCount": null,
+        "provider": "healthcheck-smoke",
+        "intent": null
+      },
+      "uploads": [],
+      "workerPayload": {
+        "jobId": "gen-20260428053242-cf45ef",
+        "role": "人类战士",
+        "action": "待机",
+        "provider": "healthcheck-smoke",
+        "uploadCount": 0,
+        "uploadNames": [],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428061822-d72005",
+      "status": "done",
+      "createdAt": "2026-04-28T06:18:22.214501+00:00",
+      "updatedAt": "2026-04-28T12:50:34.095Z",
+      "resultPath": "output/queue-results/gen-20260428061822-d72005.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "人类战士",
+        "action": "待机",
+        "frameCount": null,
+        "provider": "healthcheck-smoke",
+        "intent": null
+      },
+      "uploads": [],
+      "workerPayload": {
+        "jobId": "gen-20260428061822-d72005",
+        "role": "人类战士",
+        "action": "待机",
+        "provider": "healthcheck-smoke",
+        "uploadCount": 0,
+        "uploadNames": [],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428063241-b64e6f",
+      "status": "done",
+      "createdAt": "2026-04-28T06:32:41.507550+00:00",
+      "updatedAt": "2026-04-28T12:50:34.099Z",
+      "resultPath": "output/queue-results/gen-20260428063241-b64e6f.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "人类战士",
+        "action": "普攻",
+        "frameCount": null,
+        "provider": "OpenAI Images",
+        "intent": null
+      },
+      "uploads": [],
+      "workerPayload": {
+        "jobId": "gen-20260428063241-b64e6f",
+        "role": "人类战士",
+        "action": "普攻",
+        "provider": "OpenAI Images",
+        "uploadCount": 0,
+        "uploadNames": [],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428064913-da5cd1",
+      "status": "done",
+      "createdAt": "2026-04-28T06:49:13.098855+00:00",
+      "updatedAt": "2026-04-28T12:50:34.107Z",
+      "resultPath": "output/queue-results/gen-20260428064913-da5cd1.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "人类战士",
+        "action": "待机",
+        "frameCount": "1",
+        "provider": "Doubao",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "healthcheck.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428064913-da5cd1",
+        "role": "人类战士",
+        "action": "待机",
+        "provider": "Doubao",
+        "uploadCount": 1,
+        "uploadNames": [
+          "healthcheck.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428070159-ee5b6a",
+      "status": "done",
+      "createdAt": "2026-04-28T07:01:59.873154+00:00",
+      "updatedAt": "2026-04-28T12:50:34.109Z",
+      "resultPath": "output/queue-results/gen-20260428070159-ee5b6a.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": "4",
+        "provider": "cron-healthcheck",
+        "intent": "upload-healthcheck-smoke"
+      },
+      "uploads": [],
+      "workerPayload": {
+        "jobId": "gen-20260428070159-ee5b6a",
+        "role": "立绘",
+        "action": "attack",
+        "provider": "cron-healthcheck",
+        "uploadCount": 0,
+        "uploadNames": [],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428071831-f5fea4",
+      "status": "done",
+      "createdAt": "2026-04-28T07:18:31.533337+00:00",
+      "updatedAt": "2026-04-28T12:50:34.113Z",
+      "resultPath": "output/queue-results/gen-20260428071831-f5fea4.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": null,
+        "action": "idle",
+        "frameCount": null,
+        "provider": "manual",
+        "intent": "replace-character-asset"
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-smoke-6Nwc.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428071831-f5fea4",
+        "role": "未提供",
+        "action": "idle",
+        "provider": "manual",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-smoke-6Nwc.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428073216-815dce",
+      "status": "done",
+      "createdAt": "2026-04-28T07:32:16.869668+00:00",
+      "updatedAt": "2026-04-28T12:50:34.119Z",
+      "resultPath": "output/queue-results/gen-20260428073216-815dce.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "character",
+        "action": "idle",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [],
+      "workerPayload": {
+        "jobId": "gen-20260428073216-815dce",
+        "role": "character",
+        "action": "idle",
+        "provider": "未提供",
+        "uploadCount": 0,
+        "uploadNames": [],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428075030-396378",
+      "status": "done",
+      "createdAt": "2026-04-28T07:50:30.007245+00:00",
+      "updatedAt": "2026-04-28T12:50:34.123Z",
+      "resultPath": "output/queue-results/gen-20260428075030-396378.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-male-lead.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428075030-396378",
+        "role": "立绘",
+        "action": "attack",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-male-lead.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428080150-bebf94",
+      "status": "done",
+      "createdAt": "2026-04-28T08:01:50.398126+00:00",
+      "updatedAt": "2026-04-28T12:50:34.127Z",
+      "resultPath": "output/queue-results/gen-20260428080150-bebf94.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "立绘",
+        "action": "idle",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "healthcheck.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428080150-bebf94",
+        "role": "立绘",
+        "action": "idle",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "healthcheck.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428081747-76bbfb",
+      "status": "done",
+      "createdAt": "2026-04-28T08:17:47.369472+00:00",
+      "updatedAt": "2026-04-28T12:50:34.132Z",
+      "resultPath": "output/queue-results/gen-20260428081747-76bbfb.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-male-lead.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428081747-76bbfb",
+        "role": "立绘",
+        "action": "attack",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-male-lead.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428083139-885e82",
+      "status": "done",
+      "createdAt": "2026-04-28T08:31:39.199968+00:00",
+      "updatedAt": "2026-04-28T12:50:34.138Z",
+      "resultPath": "output/queue-results/gen-20260428083139-885e82.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-male-lead.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428083139-885e82",
+        "role": "立绘",
+        "action": "attack",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-male-lead.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428084742-8716e6",
+      "status": "done",
+      "createdAt": "2026-04-28T08:47:42.157722+00:00",
+      "updatedAt": "2026-04-28T12:50:34.141Z",
+      "resultPath": "output/queue-results/gen-20260428084742-8716e6.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-male-lead.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428084742-8716e6",
+        "role": "立绘",
+        "action": "attack",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-male-lead.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428084759-370818",
+      "status": "done",
+      "createdAt": "2026-04-28T08:47:59.299146+00:00",
+      "updatedAt": "2026-04-28T12:50:34.146Z",
+      "resultPath": "output/queue-results/gen-20260428084759-370818.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-male-lead.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428084759-370818",
+        "role": "立绘",
+        "action": "attack",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-male-lead.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428090146-308cc4",
+      "status": "done",
+      "createdAt": "2026-04-28T09:01:46.317392+00:00",
+      "updatedAt": "2026-04-28T12:50:34.148Z",
+      "resultPath": "output/queue-results/gen-20260428090146-308cc4.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "元素法师",
+        "action": "施法",
+        "frameCount": "8",
+        "provider": "OpenAI Images",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "healthcheck-smoke.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428090146-308cc4",
+        "role": "元素法师",
+        "action": "施法",
+        "provider": "OpenAI Images",
+        "uploadCount": 1,
+        "uploadNames": [
+          "healthcheck-smoke.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428090422-ab9362",
+      "status": "done",
+      "createdAt": "2026-04-28T09:04:22.864898+00:00",
+      "updatedAt": "2026-04-28T12:50:34.152Z",
+      "resultPath": "output/queue-results/gen-20260428090422-ab9362.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "tmp.Xrv3ZGIwGD.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428090422-ab9362",
+        "role": "立绘",
+        "action": "attack",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "tmp.Xrv3ZGIwGD.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428091752-942300",
+      "status": "done",
+      "createdAt": "2026-04-28T09:17:52.258688+00:00",
+      "updatedAt": "2026-04-28T12:50:34.156Z",
+      "resultPath": "output/queue-results/gen-20260428091752-942300.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-male-lead.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428091752-942300",
+        "role": "立绘",
+        "action": "attack",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-male-lead.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428093135-115b38",
+      "status": "done",
+      "createdAt": "2026-04-28T09:31:35.050774+00:00",
+      "updatedAt": "2026-04-28T12:50:34.161Z",
+      "resultPath": "output/queue-results/gen-20260428093135-115b38.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-male-lead.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428093135-115b38",
+        "role": "立绘",
+        "action": "attack",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-male-lead.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428094723-03e07a",
+      "status": "done",
+      "createdAt": "2026-04-28T09:47:23.416263+00:00",
+      "updatedAt": "2026-04-28T12:50:34.165Z",
+      "resultPath": "output/queue-results/gen-20260428094723-03e07a.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-male-lead.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428094723-03e07a",
+        "role": "立绘",
+        "action": "attack",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-male-lead.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428100139-c9dffa",
+      "status": "done",
+      "createdAt": "2026-04-28T10:01:39.227057+00:00",
+      "updatedAt": "2026-04-28T12:50:34.167Z",
+      "resultPath": "output/queue-results/gen-20260428100139-c9dffa.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-male-lead.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428100139-c9dffa",
+        "role": "立绘",
+        "action": "attack",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-male-lead.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428101738-f70385",
+      "status": "done",
+      "createdAt": "2026-04-28T10:17:38.223525+00:00",
+      "updatedAt": "2026-04-28T12:50:34.169Z",
+      "resultPath": "output/queue-results/gen-20260428101738-f70385.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-male-lead.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428101738-f70385",
+        "role": "立绘",
+        "action": "attack",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-male-lead.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428103129-4b030f",
+      "status": "done",
+      "createdAt": "2026-04-28T10:31:29.664367+00:00",
+      "updatedAt": "2026-04-28T12:50:34.171Z",
+      "resultPath": "output/queue-results/gen-20260428103129-4b030f.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": null,
+        "action": null,
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [],
+      "workerPayload": {
+        "jobId": "gen-20260428103129-4b030f",
+        "role": "未提供",
+        "action": "未提供",
+        "provider": "未提供",
+        "uploadCount": 0,
+        "uploadNames": [],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428104634-91e247",
+      "status": "done",
+      "createdAt": "2026-04-28T10:46:34.979196+00:00",
+      "updatedAt": "2026-04-28T12:50:34.173Z",
+      "resultPath": "output/queue-results/gen-20260428104634-91e247.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-male-lead.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428104634-91e247",
+        "role": "立绘",
+        "action": "attack",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-male-lead.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428104816-1bb41f",
+      "status": "done",
+      "createdAt": "2026-04-28T10:48:16.578376+00:00",
+      "updatedAt": "2026-04-28T12:50:34.175Z",
+      "resultPath": "output/queue-results/gen-20260428104816-1bb41f.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-male-lead.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428104816-1bb41f",
+        "role": "立绘",
+        "action": "attack",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-male-lead.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428110135-10c878",
+      "status": "done",
+      "createdAt": "2026-04-28T11:01:35.986927+00:00",
+      "updatedAt": "2026-04-28T12:50:34.177Z",
+      "resultPath": "output/queue-results/gen-20260428110135-10c878.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "人类战士",
+        "action": "待机",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-healthcheck.png",
+          "size": 77,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428110135-10c878",
+        "role": "人类战士",
+        "action": "待机",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-healthcheck.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428111732-7a5642",
+      "status": "done",
+      "createdAt": "2026-04-28T11:17:32.715511+00:00",
+      "updatedAt": "2026-04-28T12:50:34.179Z",
+      "resultPath": "output/queue-results/gen-20260428111732-7a5642.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": null,
+        "action": null,
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [],
+      "workerPayload": {
+        "jobId": "gen-20260428111732-7a5642",
+        "role": "未提供",
+        "action": "未提供",
+        "provider": "未提供",
+        "uploadCount": 0,
+        "uploadNames": [],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428111756-34394b",
+      "status": "done",
+      "createdAt": "2026-04-28T11:17:56.997982+00:00",
+      "updatedAt": "2026-04-28T12:50:34.181Z",
+      "resultPath": "output/queue-results/gen-20260428111756-34394b.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-male-lead.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428111756-34394b",
+        "role": "立绘",
+        "action": "attack",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-male-lead.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428113218-118795",
+      "status": "done",
+      "createdAt": "2026-04-28T11:32:18.922946+00:00",
+      "updatedAt": "2026-04-28T12:50:34.183Z",
+      "resultPath": "output/queue-results/gen-20260428113218-118795.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-male-lead.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428113218-118795",
+        "role": "立绘",
+        "action": "attack",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-male-lead.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428114755-9135da",
+      "status": "done",
+      "createdAt": "2026-04-28T11:47:55.212216+00:00",
+      "updatedAt": "2026-04-28T12:50:34.185Z",
+      "resultPath": "output/queue-results/gen-20260428114755-9135da.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-male-lead.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428114755-9135da",
+        "role": "立绘",
+        "action": "attack",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-male-lead.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428120125-08b483",
+      "status": "done",
+      "createdAt": "2026-04-28T12:01:25.533173+00:00",
+      "updatedAt": "2026-04-28T12:50:34.187Z",
+      "resultPath": "output/queue-results/gen-20260428120125-08b483.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "立绘",
+        "action": "idle",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-male-lead.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428120125-08b483",
+        "role": "立绘",
+        "action": "idle",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-male-lead.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428121530-d375ea",
+      "status": "done",
+      "createdAt": "2026-04-28T12:15:30.202292+00:00",
+      "updatedAt": "2026-04-28T12:50:34.189Z",
+      "resultPath": "output/queue-results/gen-20260428121530-d375ea.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-male-lead.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428121530-d375ea",
+        "role": "立绘",
+        "action": "attack",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-male-lead.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428121737-5f6380",
+      "status": "done",
+      "createdAt": "2026-04-28T12:17:37.687824+00:00",
+      "updatedAt": "2026-04-28T12:50:34.191Z",
+      "resultPath": "output/queue-results/gen-20260428121737-5f6380.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "人类战士",
+        "action": "待机",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "healthcheck.png",
+          "size": 68,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428121737-5f6380",
+        "role": "人类战士",
+        "action": "待机",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "healthcheck.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428123151-0620c7",
+      "status": "done",
+      "createdAt": "2026-04-28T12:31:51.576660+00:00",
+      "updatedAt": "2026-04-28T12:50:34.194Z",
+      "resultPath": "output/queue-results/gen-20260428123151-0620c7.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "立绘",
+        "action": "attack",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-male-lead.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428123151-0620c7",
+        "role": "立绘",
+        "action": "attack",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-male-lead.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428124348-8d76e6",
+      "status": "done",
+      "createdAt": "2026-04-28T12:43:48.042912+00:00",
+      "updatedAt": "2026-04-28T12:50:34.196Z",
+      "resultPath": "output/queue-results/gen-20260428124348-8d76e6.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-male-lead.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428124348-8d76e6",
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-male-lead.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428124424-a222ad",
+      "status": "done",
+      "createdAt": "2026-04-28T12:44:24.959803+00:00",
+      "updatedAt": "2026-04-28T12:50:34.201Z",
+      "resultPath": "output/queue-results/gen-20260428124424-a222ad.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "元素法师",
+        "characterId": "isolde",
+        "characterLabel": "Isolde / 伊索尔德",
+        "action": "施法",
+        "targetSlot": "fullscreen-attack",
+        "assetKind": "fullscreen-fx",
+        "frameCount": "16",
+        "provider": "Doubao",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "isolde__action__fullscreen-attack__fullscreen-fx__isolde-full-screen-attack.png",
+          "size": 1671436,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428124424-a222ad",
+        "role": "元素法师",
+        "characterId": "isolde",
+        "characterLabel": "Isolde / 伊索尔德",
+        "action": "施法",
+        "targetSlot": "fullscreen-attack",
+        "assetKind": "fullscreen-fx",
+        "provider": "Doubao",
+        "uploadCount": 1,
+        "uploadNames": [
+          "isolde__action__fullscreen-attack__fullscreen-fx__isolde-full-screen-attack.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428124532-b584ae",
+      "status": "done",
+      "createdAt": "2026-04-28T12:45:32.979795+00:00",
+      "updatedAt": "2026-04-28T12:50:34.205Z",
+      "resultPath": "output/queue-results/gen-20260428124532-b584ae.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-male-lead.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428124532-b584ae",
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-male-lead.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428124611-a5e7e1",
+      "status": "done",
+      "createdAt": "2026-04-28T12:46:11.147763+00:00",
+      "updatedAt": "2026-04-28T12:50:34.211Z",
+      "resultPath": "output/queue-results/gen-20260428124611-a5e7e1.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "元素法师",
+        "characterId": "isolde",
+        "characterLabel": "Isolde / 伊索尔德",
+        "action": "施法",
+        "targetSlot": "fullscreen-attack",
+        "assetKind": "fullscreen-fx",
+        "frameCount": "16",
+        "provider": "Doubao",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "isolde__action__fullscreen-attack__fullscreen-fx__isolde-full-screen-attack.png",
+          "size": 1671436,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428124611-a5e7e1",
+        "role": "元素法师",
+        "characterId": "isolde",
+        "characterLabel": "Isolde / 伊索尔德",
+        "action": "施法",
+        "targetSlot": "fullscreen-attack",
+        "assetKind": "fullscreen-fx",
+        "provider": "Doubao",
+        "uploadCount": 1,
+        "uploadNames": [
+          "isolde__action__fullscreen-attack__fullscreen-fx__isolde-full-screen-attack.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428124801-52b884",
+      "status": "done",
+      "createdAt": "2026-04-28T12:48:01.195736+00:00",
+      "updatedAt": "2026-04-28T12:50:34.214Z",
+      "resultPath": "output/queue-results/gen-20260428124801-52b884.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索尔德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-male-lead.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428124801-52b884",
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索尔德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-male-lead.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428125050-3b7235",
+      "status": "done",
+      "createdAt": "2026-04-28T12:50:50.829952+00:00",
+      "updatedAt": "2026-04-28T12:50:54.757Z",
+      "resultPath": "output/queue-results/gen-20260428125050-3b7235.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-male-lead.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428125050-3b7235",
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-male-lead.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428125051-ea35d0",
+      "status": "done",
+      "createdAt": "2026-04-28T12:50:51.424256+00:00",
+      "updatedAt": "2026-04-28T12:50:54.762Z",
+      "resultPath": "output/queue-results/gen-20260428125051-ea35d0.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-male-lead.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428125051-ea35d0",
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-male-lead.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428125206-1cef8a",
+      "status": "done",
+      "createdAt": "2026-04-28T12:52:06.492393+00:00",
+      "updatedAt": "2026-04-28T12:52:06.624Z",
+      "resultPath": "output/queue-results/gen-20260428125206-1cef8a.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "元素法师",
+        "characterId": "isolde",
+        "characterLabel": "Isolde / 伊索尔德",
+        "action": "施法",
+        "targetSlot": "fullscreen-attack",
+        "assetKind": "fullscreen-fx",
+        "frameCount": "16",
+        "provider": "Doubao",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "isolde__action__fullscreen-attack__fullscreen-fx__isolde-full-screen-attack.png",
+          "size": 1671436,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428125206-1cef8a",
+        "role": "元素法师",
+        "characterId": "isolde",
+        "characterLabel": "Isolde / 伊索尔德",
+        "action": "施法",
+        "targetSlot": "fullscreen-attack",
+        "assetKind": "fullscreen-fx",
+        "provider": "Doubao",
+        "uploadCount": 1,
+        "uploadNames": [
+          "isolde__action__fullscreen-attack__fullscreen-fx__isolde-full-screen-attack.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428130109-270536",
+      "status": "done",
+      "createdAt": "2026-04-28T13:01:09.409837+00:00",
+      "updatedAt": "2026-04-28T13:01:10.948Z",
+      "resultPath": "output/queue-results/gen-20260428130109-270536.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "立绘",
+        "characterId": "cron-health",
+        "characterLabel": "Cron Health",
+        "action": "smoke",
+        "targetSlot": "idle",
+        "assetKind": "battle-animation",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-male-lead.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428130109-270536",
+        "role": "立绘",
+        "characterId": "cron-health",
+        "characterLabel": "Cron Health",
+        "action": "smoke",
+        "targetSlot": "idle",
+        "assetKind": "battle-animation",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-male-lead.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428131535-800050",
+      "status": "done",
+      "createdAt": "2026-04-28T13:15:35.168374+00:00",
+      "updatedAt": "2026-04-28T13:15:39.335Z",
+      "resultPath": "output/queue-results/gen-20260428131535-800050.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-male-lead.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428131535-800050",
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-male-lead.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428131704-1cea28",
+      "status": "done",
+      "createdAt": "2026-04-28T13:17:04.761178+00:00",
+      "updatedAt": "2026-04-28T13:17:06.637Z",
+      "resultPath": "output/queue-results/gen-20260428131704-1cea28.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-male-lead.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428131704-1cea28",
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-male-lead.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428132000-a352a4",
+      "status": "done",
+      "createdAt": "2026-04-28T13:20:00.151977+00:00",
+      "updatedAt": "2026-04-28T13:20:01.271Z",
+      "resultPath": "output/queue-results/gen-20260428132000-a352a4.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "元素法师",
+        "characterId": "isolde",
+        "characterLabel": "Isolde / 伊索尔德",
+        "action": "施法",
+        "targetSlot": "fullscreen-attack",
+        "assetKind": "fullscreen-fx",
+        "frameCount": "16",
+        "provider": "Doubao",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "isolde__action__fullscreen-attack__fullscreen-fx__isolde-full-screen-attack.png",
+          "size": 1671436,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428132000-a352a4",
+        "role": "元素法师",
+        "characterId": "isolde",
+        "characterLabel": "Isolde / 伊索尔德",
+        "action": "施法",
+        "targetSlot": "fullscreen-attack",
+        "assetKind": "fullscreen-fx",
+        "provider": "Doubao",
+        "uploadCount": 1,
+        "uploadNames": [
+          "isolde__action__fullscreen-attack__fullscreen-fx__isolde-full-screen-attack.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428132706-b7414c",
+      "status": "done",
+      "createdAt": "2026-04-28T13:27:06.552626+00:00",
+      "updatedAt": "2026-04-28T13:27:07.654Z",
+      "resultPath": "output/queue-results/gen-20260428132706-b7414c.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "元素法师",
+        "characterId": "isolde",
+        "characterLabel": "Isolde / 伊索尔德",
+        "action": "施法",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "frameCount": "16",
+        "provider": "Doubao",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "isolde__action__attack__battle-animation__isolde-full-screen-attack.png",
+          "size": 1671436,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428132706-b7414c",
+        "role": "元素法师",
+        "characterId": "isolde",
+        "characterLabel": "Isolde / 伊索尔德",
+        "action": "施法",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "provider": "Doubao",
+        "uploadCount": 1,
+        "uploadNames": [
+          "isolde__action__attack__battle-animation__isolde-full-screen-attack.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428133107-0ad1d6",
+      "status": "done",
+      "createdAt": "2026-04-28T13:31:07.032232+00:00",
+      "updatedAt": "2026-04-28T13:31:09.176Z",
+      "resultPath": "output/queue-results/gen-20260428133107-0ad1d6.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": null,
+        "characterId": null,
+        "characterLabel": null,
+        "action": null,
+        "targetSlot": null,
+        "assetKind": null,
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-male-lead.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428133107-0ad1d6",
+        "role": "未提供",
+        "characterId": "unassigned",
+        "characterLabel": "未指定角色",
+        "action": "未提供",
+        "targetSlot": "unassigned",
+        "assetKind": "battle-animation",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-male-lead.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428133424-354915",
+      "status": "done",
+      "createdAt": "2026-04-28T13:34:24.759017+00:00",
+      "updatedAt": "2026-04-28T13:34:29.711Z",
+      "resultPath": "output/queue-results/gen-20260428133424-354915.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-male-lead.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428133424-354915",
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-male-lead.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428134829-c87cee",
+      "status": "done",
+      "createdAt": "2026-04-28T13:48:29.061330+00:00",
+      "updatedAt": "2026-04-28T13:48:32.488Z",
+      "resultPath": "output/queue-results/gen-20260428134829-c87cee.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-male-lead.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428134829-c87cee",
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-male-lead.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428140100-3d235e",
+      "status": "done",
+      "createdAt": "2026-04-28T14:01:00.793351+00:00",
+      "updatedAt": "2026-04-28T14:01:02.974Z",
+      "resultPath": "output/queue-results/gen-20260428140100-3d235e.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-male-lead.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428140100-3d235e",
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-male-lead.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428141535-7f91f9",
+      "status": "done",
+      "createdAt": "2026-04-28T14:15:35.584910+00:00",
+      "updatedAt": "2026-04-28T14:15:36.604Z",
+      "resultPath": "output/queue-results/gen-20260428141535-7f91f9.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-male-lead.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428141535-7f91f9",
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-male-lead.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428141627-4bc49d",
+      "status": "done",
+      "createdAt": "2026-04-28T14:16:27.635061+00:00",
+      "updatedAt": "2026-04-28T14:16:28.019Z",
+      "resultPath": "output/queue-results/gen-20260428141627-4bc49d.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-male-lead.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428141627-4bc49d",
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-male-lead.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428141735-2c3b9b",
+      "status": "done",
+      "createdAt": "2026-04-28T14:17:35.861552+00:00",
+      "updatedAt": "2026-04-28T14:17:40.034Z",
+      "resultPath": "output/queue-results/gen-20260428141735-2c3b9b.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-male-lead.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428141735-2c3b9b",
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-male-lead.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428143132-4dca7d",
+      "status": "done",
+      "createdAt": "2026-04-28T14:31:32.804043+00:00",
+      "updatedAt": "2026-04-28T14:31:33.000Z",
+      "resultPath": "output/queue-results/gen-20260428143132-4dca7d.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "立绘",
+        "characterId": "healthcheck",
+        "characterLabel": "Healthcheck",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-male-lead.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428143132-4dca7d",
+        "role": "立绘",
+        "characterId": "healthcheck",
+        "characterLabel": "Healthcheck",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-male-lead.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428144731-d35370",
+      "status": "done",
+      "createdAt": "2026-04-28T14:47:31.844944+00:00",
+      "updatedAt": "2026-04-28T14:47:34.702Z",
+      "resultPath": "output/queue-results/gen-20260428144731-d35370.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-male-lead.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428144731-d35370",
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-male-lead.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428150155-52c285",
+      "status": "done",
+      "createdAt": "2026-04-28T15:01:55.750495+00:00",
+      "updatedAt": "2026-04-28T15:01:58.800Z",
+      "resultPath": "output/queue-results/gen-20260428150155-52c285.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "立绘",
+        "characterId": "healthcheck",
+        "characterLabel": "Healthcheck",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-male-lead.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428150155-52c285",
+        "role": "立绘",
+        "characterId": "healthcheck",
+        "characterLabel": "Healthcheck",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-male-lead.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428150418-9aeb0c",
+      "status": "done",
+      "createdAt": "2026-04-28T15:04:18.654765+00:00",
+      "updatedAt": "2026-04-28T15:04:22.729Z",
+      "resultPath": "output/queue-results/gen-20260428150418-9aeb0c.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-male-lead.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428150418-9aeb0c",
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-male-lead.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428151935-102aab",
+      "status": "done",
+      "createdAt": "2026-04-28T15:19:35.007580+00:00",
+      "updatedAt": "2026-04-28T15:19:38.213Z",
+      "resultPath": "output/queue-results/gen-20260428151935-102aab.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-male-lead.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428151935-102aab",
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-male-lead.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428153131-43713b",
+      "status": "done",
+      "createdAt": "2026-04-28T15:31:31.546264+00:00",
+      "updatedAt": "2026-04-28T15:31:33.509Z",
+      "resultPath": "output/queue-results/gen-20260428153131-43713b.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "smoke.png",
+          "size": 68,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428153131-43713b",
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "smoke.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428153135-631554",
+      "status": "done",
+      "createdAt": "2026-04-28T15:31:35.243581+00:00",
+      "updatedAt": "2026-04-28T15:31:38.644Z",
+      "resultPath": "output/queue-results/gen-20260428153135-631554.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-male-lead.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428153135-631554",
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-male-lead.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428153415-95c923",
+      "status": "done",
+      "createdAt": "2026-04-28T15:34:15.992752+00:00",
+      "updatedAt": "2026-04-28T15:34:18.218Z",
+      "resultPath": "output/queue-results/gen-20260428153415-95c923.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-male-lead.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428153415-95c923",
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-male-lead.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428154818-c8a71c",
+      "status": "done",
+      "createdAt": "2026-04-28T15:48:18.430355+00:00",
+      "updatedAt": "2026-04-28T15:48:22.198Z",
+      "resultPath": "output/queue-results/gen-20260428154818-c8a71c.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "立绘",
+        "characterId": "healthcheck",
+        "characterLabel": "Healthcheck",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-male-lead.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428154818-c8a71c",
+        "role": "立绘",
+        "characterId": "healthcheck",
+        "characterLabel": "Healthcheck",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-male-lead.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428160129-9593c2",
+      "status": "done",
+      "createdAt": "2026-04-28T16:01:29.857813+00:00",
+      "updatedAt": "2026-04-28T16:01:34.318Z",
+      "resultPath": "output/queue-results/gen-20260428160129-9593c2.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "月溪灵鹿",
+        "characterId": "moon-deer",
+        "characterLabel": "Moon Deer / 月溪灵鹿",
+        "action": "普攻",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "frameCount": "16",
+        "provider": "Doubao",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "moon-deer__action__attack__battle-animation__b2d65dfc-411c-4091-9fa1-10a81ae268de.png",
+          "size": 1424708,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428160129-9593c2",
+        "role": "月溪灵鹿",
+        "characterId": "moon-deer",
+        "characterLabel": "Moon Deer / 月溪灵鹿",
+        "action": "普攻",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "provider": "Doubao",
+        "uploadCount": 1,
+        "uploadNames": [
+          "moon-deer__action__attack__battle-animation__b2d65dfc-411c-4091-9fa1-10a81ae268de.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428160257-73060c",
+      "status": "done",
+      "createdAt": "2026-04-28T16:02:57.809785+00:00",
+      "updatedAt": "2026-04-28T16:03:01.762Z",
+      "resultPath": "output/queue-results/gen-20260428160257-73060c.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-male-lead.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428160257-73060c",
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-male-lead.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428160340-901da7",
+      "status": "done",
+      "createdAt": "2026-04-28T16:03:40.619162+00:00",
+      "updatedAt": "2026-04-28T16:03:42.845Z",
+      "resultPath": "output/queue-results/gen-20260428160340-901da7.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "月溪灵鹿",
+        "characterId": "moon-deer",
+        "characterLabel": "Moon Deer / 月溪灵鹿",
+        "action": "普攻",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "frameCount": "16",
+        "provider": "Doubao",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "moon-deer__action__attack__battle-animation__b2d65dfc-411c-4091-9fa1-10a81ae268de.png",
+          "size": 1424708,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428160340-901da7",
+        "role": "月溪灵鹿",
+        "characterId": "moon-deer",
+        "characterLabel": "Moon Deer / 月溪灵鹿",
+        "action": "普攻",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "provider": "Doubao",
+        "uploadCount": 1,
+        "uploadNames": [
+          "moon-deer__action__attack__battle-animation__b2d65dfc-411c-4091-9fa1-10a81ae268de.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428161617-4d3a7b",
+      "status": "done",
+      "createdAt": "2026-04-28T16:16:17.524679+00:00",
+      "updatedAt": "2026-04-28T16:16:19.415Z",
+      "resultPath": "output/queue-results/gen-20260428161617-4d3a7b.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-male-lead.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428161617-4d3a7b",
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-male-lead.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428161742-1487df",
+      "status": "done",
+      "createdAt": "2026-04-28T16:17:42.896200+00:00",
+      "updatedAt": "2026-04-28T16:17:46.990Z",
+      "resultPath": "output/queue-results/gen-20260428161742-1487df.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-male-lead.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428161742-1487df",
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-male-lead.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428163534-6f6e9a",
+      "status": "done",
+      "createdAt": "2026-04-28T16:35:34.824795+00:00",
+      "updatedAt": "2026-04-28T16:35:38.036Z",
+      "resultPath": "output/queue-results/gen-20260428163534-6f6e9a.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-male-lead.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428163534-6f6e9a",
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-male-lead.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428163604-a878e5",
+      "status": "done",
+      "createdAt": "2026-04-28T16:36:04.442724+00:00",
+      "updatedAt": "2026-04-28T16:36:09.012Z",
+      "resultPath": "output/queue-results/gen-20260428163604-a878e5.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-male-lead.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428163604-a878e5",
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-male-lead.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428164019-fb988e",
+      "status": "done",
+      "createdAt": "2026-04-28T16:40:19.347636+00:00",
+      "updatedAt": "2026-04-28T16:40:21.446Z",
+      "resultPath": "output/queue-results/gen-20260428164019-fb988e.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "月溪灵鹿",
+        "characterId": "moon-deer",
+        "characterLabel": "Moon Deer / 月溪灵鹿",
+        "action": "普攻",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "frameCount": "8",
+        "provider": "Doubao",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "moon-deer__action__attack__battle-animation__deer-attack.png",
+          "size": 1424708,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428164019-fb988e",
+        "role": "月溪灵鹿",
+        "characterId": "moon-deer",
+        "characterLabel": "Moon Deer / 月溪灵鹿",
+        "action": "普攻",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "provider": "Doubao",
+        "uploadCount": 1,
+        "uploadNames": [
+          "moon-deer__action__attack__battle-animation__deer-attack.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428164725-ec2891",
+      "status": "done",
+      "createdAt": "2026-04-28T16:47:25.788485+00:00",
+      "updatedAt": "2026-04-28T16:47:29.170Z",
+      "resultPath": "output/queue-results/gen-20260428164725-ec2891.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-male-lead.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428164725-ec2891",
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-male-lead.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428170152-8ba479",
+      "status": "done",
+      "createdAt": "2026-04-28T17:01:52.645082+00:00",
+      "updatedAt": "2026-04-28T17:01:54.592Z",
+      "resultPath": "output/queue-results/gen-20260428170152-8ba479.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "立绘",
+        "characterId": "healthcheck",
+        "characterLabel": "Healthcheck",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "healthcheck.png",
+          "size": 68,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428170152-8ba479",
+        "role": "立绘",
+        "characterId": "healthcheck",
+        "characterLabel": "Healthcheck",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "healthcheck.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428170425-56ceec",
+      "status": "done",
+      "createdAt": "2026-04-28T17:04:25.143845+00:00",
+      "updatedAt": "2026-04-28T17:04:29.182Z",
+      "resultPath": "output/queue-results/gen-20260428170425-56ceec.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-male-lead.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428170425-56ceec",
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-male-lead.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428171759-edfa9d",
+      "status": "done",
+      "createdAt": "2026-04-28T17:17:59.725414+00:00",
+      "updatedAt": "2026-04-28T17:18:02.910Z",
+      "resultPath": "output/queue-results/gen-20260428171759-edfa9d.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "立绘",
+        "characterId": "healthcheck",
+        "characterLabel": "Healthcheck",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "healthcheck.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428171759-edfa9d",
+        "role": "立绘",
+        "characterId": "healthcheck",
+        "characterLabel": "Healthcheck",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "healthcheck.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428172726-8af7c5",
+      "status": "done",
+      "createdAt": "2026-04-28T17:27:26.758584+00:00",
+      "updatedAt": "2026-04-28T17:27:29.553Z",
+      "resultPath": "output/queue-results/gen-20260428172726-8af7c5.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "月溪灵鹿",
+        "characterId": "moon-deer",
+        "characterLabel": "Moon Deer / 月溪灵鹿",
+        "action": "普攻",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "frameCount": "16",
+        "provider": "Doubao",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "moon-deer__action__attack__battle-animation__b2d65dfc-411c-4091-9fa1-10a81ae268de.png",
+          "size": 1424708,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428172726-8af7c5",
+        "role": "月溪灵鹿",
+        "characterId": "moon-deer",
+        "characterLabel": "Moon Deer / 月溪灵鹿",
+        "action": "普攻",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "provider": "Doubao",
+        "uploadCount": 1,
+        "uploadNames": [
+          "moon-deer__action__attack__battle-animation__b2d65dfc-411c-4091-9fa1-10a81ae268de.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428173141-8dc304",
+      "status": "done",
+      "createdAt": "2026-04-28T17:31:41.302552+00:00",
+      "updatedAt": "2026-04-28T17:31:41.755Z",
+      "resultPath": "output/queue-results/gen-20260428173141-8dc304.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": null,
+        "characterId": "healthcheck-bot",
+        "characterLabel": "Healthcheck Bot",
+        "action": null,
+        "targetSlot": "attack",
+        "assetKind": "attack",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-healthcheck.png",
+          "size": 68,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428173141-8dc304",
+        "role": "未提供",
+        "characterId": "healthcheck-bot",
+        "characterLabel": "Healthcheck Bot",
+        "action": "未提供",
+        "targetSlot": "attack",
+        "assetKind": "attack",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-healthcheck.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428173424-0461d0",
+      "status": "done",
+      "createdAt": "2026-04-28T17:34:24.881876+00:00",
+      "updatedAt": "2026-04-28T17:34:26.607Z",
+      "resultPath": "output/queue-results/gen-20260428173424-0461d0.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-male-lead.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428173424-0461d0",
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-male-lead.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428174822-ded4b5",
+      "status": "done",
+      "createdAt": "2026-04-28T17:48:22.197783+00:00",
+      "updatedAt": "2026-04-28T17:48:26.172Z",
+      "resultPath": "output/queue-results/gen-20260428174822-ded4b5.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": null,
+        "characterId": "healthcheck",
+        "characterLabel": "Healthcheck",
+        "action": null,
+        "targetSlot": "idle",
+        "assetKind": "base",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-male-lead.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428174822-ded4b5",
+        "role": "未提供",
+        "characterId": "healthcheck",
+        "characterLabel": "Healthcheck",
+        "action": "未提供",
+        "targetSlot": "idle",
+        "assetKind": "base",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-male-lead.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428180131-93a2b5",
+      "status": "done",
+      "createdAt": "2026-04-28T18:01:31.353649+00:00",
+      "updatedAt": "2026-04-28T18:01:34.072Z",
+      "resultPath": "output/queue-results/gen-20260428180131-93a2b5.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-male-lead.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428180131-93a2b5",
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-male-lead.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428180416-51e919",
+      "status": "done",
+      "createdAt": "2026-04-28T18:04:16.853203+00:00",
+      "updatedAt": "2026-04-28T18:04:19.230Z",
+      "resultPath": "output/queue-results/gen-20260428180416-51e919.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-male-lead.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428180416-51e919",
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-male-lead.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428181059-54247f",
+      "status": "done",
+      "createdAt": "2026-04-28T18:10:59.793623+00:00",
+      "updatedAt": "2026-04-28T18:11:01.677Z",
+      "resultPath": "output/queue-results/gen-20260428181059-54247f.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "月溪灵鹿",
+        "characterId": "moon-deer",
+        "characterLabel": "Moon Deer / 月溪灵鹿",
+        "action": "普攻",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "frameCount": "8",
+        "provider": "Doubao",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "moon-deer__action__attack__battle-animation__deer-attack.png",
+          "size": 1424708,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428181059-54247f",
+        "role": "月溪灵鹿",
+        "characterId": "moon-deer",
+        "characterLabel": "Moon Deer / 月溪灵鹿",
+        "action": "普攻",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "provider": "Doubao",
+        "uploadCount": 1,
+        "uploadNames": [
+          "moon-deer__action__attack__battle-animation__deer-attack.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
+      }
+    },
+    {
+      "id": "gen-20260428181608-3856cd",
+      "status": "done",
+      "createdAt": "2026-04-28T18:16:08.221303+00:00",
+      "updatedAt": "2026-04-28T18:16:11.354Z",
+      "resultPath": "output/queue-results/gen-20260428181608-3856cd.result.json",
+      "storage": "hetzner-disk-persistent",
+      "request": {
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "label": "asset-1",
+          "name": "aetherlan-male-lead.png",
+          "size": 2712,
+          "type": "image/png"
+        }
+      ],
+      "workerPayload": {
+        "jobId": "gen-20260428181608-3856cd",
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "provider": "未提供",
+        "uploadCount": 1,
+        "uploadNames": [
+          "aetherlan-male-lead.png"
+        ],
+        "status": "persistent-intake-received",
+        "nextStep": "mirror-to-worker-and-process-queue"
       }
     }
   ],
   "recentResults": [
     {
-      "jobId": "gen-20260426022811-e89052",
-      "createdAt": "2026-04-26T04:29:55.891Z",
+      "jobId": "gen-20260428181608-3856cd",
+      "createdAt": "2026-04-28T18:16:11.354Z",
       "status": "done",
-      "adapter": "doubao-adapter",
+      "adapter": "unassigned-adapter",
       "note": "Queue consumer created job workspace, copied uploaded inputs, emitted stub frame/atlas/bundle manifests, and now attempts image trim preprocessing for uploaded PNG/WebP sources.",
       "request": {
-        "role": "人类战士",
-        "action": "待机",
-        "frameCount": "12",
-        "intent": "battle-animation-assets"
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
       },
       "uploads": [
         {
-          "originalName": "samuel profile pic男主头像.png",
+          "originalName": "aetherlan-male-lead.png",
           "type": "image/png",
-          "size": 1525929
+          "size": 2712
         }
       ],
       "source": {
         "intakeStorage": "hetzner-disk-persistent"
       },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
       "workspace": {
         "root": true
       },
-      "previewUrl": "/generated-previews/gen-20260426022811-e89052.png",
-      "processedPreviewUrl": "/generated-previews/gen-20260426022811-e89052.processed.png"
+      "previewUrl": "/generated-previews/gen-20260428181608-3856cd.png",
+      "processedPreviewUrl": null
     },
     {
-      "jobId": "gen-20260426022738-ff6040",
-      "createdAt": "2026-04-26T04:29:55.042Z",
+      "jobId": "gen-20260428181059-54247f",
+      "createdAt": "2026-04-28T18:11:01.677Z",
       "status": "done",
       "adapter": "doubao-adapter",
       "note": "Queue consumer created job workspace, copied uploaded inputs, emitted stub frame/atlas/bundle manifests, and now attempts image trim preprocessing for uploaded PNG/WebP sources.",
       "request": {
-        "role": "人类战士",
-        "action": "待机",
+        "role": "月溪灵鹿",
+        "characterId": "moon-deer",
+        "characterLabel": "Moon Deer / 月溪灵鹿",
+        "action": "普攻",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "frameCount": "8",
+        "provider": "Doubao",
+        "intent": "battle-animation-assets"
+      },
+      "uploads": [
+        {
+          "originalName": "moon-deer__action__attack__battle-animation__deer-attack.png",
+          "type": "image/png",
+          "size": 1424708
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428181059-54247f.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428180416-51e919",
+      "createdAt": "2026-04-28T18:04:19.230Z",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "note": "Queue consumer created job workspace, copied uploaded inputs, emitted stub frame/atlas/bundle manifests, and now attempts image trim preprocessing for uploaded PNG/WebP sources.",
+      "request": {
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428180416-51e919.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428180131-93a2b5",
+      "createdAt": "2026-04-28T18:01:34.072Z",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "note": "Queue consumer created job workspace, copied uploaded inputs, emitted stub frame/atlas/bundle manifests, and now attempts image trim preprocessing for uploaded PNG/WebP sources.",
+      "request": {
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428180131-93a2b5.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428174822-ded4b5",
+      "createdAt": "2026-04-28T17:48:26.172Z",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "note": "Queue consumer created job workspace, copied uploaded inputs, emitted stub frame/atlas/bundle manifests, and now attempts image trim preprocessing for uploaded PNG/WebP sources.",
+      "request": {
+        "role": null,
+        "characterId": "healthcheck",
+        "characterLabel": "Healthcheck",
+        "action": null,
+        "targetSlot": "idle",
+        "assetKind": "base",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428174822-ded4b5.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428173424-0461d0",
+      "createdAt": "2026-04-28T17:34:26.607Z",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "note": "Queue consumer created job workspace, copied uploaded inputs, emitted stub frame/atlas/bundle manifests, and now attempts image trim preprocessing for uploaded PNG/WebP sources.",
+      "request": {
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-male-lead.png",
+          "type": "image/png",
+          "size": 2712
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428173424-0461d0.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428173141-8dc304",
+      "createdAt": "2026-04-28T17:31:41.755Z",
+      "status": "done",
+      "adapter": "unassigned-adapter",
+      "note": "Queue consumer created job workspace, copied uploaded inputs, emitted stub frame/atlas/bundle manifests, and now attempts image trim preprocessing for uploaded PNG/WebP sources.",
+      "request": {
+        "role": null,
+        "characterId": "healthcheck-bot",
+        "characterLabel": "Healthcheck Bot",
+        "action": null,
+        "targetSlot": "attack",
+        "assetKind": "attack",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
+      },
+      "uploads": [
+        {
+          "originalName": "aetherlan-healthcheck.png",
+          "type": "image/png",
+          "size": 68
+        }
+      ],
+      "source": {
+        "intakeStorage": "hetzner-disk-persistent"
+      },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
+      "workspace": {
+        "root": true
+      },
+      "previewUrl": "/generated-previews/gen-20260428173141-8dc304.png",
+      "processedPreviewUrl": null
+    },
+    {
+      "jobId": "gen-20260428172726-8af7c5",
+      "createdAt": "2026-04-28T17:27:29.553Z",
+      "status": "done",
+      "adapter": "doubao-adapter",
+      "note": "Queue consumer created job workspace, copied uploaded inputs, emitted stub frame/atlas/bundle manifests, and now attempts image trim preprocessing for uploaded PNG/WebP sources.",
+      "request": {
+        "role": "月溪灵鹿",
+        "characterId": "moon-deer",
+        "characterLabel": "Moon Deer / 月溪灵鹿",
+        "action": "普攻",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
         "frameCount": "16",
+        "provider": "Doubao",
         "intent": "battle-animation-assets"
       },
       "uploads": [
         {
-          "originalName": "samuel profile pic男主头像.png",
+          "originalName": "moon-deer__action__attack__battle-animation__b2d65dfc-411c-4091-9fa1-10a81ae268de.png",
           "type": "image/png",
-          "size": 1525929
+          "size": 1424708
         }
       ],
       "source": {
         "intakeStorage": "hetzner-disk-persistent"
       },
-      "workspace": {
-        "root": true
-      },
-      "previewUrl": "/generated-previews/gen-20260426022738-ff6040.png",
-      "processedPreviewUrl": "/generated-previews/gen-20260426022738-ff6040.processed.png"
-    },
-    {
-      "jobId": "gen-20260426022711-1e1eba",
-      "createdAt": "2026-04-26T04:29:54.201Z",
-      "status": "done",
-      "adapter": "doubao-adapter",
-      "note": "Queue consumer created job workspace, copied uploaded inputs, emitted stub frame/atlas/bundle manifests, and now attempts image trim preprocessing for uploaded PNG/WebP sources.",
-      "request": {
-        "role": "人类战士",
-        "action": "受击",
-        "frameCount": "8",
-        "intent": "battle-animation-assets"
-      },
-      "uploads": [
-        {
-          "originalName": "smoke.png",
-          "type": "image/png",
-          "size": 1000
-        }
-      ],
-      "source": {
-        "intakeStorage": "hetzner-disk-persistent"
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
       },
       "workspace": {
         "root": true
       },
-      "previewUrl": "/generated-previews/gen-20260426022711-1e1eba.png",
+      "previewUrl": "/generated-previews/gen-20260428172726-8af7c5.png",
       "processedPreviewUrl": null
     },
     {
-      "jobId": "gen-20260426022646-74f5d0",
-      "createdAt": "2026-04-26T04:29:54.099Z",
+      "jobId": "gen-20260428171759-edfa9d",
+      "createdAt": "2026-04-28T17:18:02.910Z",
       "status": "done",
-      "adapter": "doubao-adapter",
+      "adapter": "unassigned-adapter",
       "note": "Queue consumer created job workspace, copied uploaded inputs, emitted stub frame/atlas/bundle manifests, and now attempts image trim preprocessing for uploaded PNG/WebP sources.",
       "request": {
-        "role": "人类战士",
-        "action": "受击",
-        "frameCount": "8",
-        "intent": "battle-animation-assets"
+        "role": "立绘",
+        "characterId": "healthcheck",
+        "characterLabel": "Healthcheck",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
       },
       "uploads": [
         {
-          "originalName": "smoke.png",
+          "originalName": "healthcheck.png",
           "type": "image/png",
-          "size": 1000
+          "size": 2712
         }
       ],
       "source": {
         "intakeStorage": "hetzner-disk-persistent"
       },
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
+      },
       "workspace": {
         "root": true
       },
-      "previewUrl": "/generated-previews/gen-20260426022646-74f5d0.png",
+      "previewUrl": "/generated-previews/gen-20260428171759-edfa9d.png",
       "processedPreviewUrl": null
     },
     {
-      "jobId": "gen-20260426022445-6c7d7d",
-      "createdAt": "2026-04-26T04:29:54.005Z",
+      "jobId": "gen-20260428170425-56ceec",
+      "createdAt": "2026-04-28T17:04:29.182Z",
       "status": "done",
-      "adapter": "doubao-adapter",
+      "adapter": "unassigned-adapter",
       "note": "Queue consumer created job workspace, copied uploaded inputs, emitted stub frame/atlas/bundle manifests, and now attempts image trim preprocessing for uploaded PNG/WebP sources.",
       "request": {
-        "role": "人类战士",
-        "action": "待机",
-        "frameCount": "16",
-        "intent": "battle-animation-assets"
+        "role": "立绘",
+        "characterId": "isolde",
+        "characterLabel": "伊索德",
+        "action": "attack",
+        "targetSlot": "attack",
+        "assetKind": "battle-animation",
+        "frameCount": null,
+        "provider": null,
+        "intent": null
       },
       "uploads": [
         {
-          "originalName": "samuel profile pic男主头像.png",
+          "originalName": "aetherlan-male-lead.png",
           "type": "image/png",
-          "size": 1525929
+          "size": 2712
         }
       ],
       "source": {
         "intakeStorage": "hetzner-disk-persistent"
       },
-      "workspace": {
-        "root": true
-      },
-      "previewUrl": "/generated-previews/gen-20260426022445-6c7d7d.png",
-      "processedPreviewUrl": "/generated-previews/gen-20260426022445-6c7d7d.processed.png"
-    },
-    {
-      "jobId": "gen-20260426014542-0109ea",
-      "createdAt": "2026-04-26T04:29:53.438Z",
-      "status": "done",
-      "adapter": "doubao-adapter",
-      "note": "Queue consumer created job workspace, copied uploaded inputs, emitted stub frame/atlas/bundle manifests, and now attempts image trim preprocessing for uploaded PNG/WebP sources.",
-      "request": {
-        "role": "人类战士",
-        "action": "受击",
-        "frameCount": "8",
-        "intent": "battle-animation-assets"
-      },
-      "uploads": [
-        {
-          "originalName": "smoke.png",
-          "type": "image/png",
-          "size": 1450000
-        }
-      ],
-      "source": {
-        "intakeStorage": "hetzner-disk-persistent"
+      "outputs": {
+        "transparentFrames": false,
+        "atlasPacked": false,
+        "zipReady": false,
+        "manifest": true,
+        "atlasJson": true,
+        "framePlan": true,
+        "bundlePlan": true
       },
       "workspace": {
         "root": true
       },
-      "previewUrl": "/generated-previews/gen-20260426014542-0109ea.png",
-      "processedPreviewUrl": null
-    },
-    {
-      "jobId": "gen-20260425223011-b36979",
-      "createdAt": "2026-04-26T04:29:53.267Z",
-      "status": "done",
-      "adapter": "doubao-adapter",
-      "note": "Queue consumer created job workspace, copied uploaded inputs, emitted stub frame/atlas/bundle manifests, and now attempts image trim preprocessing for uploaded PNG/WebP sources.",
-      "request": {
-        "role": "元素法师",
-        "action": "施法",
-        "frameCount": "8",
-        "intent": "battle-animation-assets"
-      },
-      "uploads": [
-        {
-          "originalName": "nginx-smoke.txt",
-          "type": "text/plain",
-          "size": 10
-        }
-      ],
-      "source": {
-        "intakeStorage": "hetzner-disk-persistent"
-      },
-      "workspace": {
-        "root": true
-      },
-      "previewUrl": null,
-      "processedPreviewUrl": null
-    },
-    {
-      "jobId": "gen-20260425220734-152f61",
-      "createdAt": "2026-04-26T04:29:53.264Z",
-      "status": "done",
-      "adapter": "doubao-adapter",
-      "note": "Queue consumer created job workspace, copied uploaded inputs, emitted stub frame/atlas/bundle manifests, and now attempts image trim preprocessing for uploaded PNG/WebP sources.",
-      "request": {
-        "role": "人类战士",
-        "action": "受击",
-        "frameCount": "8",
-        "intent": "battle-animation-assets"
-      },
-      "uploads": [
-        {
-          "originalName": "smoke.txt",
-          "type": "text/plain",
-          "size": 15
-        }
-      ],
-      "source": {
-        "intakeStorage": "hetzner-disk-persistent"
-      },
-      "workspace": {
-        "root": true
-      },
-      "previewUrl": null,
+      "previewUrl": "/generated-previews/gen-20260428170425-56ceec.png",
       "processedPreviewUrl": null
     }
   ]

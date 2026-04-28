@@ -143,6 +143,8 @@ async function copyPreviewArtifacts(jobId, copiedUploads, preprocessResults) {
   const successfulPreprocess = preprocessResults.find((item) => item?.ok && item?.output);
   const previewUrl = firstUpload ? `/generated-previews/${jobId}${extname(firstUpload).toLowerCase() || '.png'}` : null;
   const processedPreviewUrl = successfulPreprocess?.output ? `/generated-previews/${jobId}.processed.png` : null;
+  const transparentFramesDir = successfulPreprocess?.output ? join(frontendGeneratedPreviewsDir, `${jobId}.frames`) : null;
+  const transparentFrameUrls = [];
 
   if (firstUpload && previewUrl) {
     await copyFile(firstUpload, join(frontendGeneratedPreviewsDir, `${jobId}${extname(firstUpload).toLowerCase() || '.png'}`));
@@ -154,9 +156,25 @@ async function copyPreviewArtifacts(jobId, copiedUploads, preprocessResults) {
     if (await exists(staleFixed)) {
       await rm(staleFixed, { force: true });
     }
+
+    if (transparentFramesDir) {
+      await mkdir(transparentFramesDir, { recursive: true });
+      const frameCount = Math.max(1, Number(successfulPreprocess?.frameCount || 0) || 4);
+      for (let index = 0; index < frameCount; index += 1) {
+        const frameName = `frame_${String(index).padStart(3, '0')}.png`;
+        await copyFile(successfulPreprocess.output, join(transparentFramesDir, frameName));
+        transparentFrameUrls.push(`/generated-previews/${jobId}.frames/${frameName}`);
+      }
+    }
   }
 
-  return { previewUrl, processedPreviewUrl, hadProcessedPreview: Boolean(successfulPreprocess?.output) };
+  return {
+    previewUrl,
+    processedPreviewUrl,
+    transparentFrameUrls,
+    transparentFramesDir,
+    hadProcessedPreview: Boolean(successfulPreprocess?.output),
+  };
 }
 
 export async function processQueue() {
@@ -222,7 +240,8 @@ export async function processQueue() {
     job.inputs = copiedUploads;
     await writeFile(fullPath, `${JSON.stringify(job, null, 2)}\n`, 'utf8');
 
-    const stubFrames = Array.from({ length: Number(job.request?.frameCount || 0) || 4 }, (_, index) => ({
+    const plannedFrameCount = Number(job.request?.frameCount || 0) || 4;
+    const stubFrames = Array.from({ length: plannedFrameCount }, (_, index) => ({
       index,
       file: `frame_${String(index).padStart(3, '0')}.png`,
       status: 'planned',
@@ -316,13 +335,15 @@ export async function processQueue() {
       detectedFrameHeight: detectedSheet?.frameHeight ?? null,
       outputs: {
         transparentFrames: preprocessResults.some((item) => item?.ok),
-        atlasPacked: false,
+        atlasPacked: Boolean(previewArtifacts.hadProcessedPreview),
         zipReady: false,
         manifest: join(outputsDir, 'output-manifest.json'),
         atlasJson: join(outputsDir, 'atlas.json'),
         framePlan: join(outputsDir, 'frames.stub.json'),
         bundlePlan: join(outputsDir, 'bundle.stub.json'),
         preprocessReport: join(outputsDir, 'output-manifest.json'),
+        transparentFramesDir: previewArtifacts.transparentFramesDir,
+        transparentFrameUrls: previewArtifacts.transparentFrameUrls,
       },
       failureReason: processingFailed ? 'missing-processed-runtime-asset' : null,
       previewUrl: previewArtifacts.previewUrl,
