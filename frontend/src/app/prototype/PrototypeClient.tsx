@@ -197,16 +197,19 @@ const fullscreenBattleResultTiming = {
     riseMs: 660,
     lingerMs: 1040,
     exitMs: 210,
+    pulseMs: 240,
   },
   skill: {
     riseMs: 790,
     lingerMs: 1300,
     exitMs: 260,
+    pulseMs: 300,
   },
   heal: {
     riseMs: 940,
     lingerMs: 1420,
     exitMs: 300,
+    pulseMs: 340,
   },
 } as const;
 
@@ -1013,14 +1016,15 @@ export default function PrototypeClient({ showcaseByUnit = {} }: PrototypeClient
     }
 
     if (unit && canAttack(unit)) {
+      const isMoonDeerAttack = selected.id === "moon-deer";
       const bonus = selected.id === "samuel" && siblingBondActive ? 2 : 0;
       const totalDamage = selected.atk + bonus;
-      playBattleCinematic(selected, unit, totalDamage, "attack", () => {
+      playBattleCinematic(selected, unit, totalDamage, isMoonDeerAttack ? "skill" : "attack", () => {
         markUnitActed(selected.id);
         setEventBanner(`${selected.name} 压制了 ${unit.name}。`);
         pushLog(`${selected.name} 攻击 ${unit.name}，造成 ${totalDamage} 点伤害。`);
         setMode("move");
-      });
+      }, isMoonDeerAttack ? { aura: "lunar" } : undefined);
       return;
     }
 
@@ -1451,6 +1455,7 @@ export default function PrototypeClient({ showcaseByUnit = {} }: PrototypeClient
       const auraColor = fullscreenBattleFx.aura === 'wind' ? 0x86efac : fullscreenBattleFx.aura === 'lunar' ? 0xc4b5fd : 0x67e8f9;
       const progress = (time: number, start: number, duration: number) => Math.min(1, Math.max(0, (time - start) / duration));
       const damageRevealStart = timing.impactMs + timing.hitStopMs + timing.damageRevealDelayMs;
+      const damagePulseEnd = damageRevealStart + resultTiming.pulseMs;
       const damageHoldStart = damageRevealStart + resultTiming.riseMs;
       const damageExitStart = damageHoldStart + resultTiming.lingerMs;
       const resultCardSettleFadeStart = damageExitStart + Math.max(26, resultTiming.exitMs * 0.28);
@@ -1623,12 +1628,14 @@ export default function PrototypeClient({ showcaseByUnit = {} }: PrototypeClient
               ? 0.13 - recoilProgress * 0.11
               : Math.min(0.22, impactProgress * 0.22);
           const damageRevealProgress = progress(elapsed, damageRevealStart, timing.damageFadeMs + (isSupportResult ? 132 : 84));
+          const damagePulseProgress = progress(elapsed, damageRevealStart, resultTiming.pulseMs);
           const damageRiseProgress = progress(elapsed, damageRevealStart, resultTiming.riseMs);
           const damageHoldProgress = progress(elapsed, damageHoldStart, resultTiming.lingerMs);
           const damageExitProgress = progress(elapsed, damageExitStart, resultTiming.exitMs);
           const resultAlpha = Math.min(1, Math.pow(damageRevealProgress, isSupportResult ? 0.94 : 0.8)) * (1 - Math.pow(damageExitProgress, isSupportResult ? 1.18 : 1.28));
           const resultFloat = 1 - Math.pow(1 - damageRiseProgress, isSupportResult ? 1.72 : 2.08);
           const resultHoldEase = 1 - Math.pow(damageHoldProgress, isSupportResult ? 1.18 : 1.38) * (isSupportResult ? 0.03 : 0.06);
+          const resultPulse = 1 - damagePulseProgress;
           const isNarrowViewport = typeof window !== 'undefined' && window.innerWidth <= 768;
           const resultLift = isSupportResult
             ? (isNarrowViewport ? 136 : 152)
@@ -1638,13 +1645,14 @@ export default function PrototypeClient({ showcaseByUnit = {} }: PrototypeClient
           const baseScaleMultiplier = isNarrowViewport ? (isSupportResult ? 1.1 : 1.08) : 1;
           damageText.alpha = resultAlpha;
           damageText.scale.set(
-            (inHitStop
+            ((inHitStop
               ? (isSupportResult ? 0.98 : 0.94)
               : recoilProgress < 1
                 ? (isSupportResult ? 0.98 + recoilProgress * 0.09 : 0.94 + recoilProgress * 0.16)
                 : (isSupportResult
                     ? 1.04 + Math.max(0, 1 - damageRiseProgress) * 0.04 - damageExitProgress * 0.08
-                    : 1.08 + Math.max(0, 1 - damageRiseProgress) * 0.08 - damageExitProgress * 0.14)) * baseScaleMultiplier,
+                    : 1.08 + Math.max(0, 1 - damageRiseProgress) * 0.08 - damageExitProgress * 0.14))
+              + resultPulse * (isSupportResult ? 0.06 : 0.1)) * baseScaleMultiplier,
           );
           damageText.y = inHitStop
             ? (isSupportResult ? 242 : 236)
@@ -1677,6 +1685,13 @@ export default function PrototypeClient({ showcaseByUnit = {} }: PrototypeClient
             30,
           ).fill({ color: 0x020617, alpha: Math.min(0.98, resultAlpha * (isSupportResult ? 0.9 : 0.94)) });
           damageBackdrop.roundRect(
+            damageText.x - backdropWidth / 2 - 8,
+            backdropY - 8,
+            backdropWidth + 16,
+            backdropHeight + 16,
+            36,
+          ).stroke({ width: isSupportResult ? 3 : 4, color: auraColor, alpha: resultAlpha * (isSupportResult ? 0.24 : 0.32) * resultPulse });
+          damageBackdrop.roundRect(
             damageText.x - backdropWidth / 2 + 8,
             backdropY + (isNarrowViewport ? 8 : 10),
             backdropWidth - 16,
@@ -1690,6 +1705,13 @@ export default function PrototypeClient({ showcaseByUnit = {} }: PrototypeClient
             6,
             999,
           ).fill({ color: auraColor, alpha: resultAlpha * (isSupportResult ? 0.38 : 0.46) });
+          damageBackdrop.roundRect(
+            damageText.x - backdropWidth / 2 + 18,
+            backdropY + backdropHeight - 18,
+            Math.max(36, (backdropWidth - 36) * Math.max(0, 1 - progress(elapsed, damagePulseEnd, resultTiming.lingerMs + resultTiming.exitMs * 0.4))),
+            4,
+            999,
+          ).fill({ color: 0xffffff, alpha: resultAlpha * (isSupportResult ? 0.22 : 0.18) * (0.6 + resultPulse * 0.4) });
           const baseShakeX = inHitStop
             ? -14
             : Math.sin(postImpactElapsed / 16) * 12 * shakeFalloff;
