@@ -1,4 +1,4 @@
-import { mkdir, readdir, readFile, writeFile, copyFile, access, rm } from 'node:fs/promises';
+import { mkdir, readdir, readFile, writeFile, copyFile, access, rm, stat } from 'node:fs/promises';
 import { dirname, join, resolve, basename, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execFile } from 'node:child_process';
@@ -6,11 +6,12 @@ import { promisify } from 'node:util';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const rootDir = resolve(__dirname, '..');
-const queueDir = join(rootDir, 'queue');
-const resultsDir = join(rootDir, 'output', 'queue-results');
-const jobsRoot = join(rootDir, 'jobs');
-const hetznerUploadsRoot = join(rootDir, 'staging', 'hetzner-uploads');
-const frontendGeneratedPreviewsDir = resolve(rootDir, '..', '..', 'frontend', 'public', 'generated-previews');
+const persistentBaseDir = process.env.AETHERLAN_BASE_DIR?.trim() || null;
+const queueDir = persistentBaseDir ? join(persistentBaseDir, 'queue') : join(rootDir, 'queue');
+const resultsDir = persistentBaseDir ? join(persistentBaseDir, 'results') : join(rootDir, 'output', 'queue-results');
+const jobsRoot = persistentBaseDir ? join(persistentBaseDir, 'worker', 'jobs') : join(rootDir, 'jobs');
+const hetznerUploadsRoot = persistentBaseDir ? join(persistentBaseDir, 'uploads') : join(rootDir, 'staging', 'hetzner-uploads');
+const frontendGeneratedPreviewsDir = persistentBaseDir ? join(persistentBaseDir, 'frontend', 'public', 'generated-previews') : resolve(rootDir, '..', '..', 'frontend', 'public', 'generated-previews');
 const execFileAsync = promisify(execFile);
 const preprocessScript = join(rootDir, 'python', 'preprocess_frames.py');
 const detectSheetScript = join(rootDir, 'python', 'detect_sheet_layout.py');
@@ -57,6 +58,29 @@ function mapRemoteUploadToLocalPath(uploadPath) {
   return join(hetznerUploadsRoot, uploadPath.split(marker)[1]);
 }
 
+async function deriveUploadsFromMirroredHetzner(jobId) {
+  if (!jobId) return [];
+  const mirroredDir = join(hetznerUploadsRoot, jobId);
+  if (!(await exists(mirroredDir))) return [];
+
+  const entries = await readdir(mirroredDir, { withFileTypes: true });
+  const files = entries.filter((entry) => entry.isFile()).sort((a, b) => a.name.localeCompare(b.name));
+  const uploads = [];
+
+  for (const entry of files) {
+    const sourcePath = join(mirroredDir, entry.name);
+    const fileStat = await stat(sourcePath);
+    uploads.push({
+      name: entry.name,
+      size: fileStat.size,
+      type: 'application/octet-stream',
+      path: `/opt/aetherlan-war/uploads/${jobId}/${entry.name}`,
+    });
+  }
+
+  return uploads;
+}
+
 async function preprocessUploadIfImage(sourcePath, outputsDir) {
   const ext = extname(sourcePath).toLowerCase();
   if (!['.png', '.webp'].includes(ext)) return null;
@@ -73,6 +97,15 @@ async function preprocessUploadIfImage(sourcePath, outputsDir) {
     const lastLine = stdout.trim().split('\n').filter(Boolean).at(-1);
     return lastLine ? JSON.parse(lastLine) : null;
   } catch (error) {
+    const stdout = typeof error === 'object' && error && 'stdout' in error ? String(error.stdout ?? '') : '';
+    const parsed = stdout.trim().split('\n').filter(Boolean).at(-1);
+    if (parsed) {
+      try {
+        return JSON.parse(parsed);
+      } catch {
+        // fall through to generic error payload
+      }
+    }
     return {
       ok: false,
       error: error instanceof Error ? error.message : String(error),
@@ -148,10 +181,14 @@ export async function processQueue() {
     await mkdir(outputsDir, { recursive: true });
     await mkdir(logsDir, { recursive: true });
 
+    const healedUploads = Array.isArray(job.uploads) && job.uploads.length > 0
+      ? job.uploads
+      : await deriveUploadsFromMirroredHetzner(job.id);
+
     const copiedUploads = [];
     const preprocessResults = [];
     let successfulPreprocess = null;
-    for (const upload of job.uploads ?? []) {
+    for (const upload of healedUploads) {
       const resolvedSource = mapRemoteUploadToLocalPath(upload?.path);
       if (!resolvedSource || !(await exists(resolvedSource))) continue;
       const dest = join(inputsDir, basename(resolvedSource));
@@ -177,6 +214,11 @@ export async function processQueue() {
     job.updatedAt = new Date().toISOString();
     job.jobDir = jobDir;
     job.adapter = providerAdapter(job.request?.provider);
+    job.uploads = healedUploads;
+    if (job.workerPayload && (!job.workerPayload.uploadCount || job.workerPayload.uploadCount === 0)) {
+      job.workerPayload.uploadCount = healedUploads.length;
+      job.workerPayload.uploadNames = healedUploads.map((upload) => upload.name);
+    }
     job.inputs = copiedUploads;
     await writeFile(fullPath, `${JSON.stringify(job, null, 2)}\n`, 'utf8');
 

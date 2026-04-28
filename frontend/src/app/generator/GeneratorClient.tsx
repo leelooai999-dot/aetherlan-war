@@ -59,8 +59,52 @@ type UploadStatus = {
     status?: string | null;
     nextStep?: string | null;
   } | null;
+  queueSummary?: {
+    total?: number | null;
+    queued?: number | null;
+    processing?: number | null;
+    done?: number | null;
+    failed?: number | null;
+    health?: {
+      ok?: boolean | null;
+      statusMismatchCount?: number | null;
+      orphanResultCount?: number | null;
+    } | null;
+    statusMismatches?: {
+      jobId?: string | null;
+      jobStatus?: string | null;
+      resultStatus?: string | null;
+    }[] | null;
+    orphanResults?: {
+      jobId?: string | null;
+      resultStatus?: string | null;
+    }[] | null;
+  } | null;
   message?: string | null;
 };
+
+function isFallbackQueuedStatus(status: UploadStatus | null) {
+  if (!status) return false;
+  const hasMirrorData = Boolean(
+    status.processedPreviewUrl
+      || status.previewUrl
+      || status.uploads?.some((upload) => Boolean(upload?.size))
+      || status.workerPayload
+      || status.queueSummary
+      || status.storage,
+  );
+  return status.status === 'queued' && !hasMirrorData && Boolean(status.message);
+}
+
+function isPersistentPreflightDrift(error: string | null, actionUrl: string) {
+  if (!error) return false;
+  if (!actionUrl.includes('aetherlan-intake.montecarloo.com')) return false;
+  const normalized = error.toLowerCase();
+  return normalized.includes('network error during upload')
+    || normalized.includes('cors')
+    || normalized.includes('preflight')
+    || normalized.includes('options');
+}
 
 type CharacterOption = { id: string; label: string; role: string };
 type SlotOption = { id: string; label: string };
@@ -141,6 +185,7 @@ function uploadWithProgress(url: string, formData: FormData, onProgress: (percen
     const normalizedUrl = url.trim();
     const xhr = new XMLHttpRequest();
     xhr.open('POST', normalizedUrl);
+    xhr.timeout = 90_000;
     xhr.setRequestHeader('accept', 'application/json');
 
     xhr.upload.onprogress = (event) => {
@@ -167,7 +212,8 @@ function uploadWithProgress(url: string, formData: FormData, onProgress: (percen
       reject(new Error(`${data?.message || 'Upload failed'}${statusHint}${storageHint}`));
     };
 
-    xhr.onerror = () => reject(new Error('Network error during upload. Persistent intake may be unreachable or blocked by CORS / DNS.'));
+    xhr.ontimeout = () => reject(new Error('Upload timed out after 90s. The intake endpoint may be slow or unreachable; please retry and check whether the persistent intake host is healthy.'));
+    xhr.onerror = () => reject(new Error('Network error during upload. Persistent intake may be unreachable or blocked by CORS / DNS / preflight. If this is the public site, the most likely current cause is the live intake server still rejecting OPTIONS preflight.'));
     xhr.send(formData);
   });
 }
@@ -296,27 +342,66 @@ export default function GeneratorClient({
     );
   }
 
-  async function pollStatus(nextJobId: string) {
+  async function pollStatus(nextJobId: string, meta?: {
+    role?: string;
+    characterId?: string;
+    characterLabel?: string;
+    action?: string;
+    targetSlot?: string;
+    assetKind?: string;
+    uploadCount?: string;
+    queueDepth?: string;
+    recentUploadNames?: string[];
+  }) {
+    let lastStatusData: UploadStatus | null = null;
+
     for (let i = 0; i < 25; i += 1) {
-      const res = await fetch(`/api/generator/status?jobId=${encodeURIComponent(nextJobId)}`, { cache: 'no-store' });
+      const params = new URLSearchParams({
+        jobId: nextJobId,
+      });
+      if (meta?.role) params.set('role', meta.role);
+      if (meta?.characterId) params.set('characterId', meta.characterId);
+      if (meta?.characterLabel) params.set('characterLabel', meta.characterLabel);
+      if (meta?.action) params.set('action', meta.action);
+      if (meta?.targetSlot) params.set('targetSlot', meta.targetSlot);
+      if (meta?.assetKind) params.set('assetKind', meta.assetKind);
+      if (meta?.uploadCount) params.set('uploadCount', meta.uploadCount);
+      if (meta?.queueDepth) params.set('queueDepth', meta.queueDepth);
+      if (meta?.recentUploadNames?.length) params.set('recentUploadNames', meta.recentUploadNames.join('|'));
+      const res = await fetch(`/api/generator/status?${params.toString()}`, { cache: 'no-store' });
       const data = await res.json();
       if (data?.ok) {
-        setStatus(data);
+        lastStatusData = data as UploadStatus;
+        setStatus(lastStatusData);
         const percent = Math.max(5, Number(data.progress?.percent ?? 5));
-        if (data.status === 'queued') {
-          applyStatusProgressToItems('queued', Math.max(18, percent));
-        } else if (data.status === 'processing' || percent >= 35) {
-          applyStatusProgressToItems('processing', Math.max(35, percent));
-        }
-        if (percent >= 65 || data.processedPreviewUrl) {
-          applyStatusProgressToItems('ready', Math.max(65, percent));
-        }
-        if (data.status === 'done') {
+        const hasProcessedPreview = Boolean(data.processedPreviewUrl);
+        const hasPreview = Boolean(data.previewUrl);
+        const isDoneLike = data.status === 'done' || (hasProcessedPreview && percent >= 65);
+
+        if (isDoneLike) {
           applyStatusProgressToItems('done', 100);
           return;
         }
+        if (data.status === 'queued') {
+          applyStatusProgressToItems('queued', Math.max(18, percent));
+        } else if (data.status === 'processing' || percent >= 35 || hasPreview) {
+          applyStatusProgressToItems('processing', Math.max(35, percent));
+        }
+        if (percent >= 65 || hasProcessedPreview) {
+          applyStatusProgressToItems('ready', Math.max(65, percent));
+        }
       }
       await new Promise((resolve) => window.setTimeout(resolve, 2500));
+    }
+
+    if (lastStatusData) {
+      const queueMode = meta?.queueDepth === 'persistent' ? 'persistent intake' : 'preview intake';
+      setStatus({
+        ...lastStatusData,
+        message: lastStatusData.message ?? `状态轮询已完成，但后台还没在当前窗口内产出最终结果。上传本身大概率已经进入 ${queueMode}；可点“去内部追踪台看结果”继续确认 queue / worker / result 哪一步还在等待。`,
+      });
+    } else {
+      setError('上传已提交，但状态接口在当前轮询窗口内没有返回可用结果。请打开内部追踪台继续确认，或检查 persistent intake / status API 是否可达。');
     }
   }
 
@@ -421,7 +506,17 @@ export default function GeneratorClient({
       });
       applyStatusProgressToItems('queued', 20);
 
-      await pollStatus(nextJobId);
+      await pollStatus(nextJobId, {
+        role: nextRole,
+        characterId: nextCharacterId,
+        characterLabel: nextCharacterLabel,
+        action: nextAction,
+        targetSlot: nextTargetSlot,
+        assetKind: nextAssetKind,
+        uploadCount: String(files.length),
+        queueDepth: nextQueueDepth,
+        recentUploadNames: renamedFiles.map((file) => file.uploadName),
+      });
     } catch (err) {
       setAllUploadItems('error', 100);
       setError(err instanceof Error ? err.message : String(err));
@@ -604,7 +699,7 @@ export default function GeneratorClient({
           </div>
         </form>
 
-        {(jobId || status) ? (
+        {(jobId || status || error) ? (
           <div className="mt-6 rounded-3xl border border-emerald-300/20 bg-emerald-400/10 p-5 text-emerald-50">
             <div className="text-sm uppercase tracking-[0.3em] text-emerald-200">Backend progress</div>
             <p className="mt-3 text-lg font-semibold">任务状态{jobId ? ` · ${jobId}` : ''}</p>
@@ -619,12 +714,19 @@ export default function GeneratorClient({
               <span>{status?.progress?.percent ?? 0}%</span>
             </div>
             <div className="mt-4 grid gap-2 text-sm text-emerald-50/90 md:grid-cols-2">
-              <div>接收模式：{status?.storage === 'hetzner-disk-persistent' ? 'Persistent intake ✅' : status?.storage === 'vercel-ephemeral-preview' ? 'Preview fallback ⚠️' : '等待识别 ⏳'}</div>
+              <div>接收模式：{status?.storage === 'hetzner-disk-persistent' ? 'Persistent intake ✅' : status?.storage === 'vercel-ephemeral-preview' ? 'Preview fallback ⚠️' : actionUrl.includes('aetherlan-intake.montecarloo.com') ? 'Persistent intake（等待浏览器确认） ⏳' : '等待识别 ⏳'}</div>
+              <div>状态来源：{isFallbackQueuedStatus(status) ? '前端兜底排队态（镜像未追上） ⚠️' : status?.found ? '后端状态 / 队列数据 ✅' : isPersistentPreflightDrift(error, actionUrl) ? '浏览器预检失败（部署漂移） ⚠️' : '等待状态接口 ⏳'}</div>
               <div>1. 已上传到服务器 {status || uploadItems.some((item) => item.status !== 'pending') ? '✅' : '⬜'}</div>
               <div>2. 已进入队列 {status?.found || uploadItems.some((item) => item.status === 'queued' || item.status === 'processing' || item.status === 'done') ? '✅' : '⬜'}</div>
               <div>3. 后台处理中 {(status?.progress?.percent ?? 0) >= 35 || uploadItems.some((item) => item.status === 'processing' || item.status === 'done') ? '✅' : '⬜'}</div>
               <div>4. 已可应用到前端 {(status?.processedPreviewUrl || (status?.progress?.percent ?? 0) >= 65 || uploadItems.some((item) => item.status === 'done')) ? '✅' : '⬜'}</div>
             </div>
+            {isFallbackQueuedStatus(status) ? (
+              <div className="mt-4 rounded-2xl border border-amber-300/20 bg-amber-400/10 p-4 text-sm leading-7 text-amber-50/95">
+                <div className="text-xs uppercase tracking-[0.25em] text-amber-200">当前是兜底状态</div>
+                <div className="mt-2">这表示上传请求和替换绑定信息已经保留下来，但真实 queue/result 镜像还没追上，所以这里先显示安全的 queued 状态，避免误报 unknown。</div>
+              </div>
+            ) : null}
             {status?.message ? (
               <div className={`mt-4 rounded-2xl border p-4 text-sm leading-7 ${status?.storage === 'vercel-ephemeral-preview' ? 'border-amber-300/20 bg-amber-400/10 text-amber-50' : 'border-white/10 bg-black/15 text-emerald-50/90'}`}>
                 <div className="text-xs uppercase tracking-[0.25em] text-emerald-200">状态说明</div>
@@ -655,6 +757,23 @@ export default function GeneratorClient({
                 ) : null}
               </div>
             ) : null}
+            {status?.queueSummary ? (
+              <div className={`mt-4 rounded-2xl border p-4 text-sm leading-7 ${status.queueSummary.health?.ok === false ? 'border-amber-300/20 bg-amber-400/10 text-amber-50' : 'border-white/10 bg-black/15 text-emerald-50/90'}`}>
+                <div className="text-xs uppercase tracking-[0.25em] text-emerald-200">队列镜像健康</div>
+                <div className="mt-2 grid gap-2 md:grid-cols-2">
+                  <div>排队中：{status.queueSummary.queued ?? 0}</div>
+                  <div>处理中：{status.queueSummary.processing ?? 0}</div>
+                  <div>已完成：{status.queueSummary.done ?? 0}</div>
+                  <div>失败：{status.queueSummary.failed ?? 0}</div>
+                </div>
+                {status.queueSummary.health?.ok === false ? (
+                  <div className="mt-3 rounded-2xl border border-amber-300/20 bg-black/15 p-3 text-xs leading-6 text-amber-50/95">
+                    <div>检测到本地队列镜像漂移：status mismatch {status.queueSummary.health?.statusMismatchCount ?? 0}，orphan result {status.queueSummary.health?.orphanResultCount ?? 0}。</div>
+                    <div className="mt-1">这通常意味着上传已接收，但 worker / result / dashboard 其中一步还没同步完，所以状态看起来会比真实进度更慢。</div>
+                  </div>
+                ) : null}
+              </div>
+            ) : null}
             <div className="mt-4 rounded-2xl border border-white/10 bg-black/15 p-4 text-sm leading-7 text-emerald-50/90">
               <div className="text-xs uppercase tracking-[0.25em] text-emerald-200">本次绑定目标</div>
               <div className="mt-2">角色类型：{status?.request?.role ?? role ?? '未提供'}</div>
@@ -682,6 +801,17 @@ export default function GeneratorClient({
                 <div className="text-xs uppercase tracking-[0.25em] text-red-200">上传失败诊断</div>
                 <div className="mt-2">{error}</div>
                 <div className="mt-2 text-red-100/85">如果这是公网环境，请优先检查 persistent intake 域名 / SSL / CORS 是否已完成切换；如果是本地预览，再检查 action URL 是否仍指向 /api/generator。</div>
+                {isPersistentPreflightDrift(error, actionUrl) ? (
+                  <div className="mt-3 rounded-2xl border border-amber-300/20 bg-black/15 p-3 text-xs leading-6 text-amber-50/95">
+                    <div className="font-semibold text-amber-100">更像是浏览器预检失败，不像素材文件本身有问题。</div>
+                    <div className="mt-1">当前公网最常见原因是 persistent intake 还在返回 <span className="font-mono">OPTIONS 501</span>，所以浏览器会在真正 POST 之前就拦住上传。</div>
+                    <div className="mt-1">你可以先做两件事：1) 去内部追踪台确认这次是否其实没有产生 job；2) 等后端把最新 intake 服务重启上线后再重试。</div>
+                  </div>
+                ) : actionUrl.includes('aetherlan-intake.montecarloo.com') ? (
+                  <div className="mt-3 rounded-2xl border border-amber-300/20 bg-black/15 p-3 text-xs leading-6 text-amber-50/95">
+                    当前页面正在把文件直传到 persistent intake。若浏览器里是“刚点上传就失败”，通常不是 PNG 坏了，而是 intake 服务还没放行浏览器预检请求（OPTIONS / CORS preflight）。这种情况下你仍然可以先去内部追踪台核对是否已有 job 入队，或让后端把最新 intake_server.py 部署并重启后再试。
+                  </div>
+                ) : null}
               </div>
             ) : null}
           </div>
