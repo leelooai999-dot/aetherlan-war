@@ -19,6 +19,7 @@ type UploadStatus = {
     stage: string;
     label: string;
   };
+  intakeStatusSource?: 'fallback' | 'mirror' | 'persistent' | null;
   request?: {
     role?: string | null;
     characterId?: string | null;
@@ -106,6 +107,80 @@ function isPersistentPreflightDrift(error: string | null, actionUrl: string) {
     || normalized.includes('options');
 }
 
+function getStatusSourceLabel(status: UploadStatus | null, error: string | null, actionUrl: string) {
+  if (isFallbackQueuedStatus(status)) {
+    return '前端兜底排队态（镜像未追上） ⚠️';
+  }
+  if (status?.intakeStatusSource === 'persistent') {
+    return 'Persistent intake 状态接口 ✅';
+  }
+  if (status?.intakeStatusSource === 'mirror') {
+    return '本地队列镜像 / result ✅';
+  }
+  if (status?.intakeStatusSource === 'fallback') {
+    return '前端兜底排队态 ⚠️';
+  }
+  if (status?.found) {
+    return '后端状态 / 队列数据 ✅';
+  }
+  if (isPersistentPreflightDrift(error, actionUrl)) {
+    return '浏览器预检失败（部署漂移） ⚠️';
+  }
+  return '等待状态接口 ⏳';
+}
+
+function hasConfirmedWorkerActivity(status: UploadStatus | null) {
+  if (!status?.found) return false;
+  if (status.status === 'processing' || status.status === 'done') return true;
+  if (status.intakeStatusSource === 'mirror' && (status.progress?.percent ?? 0) >= 35) return true;
+  if (Boolean(status.previewUrl || status.processedPreviewUrl)) return true;
+  return false;
+}
+
+function getHandoffStateLabel(status: UploadStatus | null) {
+  if (!status?.found) {
+    return '等待 intake 确认 ⏳';
+  }
+  if (status.status === 'done') {
+    return '结果已回流前端 ✅';
+  }
+  if (hasConfirmedWorkerActivity(status)) {
+    return 'worker / queue 正在处理 ✅';
+  }
+  if (isFallbackQueuedStatus(status)) {
+    return 'intake 已接收，镜像同步中 ⏳';
+  }
+  if (status.intakeStatusSource === 'persistent' && !status.processedPreviewUrl) {
+    if ((status.queueSummary?.queued ?? 0) === 0 && (status.queueSummary?.processing ?? 0) === 0 && (status.queueSummary?.done ?? 0) > 0) {
+      return 'intake 已接收，等待桥接拉取 / 结果回写 ⏳';
+    }
+    return 'intake 已接收，等待 worker 开始 / 镜像回写 ⏳';
+  }
+  if (status.intakeStatusSource === 'mirror') {
+    return '镜像已接住当前 job ✅';
+  }
+  return '已接收，等待下一步处理 ⏳';
+}
+
+function getQueueMirrorLabel(status: UploadStatus | null) {
+  const health = status?.queueSummary?.health?.ok;
+  if (health === true) {
+    return status?.intakeStatusSource === 'persistent'
+      ? '镜像健康，但当前 job 仍主要来自 persistent intake 状态 ✅'
+      : '镜像健康 ✅';
+  }
+  if (health === false) {
+    return '发现漂移 ⚠️';
+  }
+  if (status?.intakeStatusSource === 'persistent') {
+    return '镜像摘要暂未返回；当前先信 persistent intake 状态 ⏳';
+  }
+  if (status?.queueSummary) {
+    return '已返回摘要 ⏳';
+  }
+  return '等待摘要 ⏳';
+}
+
 type CharacterOption = { id: string; label: string; role: string };
 type SlotOption = { id: string; label: string };
 type ReplacementTarget = {
@@ -140,7 +215,7 @@ function splitFileName(name: string) {
   };
 }
 
-function buildUploadFilename(file: File, meta: { characterId?: string | null; action?: string | null; targetSlot?: string | null; assetKind?: string | null }) {
+function buildUploadFilename(file: File, meta: { characterId?: string | null; action?: string | null; targetSlot?: string | null; assetKind?: string | null }, forcedExt?: string) {
   const { base, ext } = splitFileName(file.name);
   const prefix = [
     slugifySegment(meta.characterId, 'character'),
@@ -149,7 +224,75 @@ function buildUploadFilename(file: File, meta: { characterId?: string | null; ac
     slugifySegment(meta.assetKind, 'asset'),
   ].join('__');
   const cleanBase = slugifySegment(base, 'upload');
-  return `${prefix}__${cleanBase}${ext}`;
+  return `${prefix}__${cleanBase}${forcedExt ?? ext}`;
+}
+
+function isHeicLikeFile(file: File) {
+  const normalizedType = (file.type || '').toLowerCase();
+  const normalizedName = file.name.toLowerCase();
+  return normalizedType === 'image/heic'
+    || normalizedType === 'image/heif'
+    || normalizedType === 'image/heic-sequence'
+    || normalizedType === 'image/heif-sequence'
+    || normalizedName.endsWith('.heic')
+    || normalizedName.endsWith('.heif');
+}
+
+async function fileToDataUrl(file: File) {
+  return await new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = () => reject(new Error(`读取文件失败：${file.name}`));
+    reader.onload = () => {
+      if (typeof reader.result !== 'string') {
+        reject(new Error(`无法读取文件内容：${file.name}`));
+        return;
+      }
+      resolve(reader.result);
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+async function convertHeicLikeFileToPng(file: File) {
+  const imageUrl = await fileToDataUrl(file);
+  const image = await new Promise<HTMLImageElement>((resolve, reject) => {
+    const nextImage = new Image();
+    nextImage.onload = () => resolve(nextImage);
+    nextImage.onerror = () => reject(new Error(`当前浏览器无法直接解码 HEIC/HEIF：${file.name}`));
+    nextImage.src = imageUrl;
+  });
+
+  const canvas = document.createElement('canvas');
+  canvas.width = image.naturalWidth || image.width;
+  canvas.height = image.naturalHeight || image.height;
+  const context = canvas.getContext('2d');
+  if (!context) {
+    throw new Error('浏览器当前无法创建图片转换画布。');
+  }
+  context.drawImage(image, 0, 0);
+
+  const blob = await new Promise<Blob | null>((resolve) => {
+    canvas.toBlob(resolve, 'image/png');
+  });
+  if (!blob) {
+    throw new Error(`HEIC/HEIF 转 PNG 失败：${file.name}`);
+  }
+
+  const { base } = splitFileName(file.name);
+  return new File([blob], `${base}.png`, { type: 'image/png' });
+}
+
+async function normalizeMobileUploadFiles(files: File[]) {
+  const normalized: { original: File; upload: File; normalizedFrom?: string }[] = [];
+  for (const file of files) {
+    if (!isHeicLikeFile(file)) {
+      normalized.push({ original: file, upload: file });
+      continue;
+    }
+    const converted = await convertHeicLikeFileToPng(file);
+    normalized.push({ original: file, upload: converted, normalizedFrom: file.name });
+  }
+  return normalized;
 }
 
 const assetKindLabel: Record<string, string> = {
@@ -213,7 +356,7 @@ function uploadWithProgress(url: string, formData: FormData, onProgress: (percen
     };
 
     xhr.ontimeout = () => reject(new Error('Upload timed out after 90s. The intake endpoint may be slow or unreachable; please retry and check whether the persistent intake host is healthy.'));
-    xhr.onerror = () => reject(new Error('Network error during upload. Persistent intake may be unreachable or blocked by CORS / DNS / preflight. If this is the public site, the most likely current cause is the live intake server still rejecting OPTIONS preflight.'));
+    xhr.onerror = () => reject(new Error('Network error during upload. Persistent intake may be unreachable due to a temporary network, DNS, SSL, CORS, or service-health issue. If this is the public site, recheck the intake host and status API health before blaming the asset file itself.'));
     xhr.send(formData);
   });
 }
@@ -373,6 +516,8 @@ export default function GeneratorClient({
       if (data?.ok) {
         lastStatusData = data as UploadStatus;
         setStatus(lastStatusData);
+        const source = lastStatusData.intakeStatusSource;
+        const hasReliablePersistentStatus = source === 'persistent' || source === 'mirror';
         const percent = Math.max(5, Number(data.progress?.percent ?? 5));
         const hasProcessedPreview = Boolean(data.processedPreviewUrl);
         const hasPreview = Boolean(data.previewUrl);
@@ -389,6 +534,9 @@ export default function GeneratorClient({
         }
         if (percent >= 65 || hasProcessedPreview) {
           applyStatusProgressToItems('ready', Math.max(65, percent));
+        }
+        if ((data.status === 'failed' || data.status === 'error' || data.status === 'unknown') && hasReliablePersistentStatus) {
+          return;
         }
       }
       await new Promise((resolve) => window.setTimeout(resolve, 2500));
@@ -418,6 +566,7 @@ export default function GeneratorClient({
       if (!files.length) {
         throw new Error('请先选择至少一个参考图或动画素材文件再上传。');
       }
+      const normalizedFiles = await normalizeMobileUploadFiles(files);
       const nextRole = String(formData.get('role') ?? '');
       const nextCharacterId = String(formData.get('characterId') ?? '');
       const nextCharacterLabel = String(formData.get('characterLabel') ?? '');
@@ -431,21 +580,22 @@ export default function GeneratorClient({
         uploadFormData.append(key, value);
       }
 
-      const renamedFiles = files.map((file) => {
-        const uploadName = buildUploadFilename(file, {
+      const renamedFiles = normalizedFiles.map(({ original, upload, normalizedFrom }) => {
+        const forcedExt = upload.type === 'image/png' && isHeicLikeFile(original) ? '.png' : undefined;
+        const uploadName = buildUploadFilename(upload, {
           characterId: nextCharacterId,
           action: nextAction,
           targetSlot: nextTargetSlot,
           assetKind: nextAssetKind,
-        });
-        const renamedFile = new File([file], uploadName, { type: file.type || 'application/octet-stream' });
+        }, forcedExt);
+        const renamedFile = new File([upload], uploadName, { type: upload.type || 'application/octet-stream' });
         uploadFormData.append('referenceFiles', renamedFile);
-        return { original: file, uploadName };
+        return { original, uploadName, normalizedFrom };
       });
 
-      setUploadItems(renamedFiles.map(({ original, uploadName }, index) => ({
+      setUploadItems(renamedFiles.map(({ original, uploadName, normalizedFrom }, index) => ({
         id: `${original.name}-${index}-${original.size}`,
-        name: `${original.name} → ${uploadName}`,
+        name: normalizedFrom ? `${original.name} → PNG → ${uploadName}` : `${original.name} → ${uploadName}`,
         size: original.size,
         status: 'pending',
         progress: 5,
@@ -639,6 +789,7 @@ export default function GeneratorClient({
               ref={fileInputRef}
               name="referenceFiles"
               type="file"
+              accept="image/png,image/jpeg,image/webp,image/gif,image/heic,image/heif,.png,.jpg,.jpeg,.webp,.gif,.heic,.heif"
               multiple
               onChange={(event) => {
                 const files = Array.from(event.target.files ?? []);
@@ -652,6 +803,7 @@ export default function GeneratorClient({
               }}
               className="rounded-2xl border border-dashed border-cyan-300/25 bg-slate-950/60 px-4 py-6"
             />
+            <div className="text-xs leading-6 text-slate-400">手机上传支持 HEIC / HEIF，前端会先自动转成 PNG 再进入队列。</div>
           </label>
 
           {uploadItems.length > 0 ? (
@@ -706,6 +858,12 @@ export default function GeneratorClient({
             <p className="mt-2 text-sm leading-7 text-emerald-100/90">
               当前队列深度：{queueDepth}。角色类型：{role || '未提供'} / 具体角色：{characterLabel || characterId || '未提供'} / 动作：{action || '未提供'} / 槽位：{targetSlot || '未提供'} / 文件数：{uploadCount || '0'}
             </p>
+            {status?.status === 'done' && !status?.processedPreviewUrl ? (
+              <div className="mt-4 rounded-2xl border border-amber-300/20 bg-amber-400/10 p-4 text-sm leading-7 text-amber-50/95">
+                <div className="text-xs uppercase tracking-[0.25em] text-amber-200">处理完成，但还没拿到透明预览</div>
+                <div className="mt-2">这次任务已经完成并有原始预览，但透明背景 preview / atlas 结果还没写回当前状态接口。优先去内部追踪台核对该 job 的 result 文件、processed preview 和 worker 回写，而不是误以为上传失败。</div>
+              </div>
+            ) : null}
             <div className="mt-4 h-4 overflow-hidden rounded-full bg-black/30">
               <div className="h-full rounded-full bg-cyan-300 transition-all duration-500" style={{ width: `${status?.progress?.percent ?? 0}%` }} />
             </div>
@@ -715,11 +873,13 @@ export default function GeneratorClient({
             </div>
             <div className="mt-4 grid gap-2 text-sm text-emerald-50/90 md:grid-cols-2">
               <div>接收模式：{status?.storage === 'hetzner-disk-persistent' ? 'Persistent intake ✅' : status?.storage === 'vercel-ephemeral-preview' ? 'Preview fallback ⚠️' : actionUrl.includes('aetherlan-intake.montecarloo.com') ? 'Persistent intake（等待浏览器确认） ⏳' : '等待识别 ⏳'}</div>
-              <div>状态来源：{isFallbackQueuedStatus(status) ? '前端兜底排队态（镜像未追上） ⚠️' : status?.found ? '后端状态 / 队列数据 ✅' : isPersistentPreflightDrift(error, actionUrl) ? '浏览器预检失败（部署漂移） ⚠️' : '等待状态接口 ⏳'}</div>
-              <div>1. 已上传到服务器 {status || uploadItems.some((item) => item.status !== 'pending') ? '✅' : '⬜'}</div>
-              <div>2. 已进入队列 {status?.found || uploadItems.some((item) => item.status === 'queued' || item.status === 'processing' || item.status === 'done') ? '✅' : '⬜'}</div>
-              <div>3. 后台处理中 {(status?.progress?.percent ?? 0) >= 35 || uploadItems.some((item) => item.status === 'processing' || item.status === 'done') ? '✅' : '⬜'}</div>
-              <div>4. 已可应用到前端 {(status?.processedPreviewUrl || (status?.progress?.percent ?? 0) >= 65 || uploadItems.some((item) => item.status === 'done')) ? '✅' : '⬜'}</div>
+              <div>状态来源：{getStatusSourceLabel(status, error, actionUrl)}</div>
+              <div>交接状态：{getHandoffStateLabel(status)}</div>
+              <div>队列镜像：{getQueueMirrorLabel(status)}</div>
+              <div>1. 浏览器已提交上传 {status || uploadItems.some((item) => item.status !== 'pending') ? '✅' : '⬜'}</div>
+              <div>2. Intake 已接收并建 job {status?.found || uploadItems.some((item) => item.status === 'queued' || item.status === 'processing' || item.status === 'done') ? '✅' : '⬜'}</div>
+              <div>3. 队列 / worker 处理中 {hasConfirmedWorkerActivity(status) || uploadItems.some((item) => item.status === 'processing' || item.status === 'done') ? '✅' : '⬜'}</div>
+              <div>4. 结果已可回流前端 {(status?.processedPreviewUrl || (status?.progress?.percent ?? 0) >= 65 || uploadItems.some((item) => item.status === 'done')) ? '✅' : '⬜'}</div>
             </div>
             {isFallbackQueuedStatus(status) ? (
               <div className="mt-4 rounded-2xl border border-amber-300/20 bg-amber-400/10 p-4 text-sm leading-7 text-amber-50/95">
@@ -731,6 +891,22 @@ export default function GeneratorClient({
               <div className={`mt-4 rounded-2xl border p-4 text-sm leading-7 ${status?.storage === 'vercel-ephemeral-preview' ? 'border-amber-300/20 bg-amber-400/10 text-amber-50' : 'border-white/10 bg-black/15 text-emerald-50/90'}`}>
                 <div className="text-xs uppercase tracking-[0.25em] text-emerald-200">状态说明</div>
                 <div className="mt-2">{status.message}</div>
+              </div>
+            ) : null}
+            {status?.found && !status?.processedPreviewUrl ? (
+              <div className="mt-4 rounded-2xl border border-cyan-300/20 bg-cyan-400/10 p-4 text-sm leading-7 text-cyan-50/95">
+                <div className="text-xs uppercase tracking-[0.25em] text-cyan-200">如何解读当前状态</div>
+                <div className="mt-2">
+                  {getHandoffStateLabel(status) === 'intake 已接收，等待 worker 开始 / 镜像回写 ⏳'
+                    ? '这通常说明浏览器上传已经成功，persistent intake 也收到了 job；但现在还更像是“已入队等待后处理启动”，而不是 worker 已经开始跑。先别把 queued 误判成失败，也别过早把它当成已经处理中了。'
+                    : getHandoffStateLabel(status) === 'intake 已接收，等待桥接拉取 / 结果回写 ⏳'
+                      ? '这次上传已经被 persistent intake 接住了，但当前远端队列摘要没有显示新的 queued / processing 数，说明更像是在等本地桥接把新 job 拉回镜像并写回结果，而不是上传本身失败。'
+                      : getHandoffStateLabel(status) === 'intake 已接收，镜像同步中 ⏳'
+                        ? '这次上传已经拿到了 job 和绑定信息，但当前页面还在用安全兜底态等待镜像追上，所以短时间内看到 queued 属于正常现象。'
+                        : status?.intakeStatusSource === 'persistent' && status?.queueSummary?.health?.ok === true
+                          ? '当前这个 job 的状态直接来自 persistent intake，而队列镜像健康摘要只是补充说明整体桥接没漂。也就是说，这里显示 queued 并不代表状态接口坏了，只是 worker 还没把这个新 job 推进到 processing / done。'
+                          : null}
+                </div>
               </div>
             ) : null}
             {status?.uploads?.length ? (
@@ -750,7 +926,7 @@ export default function GeneratorClient({
               <div className="mt-4 rounded-2xl border border-cyan-300/20 bg-cyan-400/10 p-4 text-sm leading-7 text-cyan-50/95">
                 <div className="text-xs uppercase tracking-[0.25em] text-cyan-200">下一步交接</div>
                 <div className="mt-2">worker 状态：{status.workerPayload.status ?? 'unknown'}</div>
-                <div>worker next step：{status.workerPayload.nextStep ?? 'unknown'}</div>
+                <div>handoff next step：{status.workerPayload.nextStep ?? 'unknown'}</div>
                 <div>payload 上传数：{status.workerPayload.uploadCount ?? status.uploads?.length ?? 0}</div>
                 {status.workerPayload.uploadNames?.length ? (
                   <div className="break-all text-xs text-cyan-100/85">payload 文件：{status.workerPayload.uploadNames.join(' | ')}</div>
@@ -761,10 +937,10 @@ export default function GeneratorClient({
               <div className={`mt-4 rounded-2xl border p-4 text-sm leading-7 ${status.queueSummary.health?.ok === false ? 'border-amber-300/20 bg-amber-400/10 text-amber-50' : 'border-white/10 bg-black/15 text-emerald-50/90'}`}>
                 <div className="text-xs uppercase tracking-[0.25em] text-emerald-200">队列镜像健康</div>
                 <div className="mt-2 grid gap-2 md:grid-cols-2">
-                  <div>排队中：{status.queueSummary.queued ?? 0}</div>
-                  <div>处理中：{status.queueSummary.processing ?? 0}</div>
-                  <div>已完成：{status.queueSummary.done ?? 0}</div>
-                  <div>失败：{status.queueSummary.failed ?? 0}</div>
+                  <div>镜像排队中：{status.queueSummary.queued ?? 0}</div>
+                  <div>镜像处理中：{status.queueSummary.processing ?? 0}</div>
+                  <div>镜像已完成：{status.queueSummary.done ?? 0}</div>
+                  <div>镜像失败：{status.queueSummary.failed ?? 0}</div>
                 </div>
                 {status.queueSummary.health?.ok === false ? (
                   <div className="mt-3 rounded-2xl border border-amber-300/20 bg-black/15 p-3 text-xs leading-6 text-amber-50/95">
@@ -804,12 +980,12 @@ export default function GeneratorClient({
                 {isPersistentPreflightDrift(error, actionUrl) ? (
                   <div className="mt-3 rounded-2xl border border-amber-300/20 bg-black/15 p-3 text-xs leading-6 text-amber-50/95">
                     <div className="font-semibold text-amber-100">更像是浏览器预检失败，不像素材文件本身有问题。</div>
-                    <div className="mt-1">当前公网最常见原因是 persistent intake 还在返回 <span className="font-mono">OPTIONS 501</span>，所以浏览器会在真正 POST 之前就拦住上传。</div>
-                    <div className="mt-1">你可以先做两件事：1) 去内部追踪台确认这次是否其实没有产生 job；2) 等后端把最新 intake 服务重启上线后再重试。</div>
+                    <div className="mt-1">这更像是浏览器到 intake 入口之间的网络 / DNS / SSL / CORS / 服务健康问题，而不是素材文件本身坏了。</div>
+                    <div className="mt-1">你可以先做两件事：1) 去内部追踪台确认这次是否其实已经产生 job；2) 复查 intake host 与 status API 健康后再重试。</div>
                   </div>
                 ) : actionUrl.includes('aetherlan-intake.montecarloo.com') ? (
                   <div className="mt-3 rounded-2xl border border-amber-300/20 bg-black/15 p-3 text-xs leading-6 text-amber-50/95">
-                    当前页面正在把文件直传到 persistent intake。若浏览器里是“刚点上传就失败”，通常不是 PNG 坏了，而是 intake 服务还没放行浏览器预检请求（OPTIONS / CORS preflight）。这种情况下你仍然可以先去内部追踪台核对是否已有 job 入队，或让后端把最新 intake_server.py 部署并重启后再试。
+                    当前页面正在把文件直传到 persistent intake。若浏览器里是“刚点上传就失败”，通常先别急着怀疑 PNG 坏了，更常见的是 intake 入口短暂不可达，或浏览器到 intake 的网络 / SSL / CORS 链路出了问题。你仍然可以先去内部追踪台核对是否已有 job 入队，再决定是重试上传还是继续查 intake 健康。
                   </div>
                 ) : null}
               </div>

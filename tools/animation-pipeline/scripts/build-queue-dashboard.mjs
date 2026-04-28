@@ -17,6 +17,26 @@ function sanitizeUpload(upload) {
   };
 }
 
+function getIsoTime(value) {
+  if (!value || typeof value !== 'string') return null;
+  const parsed = Date.parse(value);
+  if (Number.isNaN(parsed)) return null;
+  return new Date(parsed).toISOString();
+}
+
+function getAgeMinutes(value, now = Date.now()) {
+  if (!value || typeof value !== 'string') return null;
+  const parsed = Date.parse(value);
+  if (Number.isNaN(parsed)) return null;
+  return Math.max(0, Math.round((now - parsed) / 60000));
+}
+
+function compareIsoDesc(a, b) {
+  const aTime = Date.parse(a?.createdAt || a?.updatedAt || '') || 0;
+  const bTime = Date.parse(b?.createdAt || b?.updatedAt || '') || 0;
+  return bTime - aTime;
+}
+
 function sanitizeResult(result) {
   return {
     jobId: result.jobId,
@@ -64,6 +84,13 @@ function sanitizeResult(result) {
   };
 }
 
+function normalizeWorkerNextStep(nextStep) {
+  if (!nextStep || nextStep === 'dispatch-worker-from-queue') {
+    return 'mirror-to-worker-and-process-queue';
+  }
+  return nextStep;
+}
+
 function sanitizeJob(job) {
   return {
     id: job.id,
@@ -106,7 +133,7 @@ function sanitizeJob(job) {
           uploadCount: job.workerPayload.uploadCount,
           uploadNames: job.workerPayload.uploadNames,
           status: job.workerPayload.status,
-          nextStep: job.workerPayload.nextStep,
+          nextStep: normalizeWorkerNextStep(job.workerPayload.nextStep),
         }
       : undefined,
   };
@@ -115,9 +142,12 @@ function sanitizeJob(job) {
 export async function buildQueueDashboard() {
   await mkdir(queueDir, { recursive: true });
   await mkdir(outputDir, { recursive: true });
+  await mkdir(queueResultsDir, { recursive: true });
 
+  const now = Date.now();
+  const STALE_QUEUED_MINUTES = Number.parseInt(process.env.AETHERLAN_STALE_QUEUED_MINUTES || '30', 10);
   const files = (await readdir(queueDir)).filter((file) => file.endsWith('.json') && file !== 'index.json').sort();
-  const resultFiles = await readdir(queueResultsDir).catch(() => []).then((items) => items.filter((file) => file.endsWith('.json')).sort());
+  const resultFiles = (await readdir(queueResultsDir)).filter((file) => file.endsWith('.json')).sort();
   const jobs = await Promise.all(files.map(async (file) => JSON.parse(await readFile(join(queueDir, file), 'utf8'))));
   const results = await Promise.all(resultFiles.map(async (file) => JSON.parse(await readFile(join(queueResultsDir, file), 'utf8'))));
 
@@ -145,6 +175,32 @@ export async function buildQueueDashboard() {
       createdAt: result.createdAt,
     }));
 
+  const sortedJobs = [...jobs].sort(compareIsoDesc);
+  const activeJobs = sortedJobs.filter((job) => job.status === 'queued' || job.status === 'processing');
+  const staleQueuedJobs = activeJobs
+    .filter((job) => job.status === 'queued')
+    .map((job) => {
+      const queuedMinutes = getAgeMinutes(job.updatedAt || job.createdAt, now);
+      return {
+        jobId: job.id,
+        createdAt: getIsoTime(job.createdAt),
+        updatedAt: getIsoTime(job.updatedAt),
+        queuedMinutes,
+        exceedsThreshold: queuedMinutes != null ? queuedMinutes >= STALE_QUEUED_MINUTES : false,
+        storage: job.storage,
+        request: job.request
+          ? {
+              characterId: job.request.characterId,
+              action: job.request.action,
+              targetSlot: job.request.targetSlot,
+              assetKind: job.request.assetKind,
+            }
+          : undefined,
+      };
+    })
+    .sort((a, b) => (b.queuedMinutes || 0) - (a.queuedMinutes || 0))
+    .slice(0, 10);
+
   const payload = {
     generatedAt: new Date().toISOString(),
     total: jobs.length,
@@ -156,11 +212,18 @@ export async function buildQueueDashboard() {
       ok: statusMismatches.length === 0 && orphanResults.length === 0,
       statusMismatchCount: statusMismatches.length,
       orphanResultCount: orphanResults.length,
+      activeJobCount: activeJobs.length,
+      oldestActiveJobAt: getIsoTime(activeJobs[activeJobs.length - 1]?.createdAt),
+      newestActiveJobAt: getIsoTime(activeJobs[0]?.createdAt),
+      staleQueuedJobCount: staleQueuedJobs.length,
+      staleQueuedThresholdMinutes: STALE_QUEUED_MINUTES,
+      staleQueuedOverThresholdCount: staleQueuedJobs.filter((job) => job.exceedsThreshold).length,
     },
     statusMismatches,
     orphanResults,
+    staleQueuedJobs,
     jobs: jobs.map(sanitizeJob),
-    recentResults: results.slice(-10).reverse().map(sanitizeResult),
+    recentResults: [...results].sort(compareIsoDesc).slice(0, 10).map(sanitizeResult),
   };
 
   await writeFile(join(outputDir, 'queue-dashboard.json'), `${JSON.stringify(payload, null, 2)}\n`, 'utf8');

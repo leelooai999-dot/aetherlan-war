@@ -47,6 +47,7 @@ function sanitizeQueueResult(result) {
           bundlePlan: Boolean(result.outputs.bundlePlan),
         }
       : undefined,
+    failureReason: result.failureReason,
     workspace: result.workspace
       ? {
           root: true,

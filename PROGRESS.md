@@ -219,6 +219,12 @@
 ## 2026-04-25 08:40 PDT
 - 已继续把线上接收结果往 `/pipeline` 回流：从 generator 成功页跳转到 pipeline 时，会把最近一次线上接收的 job id、角色、动作、provider、文件数和文件名一起带过去
 
+## 2026-04-28 00:45 PDT
+- 已收紧后端 smoke 验证：`tools/animation-pipeline/scripts/smoke-queue-flow.mjs` 现在除确认 synthetic job 能从 queue 走到 `done` 外，也会同时断言 `queue-dashboard.json.health.ok === true`
+- 这让 queue/result 不一致、孤儿 result 文件之类的回传漂移问题，能在最小 smoke gate 里更早暴露，而不是等前端状态异常后再倒查
+- 已重新运行两条后端最小验证：`node tools/animation-pipeline/scripts/smoke-queue-flow.mjs` 与 `node tools/animation-pipeline/scripts/smoke-intake-status.mjs`，两者均返回 `ok: true`
+- 下一步：继续把这套 backend smoke/checklist 纳入 cron 常规节奏，并优先追 live intake 进程与 workspace 代码是否仍有部署漂移
+
 ## 2026-04-25 13:06 PDT
 - 已确认现有 Hetzner 主机 `178.156.247.8` 正在运行，规格相当于 CPX21 档：约 3.7 GiB RAM、75G 磁盘、44G 可用
 - 已确认这台机上当前只存在两个独立项目目录：`/opt/montecarloo` 与 `/opt/pyeces`，因此 Aetherlan War 继续复用同机是可行的，但必须严格目录 / env / systemd 隔离
@@ -345,6 +351,21 @@
 ## 2026-04-25 22:43 PDT
 - 继续向下收紧到 JSON API 响应体本身，发现 `/api/generator` 的 JSON 模式此前仍会返回 `provider`、`notes`、真实文件名以及 `workerPayload.provider`，这对直接调接口的人仍属于多余暴露
 - 已在 `frontend/src/app/api/generator/route.ts` 与 Hetzner `backend/intake_server.py` 增加 `sanitize_*_for_client` 输出，只向客户端返回最小必要字段：jobId、时间、状态、角色、动作、帧数、intent、`asset-1` 风格抽象资源标签、大小、类型、以及下一步状态说明
+
+## 2026-04-27 23:34 PDT
+- 已继续推进 `/prototype` 全屏战斗演出的可读性，聚焦修正“命中闪白 / hit-stop / 后坐反馈 / 伤害数字”过于挤在一起的问题
+- 普攻与技能的 damage/heal 数字现在都会在 hit-stop 结束后再延迟短促揭示，并分别使用独立 fade-in 时长，移动端和小屏上更不容易把结果数字看成闪光残影
+- 已通过 `frontend` 生产构建验证（`npm run build`），这是一项纯战斗演出节奏优化，不改动战斗数值或回合逻辑
+
+## 2026-04-28 01:41 PDT
+- 已继续收口 `/prototype` 全屏战斗结果数字的移动端可读性：为 damage / heal 结果增加深色圆角背板，并进一步拉开 impact flash 与数字显现之间的时间差
+- 普攻与技能的结果数字现在更像“命中后再读结果”，而不是和白闪、震屏、后坐同时挤在一帧里；小屏上更不容易丢读
+- 已再次通过 `frontend` 生产构建验证（`npm run build`），属于纯表现层 polish，不改战斗数值与流程
+
+## 2026-04-28 02:15 PDT
+- 已继续打磨 `/prototype` 棋盘层切入全屏战斗前的前摇一致性：把 attackerFocus 与 targetFocus 的清理时长重新对齐，避免攻击者高亮先消失、目标高亮却多挂一拍的轻微脱节感
+- 现在攻击者蓄势、目标锁定、方向线和圆环提示会更接近作为一组镜头语言一起收束，进入全屏演出前不再那么像两个独立计时器各自结束
+- 已通过 `frontend` 生产构建验证（`npm run build`），属于纯 battle presentation 节奏优化，不改伤害、流程或回合规则
 
 ## 2026-04-25 17:58 PDT
 - 已开始把最新一轮 `/pipeline` persistent 来源追踪升级部署到 Vercel production

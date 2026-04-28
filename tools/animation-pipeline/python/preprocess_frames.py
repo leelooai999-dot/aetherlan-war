@@ -5,6 +5,8 @@ import json
 import sys
 from pathlib import Path
 
+from PIL import UnidentifiedImageError
+
 try:
     from PIL import Image
 except Exception:
@@ -71,7 +73,17 @@ def main() -> int:
         return 3
 
     output_dir.mkdir(parents=True, exist_ok=True)
-    original = Image.open(input_path).convert("RGBA")
+    try:
+        original = Image.open(input_path).convert("RGBA")
+    except UnidentifiedImageError:
+        print(json.dumps({
+            "ok": False,
+            "error": "unrecognized image file",
+            "input": str(input_path),
+            "hint": "Upload a real PNG/WebP sprite sheet or character art file instead of a renamed placeholder/smoke file.",
+        }))
+        return 4
+
     cleaned, bg_report = remove_background(original.copy())
     bbox = trim_bbox(cleaned)
     trimmed = cleaned.crop(bbox) if bbox else cleaned

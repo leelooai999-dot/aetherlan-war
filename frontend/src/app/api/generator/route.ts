@@ -12,14 +12,20 @@ function sanitizeJobForClient(job: Record<string, any>) {
     request: job.request
       ? {
           role: job.request.role ?? null,
+          characterId: job.request.characterId ?? null,
+          characterLabel: job.request.characterLabel ?? null,
           action: job.request.action ?? null,
+          targetSlot: job.request.targetSlot ?? null,
+          assetKind: job.request.assetKind ?? null,
           frameCount: job.request.frameCount ?? null,
+          provider: job.request.provider ?? null,
           intent: job.request.intent ?? null,
         }
       : undefined,
     uploads: Array.isArray(job.uploads)
       ? job.uploads.map((file: Record<string, any>, index: number) => ({
           label: `asset-${index + 1}`,
+          name: file.name,
           size: file.size,
           type: file.type,
         }))
@@ -72,7 +78,9 @@ export async function POST(request: Request) {
     const entries = Object.fromEntries(formData.entries());
     payload = entries;
 
-    const files = formData.getAll('referenceFiles').filter((item): item is File => item instanceof File && item.size > 0);
+    const files = ['referenceFiles', 'uploads', 'references']
+      .flatMap((field) => formData.getAll(field))
+      .filter((item): item is File => item instanceof File && item.size > 0);
     const jobKey = fallbackJobKey();
 
     uploadedFiles = files.map((file) => ({
@@ -173,6 +181,18 @@ export async function POST(request: Request) {
     ok: true,
     status: 'queued',
     job: sanitizeJobForClient(job),
+    workerPayload: buildWorkerReadyPayload({
+      jobId: job.id,
+      role: typeof payload.role === 'string' ? payload.role : null,
+      characterId: typeof payload.characterId === 'string' ? payload.characterId : null,
+      characterLabel: typeof payload.characterLabel === 'string' ? payload.characterLabel : null,
+      action: typeof payload.action === 'string' ? payload.action : null,
+      targetSlot: typeof payload.targetSlot === 'string' ? payload.targetSlot : null,
+      assetKind: typeof payload.assetKind === 'string' ? payload.assetKind : null,
+      provider: typeof payload.provider === 'string' ? payload.provider : null,
+      uploadCount: uploadedFiles.length,
+      uploadNames: uploadedFiles.map((file) => file.name),
+    }),
     queueDepth: 'preview',
     message: 'Preview queue accepted. Persistent storage / worker hookup is still needed before real background removal and animation generation run online.',
   });

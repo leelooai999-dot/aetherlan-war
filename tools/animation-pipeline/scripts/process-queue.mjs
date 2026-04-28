@@ -156,7 +156,7 @@ async function copyPreviewArtifacts(jobId, copiedUploads, preprocessResults) {
     }
   }
 
-  return { previewUrl, processedPreviewUrl };
+  return { previewUrl, processedPreviewUrl, hadProcessedPreview: Boolean(successfulPreprocess?.output) };
 }
 
 export async function processQueue() {
@@ -277,6 +277,9 @@ export async function processQueue() {
     );
 
     const previewArtifacts = await copyPreviewArtifacts(job.id, copiedUploads, preprocessResults);
+    const requiresBattleReadyOutput = job.request?.assetKind === 'battle-animation' || job.request?.assetKind === 'fullscreen-fx';
+    const hasBattleReadyOutput = Boolean(previewArtifacts.hadProcessedPreview);
+    const processingFailed = requiresBattleReadyOutput && !hasBattleReadyOutput;
     const primarySheetPath = successfulPreprocess?.output ?? copiedUploads[0]?.jobInputPath ?? null;
     const imageLikePath = primarySheetPath && ['.png', '.webp', '.jpg', '.jpeg', '.gif'].includes(extname(primarySheetPath).toLowerCase())
       ? primarySheetPath
@@ -287,9 +290,11 @@ export async function processQueue() {
     const result = {
       jobId: job.id,
       createdAt: new Date().toISOString(),
-      status: 'done',
+      status: processingFailed ? 'failed' : 'done',
       adapter: job.adapter,
-      note: 'Queue consumer created job workspace, copied uploaded inputs, emitted stub frame/atlas/bundle manifests, and now attempts image trim preprocessing for uploaded PNG/WebP sources.',
+      note: processingFailed
+        ? 'Queue consumer accepted the upload and created workspace artifacts, but failed to produce a processed runtime-ready asset. Preview-only battle-animation jobs are now marked failed instead of pretending to be applied.'
+        : 'Queue consumer created job workspace, copied uploaded inputs, emitted stub frame/atlas/bundle manifests, and now attempts image trim preprocessing for uploaded PNG/WebP sources.',
       request: job.request,
       uploads: copiedUploads,
       source: {
@@ -319,11 +324,12 @@ export async function processQueue() {
         bundlePlan: join(outputsDir, 'bundle.stub.json'),
         preprocessReport: join(outputsDir, 'output-manifest.json'),
       },
+      failureReason: processingFailed ? 'missing-processed-runtime-asset' : null,
       previewUrl: previewArtifacts.previewUrl,
       processedPreviewUrl: previewArtifacts.processedPreviewUrl,
     };
 
-    job.status = 'done';
+    job.status = processingFailed ? 'failed' : 'done';
     job.updatedAt = new Date().toISOString();
     job.resultPath = `output/queue-results/${job.id}.result.json`;
 

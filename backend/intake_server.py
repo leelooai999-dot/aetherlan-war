@@ -61,7 +61,7 @@ def build_worker_payload(
         'uploadCount': len(upload_names),
         'uploadNames': upload_names,
         'status': 'persistent-intake-received',
-        'nextStep': 'dispatch-worker-from-queue',
+        'nextStep': 'mirror-to-worker-and-process-queue',
     }
 
 
@@ -254,7 +254,8 @@ class IntakeHandler(BaseHTTPRequestHandler):
 
     def do_OPTIONS(self) -> None:
         parsed = urlparse(self.path)
-        if parsed.path not in ('/api/generator', '/api/generator/status', '/health'):
+        normalized_path = parsed.path.rstrip('/') or '/'
+        if normalized_path not in ('/api/generator', '/api/generator/status', '/health'):
             send_error_payload(self, 404, 'Not found', code='not-found', path=parsed.path)
             return
         self.send_response(204)
@@ -264,7 +265,8 @@ class IntakeHandler(BaseHTTPRequestHandler):
 
     def do_GET(self) -> None:
         parsed = urlparse(self.path)
-        if parsed.path == '/health':
+        normalized_path = parsed.path.rstrip('/') or '/'
+        if normalized_path == '/health':
             self._send_json(200, {
                 'ok': True,
                 'service': 'aetherlan-war-intake',
@@ -283,9 +285,7 @@ class IntakeHandler(BaseHTTPRequestHandler):
                 },
             })
             return
-        if parsed.path == '/api/generator/status/' and not parsed.query:
-            parsed = parsed._replace(path='/api/generator/status')
-        if parsed.path == '/api/generator/status':
+        if normalized_path == '/api/generator/status':
             query = parse_qs(parsed.query)
             job_id = (query.get('jobId') or [None])[0]
             if not job_id:
@@ -299,18 +299,7 @@ class IntakeHandler(BaseHTTPRequestHandler):
                 return
             self._send_json(200, load_status_payload(job_id))
             return
-        if parsed.path == '/api/generator':
-            send_error_payload(
-                self,
-                405,
-                'Use POST multipart form data on /api/generator.',
-                code='method-not-allowed',
-                allowedMethod='POST',
-                health='/health',
-                statusEndpoint='/api/generator/status?jobId=...',
-            )
-            return
-        if parsed.path == '/api/generator/':
+        if normalized_path == '/api/generator':
             send_error_payload(
                 self,
                 405,
@@ -325,8 +314,9 @@ class IntakeHandler(BaseHTTPRequestHandler):
 
     def do_POST(self) -> None:
         parsed = urlparse(self.path)
-        if parsed.path != '/api/generator':
-            if parsed.path == '/api/generator/status':
+        normalized_path = parsed.path.rstrip('/') or '/'
+        if normalized_path != '/api/generator':
+            if normalized_path == '/api/generator/status':
                 query = parse_qs(parsed.query)
                 job_id = (query.get('jobId') or [None])[0]
                 if not job_id:
@@ -462,7 +452,7 @@ class IntakeHandler(BaseHTTPRequestHandler):
             },
             'uploads': upload_entries,
             'workerPayload': worker_payload,
-            'nextStep': 'Queued on persistent Hetzner intake. Worker dispatch is the next integration step.',
+            'nextStep': 'Queued on persistent Hetzner intake. Next expected handoff: mirror uploads/queue into the worker bridge, process the job, then push result writeback.',
         }
 
         (QUEUE_DIR / f'{job_id}.json').write_text(json.dumps(job, ensure_ascii=False, indent=2), encoding='utf-8')

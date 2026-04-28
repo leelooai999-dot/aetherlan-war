@@ -6,6 +6,7 @@ import { inferSpriteSheetLayout } from '@/lib/sprite-sheet';
 type QueueResult = {
   jobId: string;
   status?: string;
+  failureReason?: string | null;
   request?: {
     role?: string;
     characterId?: string;
@@ -24,6 +25,11 @@ type QueueResult = {
   detectedFrameHeight?: number;
   previewUrl?: string | null;
   processedPreviewUrl?: string | null;
+  outputs?: {
+    transparentFrames?: boolean;
+    atlasPacked?: boolean;
+    zipReady?: boolean;
+  };
 };
 
 type ShowcaseEntry = {
@@ -91,6 +97,8 @@ async function loadShowcaseByUnit(): Promise<ShowcaseByUnit> {
       const unitId = CHARACTER_ID_TO_UNIT_ID[result.request?.characterId ?? ''] ?? ROLE_TO_UNIT_ID[result.request?.role ?? ''];
       const slot = ACTION_TO_SLOT[result.request?.targetSlot ?? ''] ?? ACTION_TO_SLOT[result.request?.action ?? ''];
       if (!unitId || !slot || result.status !== 'done') continue;
+      const isBattleReady = Boolean(result.processedPreviewUrl || result.outputs?.atlasPacked || result.outputs?.transparentFrames);
+      if (!isBattleReady) continue;
       const url = result.processedPreviewUrl || result.previewUrl;
       if (!url) continue;
 

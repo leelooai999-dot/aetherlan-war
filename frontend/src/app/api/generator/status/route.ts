@@ -9,6 +9,7 @@ const configuredGeneratorActionUrl = (process.env.NEXT_PUBLIC_GENERATOR_ACTION_U
 type QueueResult = {
   jobId: string;
   status?: string;
+  failureReason?: string | null;
   request?: {
     role?: string;
     characterId?: string;
@@ -171,6 +172,9 @@ function buildProgress(result: QueueResult | null, queuedStatus?: string) {
       label: result?.processedPreviewUrl ? '处理完成，透明预览已生成' : '处理完成，可查看结果',
     };
   }
+  if (effectiveStatus === 'failed' && result?.failureReason === 'missing-processed-runtime-asset') {
+    return { percent: 100, stage: 'failed-runtime-asset', label: '处理失败：只拿到原始预览，未生成可应用到战斗的运行时素材' };
+  }
   if (result?.outputs?.atlasPacked) {
     return { percent: 85, stage: 'atlas-packed', label: '图集已打包' };
   }
@@ -222,6 +226,7 @@ export async function GET(request: Request) {
       return NextResponse.json({
         ...persistentStatus,
         found: true,
+        intakeStatusSource: 'persistent',
         queueSummary: persistentStatus.queueSummary ?? (dashboard
           ? {
               total: dashboard.total ?? null,
@@ -291,11 +296,21 @@ export async function GET(request: Request) {
         ? buildProgress(null, 'queued')
         : buildProgress(null, undefined);
 
+  const intakeStatusSource = result || job
+    ? 'mirror'
+    : (persistentStatusFound || hasPersistentStatusPayload)
+      ? 'persistent'
+      : shouldUseFallbackQueuedState
+        ? 'fallback'
+        : null;
+
   return NextResponse.json({
     ok: true,
     jobId,
     found: Boolean(job || result || persistentStatusFound || hasPersistentStatusPayload || shouldUseFallbackQueuedState),
+    intakeStatusSource,
     status,
+    failureReason: result?.failureReason ?? null,
     progress,
     request: result?.request ?? job?.request ?? persistentRequest ?? ((hasFallbackRequest || shouldPromotePersistentNotFound) ? fallbackRequest : null),
     previewUrl: result?.previewUrl ?? null,

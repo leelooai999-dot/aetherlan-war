@@ -9,7 +9,8 @@ FIXTURE_FILE="${AETHERLAN_SMOKE_FIXTURE:-$PROJECT_ROOT/../../tmp/aetherlan-male-
 TMP_HEADERS="${TMPDIR:-/tmp}/aetherlan-intake-headers.$$"
 TMP_BODY="${TMPDIR:-/tmp}/aetherlan-intake-body.$$"
 TMP_STATUS_HEADERS="${TMPDIR:-/tmp}/aetherlan-intake-status-headers.$$"
-trap 'rm -f "$TMP_HEADERS" "$TMP_BODY" "$TMP_STATUS_HEADERS"' EXIT
+TMP_STATUS_BODY="${TMPDIR:-/tmp}/aetherlan-intake-status-body.$$"
+trap 'rm -f "$TMP_HEADERS" "$TMP_BODY" "$TMP_STATUS_HEADERS" "$TMP_STATUS_BODY"' EXIT
 
 if [[ ! -f "$FIXTURE_FILE" ]]; then
   echo "missing smoke fixture: $FIXTURE_FILE" >&2
@@ -33,6 +34,8 @@ printf 'allow_origin=%s\n' "$allow_origin"
 printf 'allow_methods=%s\n' "$allow_methods"
 if [[ "$preflight_status" == "204" && -n "$allow_origin" ]]; then
   preflight_ok=1
+else
+  printf 'preflight_hint=%s\n' 'expected 204 + CORS headers; stale nginx/service code often shows up here first'
 fi
 
 printf '\n== POST %s/api/generator ==\n' "$BASE_URL"
@@ -50,6 +53,18 @@ if [[ -f "$TMP_BODY" ]]; then
   cat "$TMP_BODY"
 fi
 printf '\npost_status=%s\n' "$post_status"
+post_upload_count="$(python3 - <<'PY' "$TMP_BODY"
+import json, sys
+path = sys.argv[1]
+try:
+    with open(path, 'r', encoding='utf-8') as fh:
+        data = json.load(fh)
+    job = data.get('job') or {}
+    print(job.get('uploadCount') or len(job.get('uploads') or []))
+except Exception:
+    print('')
+PY
+)"
 if [[ "$post_status" == "200" ]]; then
   post_ok=1
 fi
@@ -65,15 +80,45 @@ except Exception:
 PY
 )"
 printf 'job_id=%s\n' "$job_id"
+printf 'post_upload_count=%s\n' "$post_upload_count"
+if [[ "$post_ok" == "1" && ( -z "$post_upload_count" || "$post_upload_count" == "0" ) ]]; then
+  printf 'post_hint=%s\n' 'POST reached intake but no files were persisted; suspect stale multipart parsing code or proxy/body handling drift'
+fi
 
 if [[ -n "$job_id" ]]; then
   printf '\n== GET %s/api/generator/status?jobId=%s ==\n' "$BASE_URL" "$job_id"
-  status_status="$(curl -sS -D "$TMP_STATUS_HEADERS" -o "$TMP_BODY" -w '%{http_code}' \
+  status_status="$(curl -sS -D "$TMP_STATUS_HEADERS" -o "$TMP_STATUS_BODY" -w '%{http_code}' \
     "$BASE_URL/api/generator/status?jobId=$job_id" || true)"
-  cat "$TMP_BODY"
+  cat "$TMP_STATUS_BODY"
   printf '\nstatus_status=%s\n' "$status_status"
-  if [[ "$status_status" == "200" ]]; then
+  status_found="$(python3 - <<'PY' "$TMP_STATUS_BODY"
+import json, sys
+path = sys.argv[1]
+try:
+    with open(path, 'r', encoding='utf-8') as fh:
+        data = json.load(fh)
+    print('1' if data.get('found') else '0')
+except Exception:
+    print('')
+PY
+)"
+  status_label="$(python3 - <<'PY' "$TMP_STATUS_BODY"
+import json, sys
+path = sys.argv[1]
+try:
+    with open(path, 'r', encoding='utf-8') as fh:
+        data = json.load(fh)
+    print(data.get('status') or '')
+except Exception:
+    print('')
+PY
+)"
+  printf 'status_found=%s\n' "$status_found"
+  printf 'status_label=%s\n' "$status_label"
+  if [[ "$status_status" == "200" && "$status_found" == "1" ]]; then
     status_ok=1
+  else
+    printf 'status_hint=%s\n' 'expected 200 + found=true for the fresh job; if POST succeeded but this failed, suspect stale status routing or result visibility drift'
   fi
 else
   printf '\n== GET skipped: no job id from POST response ==\n'

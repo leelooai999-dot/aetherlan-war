@@ -172,36 +172,41 @@ const fullscreenBattleTimingPresets = {
     attackerAdvanceMs: 300,
     slashStartMs: 220,
     impactMs: 400,
-    hitStopMs: 132,
-    recoilMs: 240,
-    damageRevealDelayMs: 116,
-    damageFadeMs: 272,
-    settleMs: 980,
-    cleanupMs: 1480,
+    hitStopMs: 148,
+    recoilMs: 286,
+    damageRevealDelayMs: 144,
+    damageFadeMs: 336,
+    settleMs: 1120,
+    cleanupMs: 1720,
   },
   skill: {
     attackerAdvanceMs: 420,
     slashStartMs: 340,
     impactMs: 560,
-    hitStopMs: 220,
-    recoilMs: 320,
-    damageRevealDelayMs: 188,
-    damageFadeMs: 344,
-    settleMs: 1460,
-    cleanupMs: 2200,
+    hitStopMs: 252,
+    recoilMs: 376,
+    damageRevealDelayMs: 228,
+    damageFadeMs: 420,
+    settleMs: 1660,
+    cleanupMs: 2460,
   },
 } as const;
 
 const fullscreenBattleResultTiming = {
   attack: {
-    riseMs: 500,
-    lingerMs: 1060,
-    exitMs: 220,
+    riseMs: 760,
+    lingerMs: 1560,
+    exitMs: 208,
   },
   skill: {
-    riseMs: 640,
-    lingerMs: 1360,
-    exitMs: 300,
+    riseMs: 920,
+    lingerMs: 1980,
+    exitMs: 292,
+  },
+  heal: {
+    riseMs: 1140,
+    lingerMs: 2140,
+    exitMs: 328,
   },
 } as const;
 
@@ -1344,6 +1349,39 @@ export default function PrototypeClient({ showcaseByUnit = {} }: PrototypeClient
       phaseText.position.set(640, 64);
       stage.addChild(phaseText);
 
+      const attackerPlate = new Graphics();
+      stage.addChild(attackerPlate);
+
+      const defenderPlate = new Graphics();
+      stage.addChild(defenderPlate);
+
+      const intentText = new Text({
+        text: fullscreenBattleFx.damage === 0 ? 'HEAL TARGET' : fullscreenBattleFx.kind === 'skill' ? 'SKILL TARGET' : 'ATTACK TARGET',
+        style: new TextStyle({
+          fill: 0xe2e8f0,
+          fontFamily: 'Arial',
+          fontSize: 16,
+          fontWeight: '800',
+          letterSpacing: 2.4,
+        }),
+      });
+      intentText.anchor.set(1, 0);
+      intentText.position.set(1188, 42);
+      stage.addChild(intentText);
+
+      const actorText = new Text({
+        text: fullscreenBattleFx.damage === 0 ? 'CASTER' : fullscreenBattleFx.kind === 'skill' ? 'SKILL USER' : 'ATTACKER',
+        style: new TextStyle({
+          fill: 0xe2e8f0,
+          fontFamily: 'Arial',
+          fontSize: 16,
+          fontWeight: '800',
+          letterSpacing: 2.4,
+        }),
+      });
+      actorText.position.set(92, 42);
+      stage.addChild(actorText);
+
       const damageBackdrop = new Graphics();
       damageBackdrop.alpha = 0;
       stage.addChild(damageBackdrop);
@@ -1375,9 +1413,16 @@ export default function PrototypeClient({ showcaseByUnit = {} }: PrototypeClient
 
       let elapsed = 0;
       const timing = fullscreenBattleTimingPresets[fullscreenBattleFx.kind];
-      const resultTiming = fullscreenBattleResultTiming[fullscreenBattleFx.kind];
+      const isSupportResult = fullscreenBattleFx.damage === 0;
+      const resultTiming = isSupportResult
+        ? fullscreenBattleResultTiming.heal
+        : fullscreenBattleResultTiming[fullscreenBattleFx.kind];
       const auraColor = fullscreenBattleFx.aura === 'wind' ? 0x86efac : fullscreenBattleFx.aura === 'lunar' ? 0xc4b5fd : 0x67e8f9;
       const progress = (time: number, start: number, duration: number) => Math.min(1, Math.max(0, (time - start) / duration));
+      const damageRevealStart = timing.impactMs + timing.hitStopMs + timing.damageRevealDelayMs;
+      const damageHoldStart = damageRevealStart + resultTiming.riseMs;
+      const damageExitStart = damageHoldStart + resultTiming.lingerMs;
+      const cinematicSettleStart = Math.max(timing.settleMs + 132, damageExitStart + 20);
       app.ticker.add((ticker) => {
         if (elapsed >= timing.cleanupMs) {
           if (fullscreenBattleCleanupRef.current) {
@@ -1391,6 +1436,24 @@ export default function PrototypeClient({ showcaseByUnit = {} }: PrototypeClient
         elapsed += ticker.deltaMS;
 
         const attackArcProgress = progress(elapsed, 0, timing.attackerAdvanceMs + 240);
+        const attackerPlateGlow = elapsed < timing.impactMs ? 0.68 + Math.sin(elapsed / 110) * 0.08 : 0.56;
+        const defenderPlateGlow = elapsed < timing.impactMs ? 0.52 + Math.sin(elapsed / 160) * 0.05 : 0.7 + Math.min(0.14, progress(elapsed, timing.impactMs, 220) * 0.14);
+        attackerPlate.clear();
+        attackerPlate.roundRect(44, 28, 324, 112, 28).fill({ color: 0x020617, alpha: 0.7 });
+        attackerPlate.roundRect(52, 36, 10, 96, 999).fill({ color: auraColor, alpha: attackerPlateGlow });
+        attackerPlate.roundRect(70, 96, 198, 12, 999).fill({ color: 0xffffff, alpha: 0.08 });
+        defenderPlate.clear();
+        defenderPlate.roundRect(912, 28, 324, 112, 28).fill({ color: 0x020617, alpha: 0.76 });
+        defenderPlate.roundRect(1218, 36, 10, 96, 999).fill({ color: auraColor, alpha: defenderPlateGlow });
+        defenderPlate.roundRect(968, 96, 198, 12, 999).fill({ color: 0xffffff, alpha: 0.08 });
+        const attackerPlatePulse = elapsed < timing.impactMs ? Math.sin(elapsed / 180) * 2 : 0;
+        const defenderPlatePulse = elapsed > timing.impactMs ? Math.sin((elapsed - timing.impactMs) / 120) * 3 : 0;
+        attackerName.position.set(90, 76 + attackerPlatePulse);
+        attackerRole.position.set(92, 112 + attackerPlatePulse);
+        actorText.position.set(92, 42 + attackerPlatePulse * 0.6);
+        defenderName.position.set(1190, 76 + defenderPlatePulse);
+        defenderRole.position.set(1188, 112 + defenderPlatePulse);
+        intentText.position.set(1188, 42 + defenderPlatePulse * 0.6);
         attackerWrap.x = elapsed < timing.attackerAdvanceMs
           ? 280 + progress(elapsed, 0, timing.attackerAdvanceMs) * 200
           : elapsed < timing.impactMs + 60
@@ -1469,28 +1532,31 @@ export default function PrototypeClient({ showcaseByUnit = {} }: PrototypeClient
             : recoilProgress < 1
               ? 0.13 - recoilProgress * 0.11
               : Math.min(0.22, impactProgress * 0.22);
-          const damageRevealStart = timing.impactMs + timing.hitStopMs + timing.damageRevealDelayMs;
-          const damageRevealProgress = progress(elapsed, damageRevealStart, timing.damageFadeMs + 56);
+          const damageRevealProgress = progress(elapsed, damageRevealStart, timing.damageFadeMs + (isSupportResult ? 132 : 84));
           const damageRiseProgress = progress(elapsed, damageRevealStart, resultTiming.riseMs);
-          const damageHoldStart = damageRevealStart + resultTiming.riseMs;
-          const damageExitStart = damageHoldStart + resultTiming.lingerMs;
+          const damageHoldProgress = progress(elapsed, damageHoldStart, resultTiming.lingerMs);
           const damageExitProgress = progress(elapsed, damageExitStart, resultTiming.exitMs);
-          const resultAlpha = Math.min(1, damageRevealProgress) * (1 - damageExitProgress);
-          const resultFloat = 1 - Math.pow(1 - damageRiseProgress, 1.45);
-          const resultLift = fullscreenBattleFx.kind === 'skill' ? 138 : 112;
+          const resultAlpha = Math.min(1, Math.pow(damageRevealProgress, isSupportResult ? 0.94 : 0.8)) * (1 - Math.pow(damageExitProgress, isSupportResult ? 1.18 : 1.28));
+          const resultFloat = 1 - Math.pow(1 - damageRiseProgress, isSupportResult ? 1.72 : 2.08);
+          const resultHoldEase = 1 - Math.pow(damageHoldProgress, isSupportResult ? 1.18 : 1.38) * (isSupportResult ? 0.03 : 0.06);
+          const resultLift = isSupportResult ? 152 : fullscreenBattleFx.kind === 'skill' ? 198 : 160;
           damageText.alpha = resultAlpha;
           damageText.scale.set(
             inHitStop
-              ? 0.94
+              ? (isSupportResult ? 0.98 : 0.94)
               : recoilProgress < 1
-                ? 0.94 + recoilProgress * 0.16
-                : 1.08 + Math.max(0, 1 - damageRiseProgress) * 0.08 - damageExitProgress * 0.14,
+                ? (isSupportResult ? 0.98 + recoilProgress * 0.09 : 0.94 + recoilProgress * 0.16)
+                : (isSupportResult
+                    ? 1.04 + Math.max(0, 1 - damageRiseProgress) * 0.04 - damageExitProgress * 0.08
+                    : 1.08 + Math.max(0, 1 - damageRiseProgress) * 0.08 - damageExitProgress * 0.14),
           );
           damageText.y = inHitStop
-            ? 236
+            ? (isSupportResult ? 242 : 236)
             : recoilProgress < 1
-              ? 236 - recoilProgress * 28
-              : 236 - resultFloat * resultLift - damageExitProgress * 94;
+              ? (isSupportResult ? 242 - recoilProgress * 16 : 236 - recoilProgress * 28)
+              : (isSupportResult
+                  ? 242 - resultFloat * resultLift * resultHoldEase - damageExitProgress * 82
+                  : 236 - resultFloat * resultLift * resultHoldEase - damageExitProgress * 118);
           damageText.style.fill = fullscreenBattleFx.damage === 0
             ? fullscreenBattleFx.aura === 'lunar'
               ? [0xe9d5ff, 0xc4b5fd]
@@ -1498,8 +1564,8 @@ export default function PrototypeClient({ showcaseByUnit = {} }: PrototypeClient
             : fullscreenBattleFx.kind === 'skill'
               ? [0xdcfce7, 0x86efac]
               : [0xfff1f2, 0xfda4af];
-          const backdropWidth = fullscreenBattleFx.damage === 0 ? 248 : 196;
-          const backdropHeight = fullscreenBattleFx.damage === 0 ? 92 : 84;
+          const backdropWidth = fullscreenBattleFx.damage === 0 ? 312 : 240;
+          const backdropHeight = fullscreenBattleFx.damage === 0 ? 114 : 100;
           const backdropY = damageText.y - backdropHeight / 2 + 6;
           damageBackdrop.visible = resultAlpha > 0.02;
           damageBackdrop.clear();
@@ -1509,21 +1575,21 @@ export default function PrototypeClient({ showcaseByUnit = {} }: PrototypeClient
             backdropWidth,
             backdropHeight,
             30,
-          ).fill({ color: 0x020617, alpha: Math.min(0.92, resultAlpha * 0.84) });
+          ).fill({ color: 0x020617, alpha: Math.min(0.98, resultAlpha * (isSupportResult ? 0.9 : 0.94)) });
           damageBackdrop.roundRect(
             damageText.x - backdropWidth / 2 + 8,
             backdropY + 10,
             backdropWidth - 16,
             Math.max(20, backdropHeight * 0.28),
             18,
-          ).fill({ color: 0xffffff, alpha: resultAlpha * (fullscreenBattleFx.damage === 0 ? 0.11 : 0.085) });
+          ).fill({ color: 0xffffff, alpha: resultAlpha * (fullscreenBattleFx.damage === 0 ? 0.22 : 0.14) });
           damageBackdrop.roundRect(
             damageText.x - backdropWidth / 2 + 10,
             damageText.y + backdropHeight * 0.16,
             Math.max(42, (backdropWidth - 20) * Math.max(0, 1 - damageExitProgress * 0.94)),
             6,
             999,
-          ).fill({ color: auraColor, alpha: resultAlpha * 0.26 });
+          ).fill({ color: auraColor, alpha: resultAlpha * (isSupportResult ? 0.38 : 0.46) });
           stage.x = inHitStop
             ? -14
             : Math.sin(postImpactElapsed / 16) * 12 * shakeFalloff;
@@ -1535,8 +1601,8 @@ export default function PrototypeClient({ showcaseByUnit = {} }: PrototypeClient
           damageBackdrop.visible = false;
         }
 
-        if (elapsed > timing.settleMs) {
-          const settleFade = 1 - progress(elapsed, timing.settleMs, timing.cleanupMs - timing.settleMs);
+        if (elapsed > cinematicSettleStart) {
+          const settleFade = 1 - progress(elapsed, cinematicSettleStart, Math.max(1, timing.cleanupMs - cinematicSettleStart));
           overlayText.text = fullscreenBattleFx.combo ? '连携收束' : '战果显现';
           stage.x *= 0.72;
           stage.y *= 0.72;
@@ -1546,8 +1612,8 @@ export default function PrototypeClient({ showcaseByUnit = {} }: PrototypeClient
           supportBurst.alpha = settleFade * 0.88;
           slash.alpha *= 0.78;
           impactRing.alpha = settleFade;
-          damageText.alpha *= 0.96 + settleFade * 0.04;
-          damageBackdrop.alpha = Math.max(0, Math.min(0.88, settleFade * 0.92));
+          damageText.alpha *= 0.98 + settleFade * 0.02;
+          damageBackdrop.alpha = Math.max(0, Math.min(0.82, settleFade * 0.9));
         }
       });
     };

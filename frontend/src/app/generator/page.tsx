@@ -7,7 +7,11 @@ type GeneratorPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
 
-const generatorAction = process.env.NEXT_PUBLIC_GENERATOR_ACTION_URL || '/api/generator';
+function firstParam(value: string | string[] | undefined) {
+  return Array.isArray(value) ? value[0] ?? null : typeof value === 'string' ? value : null;
+}
+
+const generatorAction = (process.env.NEXT_PUBLIC_GENERATOR_ACTION_URL || '/api/generator').trim();
 
 const roles = ['人类战士', '元素法师', '月溪灵鹿', '异化凶兽'];
 const actions = ['待机', '行走', '冲刺', '普攻', '重击', '施法', '受击', '僵直', '死亡'];
@@ -106,15 +110,15 @@ async function loadRecentQueueResults() {
 export default async function GeneratorPage({ searchParams }: GeneratorPageProps) {
   const params = (await searchParams) ?? {};
   const showcase = buildAnimationShowcase((await loadRecentQueueResults()) as never[]);
-  const jobId = typeof params.jobId === 'string' ? params.jobId : null;
-  const queueDepth = typeof params.queueDepth === 'string' ? params.queueDepth : null;
-  const uploadCount = typeof params.uploadCount === 'string' ? params.uploadCount : null;
-  const action = typeof params.action === 'string' ? params.action : null;
-  const role = typeof params.role === 'string' ? params.role : null;
-  const characterId = typeof params.characterId === 'string' ? params.characterId : null;
-  const characterLabel = typeof params.characterLabel === 'string' ? params.characterLabel : null;
-  const targetSlot = typeof params.targetSlot === 'string' ? params.targetSlot : null;
-  const assetKind = typeof params.assetKind === 'string' ? params.assetKind : null;
+  const jobId = firstParam(params.jobId);
+  const queueDepth = firstParam(params.queueDepth);
+  const uploadCount = firstParam(params.uploadCount);
+  const action = firstParam(params.action);
+  const role = firstParam(params.role);
+  const characterId = firstParam(params.characterId);
+  const characterLabel = firstParam(params.characterLabel);
+  const targetSlot = firstParam(params.targetSlot);
+  const assetKind = firstParam(params.assetKind);
 
   return (
     <main className="min-h-screen bg-[radial-gradient(circle_at_top,_#25314f,_#0d1326_58%,_#05070d)] text-white">
@@ -122,11 +126,11 @@ export default async function GeneratorPage({ searchParams }: GeneratorPageProps
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div className="space-y-4">
             <span className="inline-flex rounded-full border border-cyan-300/25 bg-cyan-400/10 px-4 py-1 text-sm text-cyan-200">
-              公共在线工具 · One-click Asset Generator
+              公共在线工具 · Asset intake + queue tracking
             </span>
-            <h1 className="text-4xl font-bold tracking-tight lg:text-6xl">一键制图与图集生成前端</h1>
+            <h1 className="text-4xl font-bold tracking-tight lg:text-6xl">战斗素材上传与处理追踪前端</h1>
             <p className="max-w-3xl text-base leading-8 text-slate-200 lg:text-lg">
-              面向所有用户的公共素材工具。上传任意参考图，选择角色类型与动作后，一键走透明化、裁边、图集打包和下载流程。
+              面向所有用户的公共素材入口。上传参考图后，系统会先写入持久化 intake / queue，再持续回显处理状态、预览与替换绑定信息，减少“到底有没有收上去”的不确定感。
             </p>
           </div>
           <a
@@ -141,7 +145,7 @@ export default async function GeneratorPage({ searchParams }: GeneratorPageProps
           <div className="text-sm uppercase tracking-[0.3em] text-amber-200">Battle asset upload</div>
           <p className="mt-3 text-lg font-semibold">这里就是你要上传战斗动画素材的前端入口</p>
           <p className="mt-2 text-sm leading-7 text-amber-50/90">
-            适合先上传角色参考图、动作参考、技能演出参考或现有序列帧。提交后会直接写入 queue，并把文件保存到对应 job 的 uploads 目录。
+            适合先上传角色参考图、动作参考、技能演出参考或现有序列帧。提交后会先进入 intake，再写入对应 job 的持久化 queue / uploads，并在下方持续显示状态来源与处理进度。
           </p>
         </div>
 

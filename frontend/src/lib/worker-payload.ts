@@ -9,8 +9,8 @@ export type WorkerReadyPayload = {
   provider: string;
   uploadCount: number;
   uploadNames: string[];
-  status: 'preview-intake-received';
-  nextStep: 'persist-upload-and-dispatch-worker';
+  status: 'persistent-intake-received';
+  nextStep: 'mirror-to-worker-and-process-queue';
 };
 
 export function buildWorkerReadyPayload(input: {
@@ -36,7 +36,7 @@ export function buildWorkerReadyPayload(input: {
     provider: input.provider ?? '未提供',
     uploadCount: Number(input.uploadCount ?? 0),
     uploadNames: input.uploadNames ?? [],
-    status: 'preview-intake-received',
-    nextStep: 'persist-upload-and-dispatch-worker',
+    status: 'persistent-intake-received',
+    nextStep: 'mirror-to-worker-and-process-queue',
   };
 }
