@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Application, BlurFilter, Container, Graphics, Sprite, Text, TextStyle } from "pixi.js";
+import { Application, AnimatedSprite, BlurFilter, Container, Graphics, Rectangle, Sprite, Text, TextStyle, Texture } from "pixi.js";
 
 const tileVisualSize = 56;
 const spriteSheetColumns = 5;
@@ -1277,11 +1277,50 @@ export default function PrototypeClient({ showcaseByUnit = {} }: PrototypeClient
       const supportShadow = new Graphics().ellipse(0, 0, 90, 18).fill({ color: 0x000000, alpha: 0.22 });
       supportWrap.addChild(supportShadow);
 
-      const attackerSprite = Sprite.from(fullscreenBattleFx.attacker.showcase?.fullscreen?.url ?? fullscreenBattleFx.attacker.showcase?.attack?.url ?? fullscreenBattleFx.attacker.showcaseIdleUrl ?? fullscreenBattleFx.attacker.profilePortrait ?? fullscreenBattleFx.attacker.portrait ?? "/characters/samuel-profile-pic.png");
-      attackerSprite.anchor.set(0.5, 1);
-      attackerSprite.width = 290;
-      attackerSprite.height = 370;
-      attackerSprite.y = -10;
+      const attackerFullscreenSheet = fullscreenBattleFx.attacker.id === "moon-deer"
+        ? {
+            url: fullscreenBattleFx.attacker.spriteSheet ?? "/characters/moon-deer-sprite.png",
+            cols: fullscreenBattleFx.attacker.spriteSheetCols ?? 10,
+            rows: fullscreenBattleFx.attacker.spriteSheetRows ?? 5,
+            row: fullscreenBattleFx.kind === "skill" ? (fullscreenBattleFx.attacker.spriteAnims?.attack?.row ?? 3) : (fullscreenBattleFx.attacker.spriteAnims?.attack?.row ?? 3),
+            frames: Math.max(1, fullscreenBattleFx.attacker.spriteAnims?.attack?.frames ?? 8),
+            fps: Math.max(8, fullscreenBattleFx.attacker.spriteAnims?.attack?.fps ?? 12),
+            frameWidth: 256,
+            frameHeight: 256,
+          }
+        : null;
+
+      let attackerSprite: Sprite | AnimatedSprite;
+      if (attackerFullscreenSheet) {
+        const sheetTexture = Texture.from(attackerFullscreenSheet.url);
+        const frames = Array.from({ length: attackerFullscreenSheet.frames }, (_, index) => {
+          const frame = new Rectangle(
+            index * attackerFullscreenSheet.frameWidth,
+            attackerFullscreenSheet.row * attackerFullscreenSheet.frameHeight,
+            attackerFullscreenSheet.frameWidth,
+            attackerFullscreenSheet.frameHeight,
+          );
+          return new Texture({
+            source: sheetTexture.source,
+            frame,
+          });
+        });
+        const animated = new AnimatedSprite(frames);
+        animated.anchor.set(0.5, 1);
+        animated.width = 360;
+        animated.height = 360;
+        animated.y = -8;
+        animated.animationSpeed = attackerFullscreenSheet.fps / 60;
+        animated.loop = true;
+        animated.play();
+        attackerSprite = animated;
+      } else {
+        attackerSprite = Sprite.from(fullscreenBattleFx.attacker.showcase?.fullscreen?.url ?? fullscreenBattleFx.attacker.showcase?.attack?.url ?? fullscreenBattleFx.attacker.showcaseIdleUrl ?? fullscreenBattleFx.attacker.profilePortrait ?? fullscreenBattleFx.attacker.portrait ?? "/characters/samuel-profile-pic.png");
+        attackerSprite.anchor.set(0.5, 1);
+        attackerSprite.width = 290;
+        attackerSprite.height = 370;
+        attackerSprite.y = -10;
+      }
       attackerWrap.addChild(attackerSprite);
 
       const defenderSprite = Sprite.from(fullscreenBattleFx.defender.showcase?.hit?.url ?? fullscreenBattleFx.defender.showcaseIdleUrl ?? fullscreenBattleFx.defender.profilePortrait ?? fullscreenBattleFx.defender.portrait ?? "/characters/mutated-monster-profile-pic.png");
