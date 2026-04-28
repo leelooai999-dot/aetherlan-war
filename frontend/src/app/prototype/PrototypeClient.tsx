@@ -120,6 +120,7 @@ type FullscreenBattleFx = {
   aura?: "wind" | "lunar" | "slash";
   origin?: { x: number; y: number };
   target?: { x: number; y: number };
+  forced?: boolean;
 };
 
 type CombatFx = {
@@ -898,6 +899,7 @@ export default function PrototypeClient({ showcaseByUnit = {} }: PrototypeClient
       aura: options?.aura ?? (kind === "skill" ? "wind" : "slash"),
       origin: { x: attacker.x, y: attacker.y },
       target: { x: defender.x, y: defender.y },
+      forced: attacker.id === "moon-deer",
     });
     setBattleCinematic({ attacker, defender, damage, kind, phase: "run", defenderReacting: false, videoEffect });
 
@@ -1977,14 +1979,14 @@ export default function PrototypeClient({ showcaseByUnit = {} }: PrototypeClient
             }}
           />
         ) : null}
-        {fullscreenBattleActive ? (
+        {fullscreenBattleFx?.forced || fullscreenBattleActive ? (
           <div className="fixed inset-0 z-[100] overflow-hidden bg-slate-950/95 backdrop-blur-md ring-4 ring-yellow-300/80">
             <div ref={fullscreenBattleCanvasRef} className="absolute inset-0" />
             <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-black/55 to-transparent" />
             <div className="pointer-events-none absolute inset-x-0 bottom-0 h-56 bg-gradient-to-t from-black/70 to-transparent" />
           </div>
         ) : null}
-        {battleCinematic && !fullscreenBattleActive ? (
+        {battleCinematic && !(fullscreenBattleFx?.forced || fullscreenBattleActive) ? (
           <div className="fixed inset-0 z-[90] flex items-center justify-center bg-slate-950/92 backdrop-blur-sm px-4">
             <div className="relative flex h-full max-h-[90vh] w-full max-w-6xl items-end justify-between overflow-hidden rounded-3xl border border-cyan-300/20 bg-[radial-gradient(circle_at_center,_rgba(34,211,238,0.12),_rgba(2,6,23,0.95)_60%)] px-6 py-10 sm:px-10">
               <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_54%,rgba(255,255,255,0.06),transparent_40%)]" />
