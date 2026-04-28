@@ -138,8 +138,9 @@ type Props = {
 
 function uploadWithProgress(url: string, formData: FormData, onProgress: (percent: number) => void): Promise<any> {
   return new Promise((resolve, reject) => {
+    const normalizedUrl = url.trim();
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', url);
+    xhr.open('POST', normalizedUrl);
     xhr.setRequestHeader('accept', 'application/json');
 
     xhr.upload.onprogress = (event) => {

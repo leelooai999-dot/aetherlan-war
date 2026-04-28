@@ -15,7 +15,7 @@ QUEUE_DIR = BASE_DIR / 'queue'
 RESULTS_DIR = BASE_DIR / 'results'
 HOST = os.environ.get('AETHERLAN_HOST', '0.0.0.0')
 PORT = int(os.environ.get('AETHERLAN_PORT', '8010'))
-PUBLIC_APP_ORIGIN = os.environ.get('AETHERLAN_PUBLIC_APP_ORIGIN', 'https://aetherlan-war.vercel.app')
+PUBLIC_APP_ORIGIN = os.environ.get('AETHERLAN_PUBLIC_APP_ORIGIN', 'https://aetherlan-war.vercel.app').strip()
 
 
 def ensure_dirs() -> None:
