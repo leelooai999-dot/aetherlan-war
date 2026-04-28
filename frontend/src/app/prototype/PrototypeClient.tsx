@@ -887,7 +887,7 @@ export default function PrototypeClient({ showcaseByUnit = {} }: PrototypeClient
     fullscreenBattleCleanupRef.current = window.setTimeout(() => {
       setFullscreenBattleFx(null);
       fullscreenBattleCleanupRef.current = null;
-    }, (kind === "skill" ? fullscreenBattleTimingPresets.skill.cleanupMs : fullscreenBattleTimingPresets.attack.cleanupMs) + 260);
+    }, Math.max(2600, (kind === "skill" ? fullscreenBattleTimingPresets.skill.cleanupMs : fullscreenBattleTimingPresets.attack.cleanupMs) + 900));
     setFullscreenBattleFx({
       attacker,
       defender,
@@ -1978,7 +1978,7 @@ export default function PrototypeClient({ showcaseByUnit = {} }: PrototypeClient
           />
         ) : null}
         {fullscreenBattleActive ? (
-          <div className="fixed inset-0 z-[100] overflow-hidden bg-slate-950/95 backdrop-blur-md">
+          <div className="fixed inset-0 z-[100] overflow-hidden bg-slate-950/95 backdrop-blur-md ring-4 ring-yellow-300/80">
             <div ref={fullscreenBattleCanvasRef} className="absolute inset-0" />
             <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-black/55 to-transparent" />
             <div className="pointer-events-none absolute inset-x-0 bottom-0 h-56 bg-gradient-to-t from-black/70 to-transparent" />
