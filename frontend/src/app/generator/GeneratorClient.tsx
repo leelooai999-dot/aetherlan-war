@@ -6,7 +6,7 @@ import { FormEvent, useMemo, useRef, useState } from 'react';
   id: string;
   name: string;
   size: number;
-  status: 'pending' | 'uploading' | 'queued' | 'processing' | 'done' | 'error';
+  status: 'pending' | 'uploading' | 'queued' | 'processing' | 'ready' | 'done' | 'error';
   progress: number;
 };
 
@@ -37,6 +37,8 @@ type UploadStatus = {
   detectedRows?: number | null;
   detectedFrameWidth?: number | null;
   detectedFrameHeight?: number | null;
+  storage?: string | null;
+  message?: string | null;
 };
 
 type CharacterOption = { id: string; label: string; role: string };
@@ -52,6 +54,38 @@ type ReplacementTarget = {
   assetKind: string;
   notesHint?: string;
 };
+
+function slugifySegment(value: string | null | undefined, fallback: string) {
+  const normalized = String(value || '')
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+  return normalized || fallback;
+}
+
+function splitFileName(name: string) {
+  const dotIndex = name.lastIndexOf('.');
+  if (dotIndex <= 0) {
+    return { base: name, ext: '' };
+  }
+  return {
+    base: name.slice(0, dotIndex),
+    ext: name.slice(dotIndex),
+  };
+}
+
+function buildUploadFilename(file: File, meta: { characterId?: string | null; action?: string | null; targetSlot?: string | null; assetKind?: string | null }) {
+  const { base, ext } = splitFileName(file.name);
+  const prefix = [
+    slugifySegment(meta.characterId, 'character'),
+    slugifySegment(meta.action, 'action'),
+    slugifySegment(meta.targetSlot, 'slot'),
+    slugifySegment(meta.assetKind, 'asset'),
+  ].join('__');
+  const cleanBase = slugifySegment(base, 'upload');
+  return `${prefix}__${cleanBase}${ext}`;
+}
 
 const assetKindLabel: Record<string, string> = {
   'map-sprite': '地图动作 / map sprite',
@@ -94,19 +128,24 @@ function uploadWithProgress(url: string, formData: FormData, onProgress: (percen
     };
 
     xhr.onload = () => {
+      let data: any = null;
       try {
-        const data = JSON.parse(xhr.responseText || '{}');
-        if (xhr.status >= 200 && xhr.status < 300) {
-          resolve(data);
-        } else {
-          reject(new Error(data?.message || 'Upload failed'));
-        }
-      } catch (error) {
-        reject(error instanceof Error ? error : new Error('Invalid upload response'));
+        data = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+      } catch {
+        data = null;
       }
+
+      if (xhr.status >= 200 && xhr.status < 300) {
+        resolve(data ?? {});
+        return;
+      }
+
+      const storageHint = data?.storage ? ` [storage=${data.storage}]` : '';
+      const statusHint = xhr.status ? ` (HTTP ${xhr.status})` : '';
+      reject(new Error(`${data?.message || 'Upload failed'}${statusHint}${storageHint}`));
     };
 
-    xhr.onerror = () => reject(new Error('Network error during upload'));
+    xhr.onerror = () => reject(new Error('Network error during upload. Persistent intake may be unreachable or blocked by CORS / DNS.'));
     xhr.send(formData);
   });
 }
@@ -199,7 +238,26 @@ export default function GeneratorClient({
   }
 
   function setAllUploadItems(statusValue: UploadItemStatus['status'], progress: number) {
-    setUploadItems((items) => items.map((item) => ({ ...item, status: statusValue, progress })));
+    setUploadItems((items) => items.map((item) => ({ ...item, status: statusValue, progress: Math.max(item.progress, progress) })));
+  }
+
+  function applyStatusProgressToItems(statusValue: UploadItemStatus['status'], progress: number) {
+    setUploadItems((items) => items.map((item) => {
+      const current = item.progress;
+      if (statusValue === 'queued') {
+        return { ...item, status: current >= 100 ? item.status : 'queued', progress: Math.max(current, progress) };
+      }
+      if (statusValue === 'processing') {
+        return { ...item, status: current >= 100 ? item.status : 'processing', progress: Math.max(current, progress) };
+      }
+      if (statusValue === 'ready') {
+        return { ...item, status: 'ready', progress: Math.max(current, progress) };
+      }
+      if (statusValue === 'done') {
+        return { ...item, status: 'done', progress: 100 };
+      }
+      return { ...item, status: statusValue, progress: Math.max(current, progress) };
+    }));
   }
 
   function setUploadProgress(percent: number) {
@@ -222,13 +280,17 @@ export default function GeneratorClient({
       const data = await res.json();
       if (data?.ok) {
         setStatus(data);
+        const percent = Math.max(5, Number(data.progress?.percent ?? 5));
         if (data.status === 'queued') {
-          setAllUploadItems('queued', 22);
-        } else if (data.status === 'processing' || data.progress?.percent >= 35) {
-          setAllUploadItems('processing', Math.max(35, data.progress?.percent ?? 35));
+          applyStatusProgressToItems('queued', Math.max(18, percent));
+        } else if (data.status === 'processing' || percent >= 35) {
+          applyStatusProgressToItems('processing', Math.max(35, percent));
         }
-        if (data.progress?.percent >= 65 || data.status === 'done' || data.processedPreviewUrl) {
-          setAllUploadItems('done', 100);
+        if (percent >= 65 || data.processedPreviewUrl) {
+          applyStatusProgressToItems('ready', Math.max(65, percent));
+        }
+        if (data.status === 'done') {
+          applyStatusProgressToItems('done', 100);
           return;
         }
       }
@@ -246,24 +308,52 @@ export default function GeneratorClient({
       const form = event.currentTarget;
       const formData = new FormData(form);
       const files = formData.getAll('referenceFiles').filter((item): item is File => item instanceof File && item.size > 0);
-      setUploadItems(files.map((file, index) => ({
-        id: `${file.name}-${index}-${file.size}`,
-        name: file.name,
-        size: file.size,
+      if (!files.length) {
+        throw new Error('请先选择至少一个参考图或动画素材文件再上传。');
+      }
+      const nextRole = String(formData.get('role') ?? '');
+      const nextCharacterId = String(formData.get('characterId') ?? '');
+      const nextCharacterLabel = String(formData.get('characterLabel') ?? '');
+      const nextAction = String(formData.get('action') ?? '');
+      const nextTargetSlot = String(formData.get('targetSlot') ?? '');
+      const nextAssetKind = String(formData.get('assetKind') ?? '');
+
+      const uploadFormData = new FormData();
+      for (const [key, value] of formData.entries()) {
+        if (key === 'referenceFiles') continue;
+        uploadFormData.append(key, value);
+      }
+
+      const renamedFiles = files.map((file) => {
+        const uploadName = buildUploadFilename(file, {
+          characterId: nextCharacterId,
+          action: nextAction,
+          targetSlot: nextTargetSlot,
+          assetKind: nextAssetKind,
+        });
+        const renamedFile = new File([file], uploadName, { type: file.type || 'application/octet-stream' });
+        uploadFormData.append('referenceFiles', renamedFile);
+        return { original: file, uploadName };
+      });
+
+      setUploadItems(renamedFiles.map(({ original, uploadName }, index) => ({
+        id: `${original.name}-${index}-${original.size}`,
+        name: `${original.name} → ${uploadName}`,
+        size: original.size,
         status: 'pending',
         progress: 5,
       })));
       setUploadCount(String(files.length));
-      setRole(String(formData.get('role') ?? ''));
-      setCharacterId(String(formData.get('characterId') ?? ''));
-      setCharacterLabel(String(formData.get('characterLabel') ?? ''));
-      setAction(String(formData.get('action') ?? ''));
-      setTargetSlot(String(formData.get('targetSlot') ?? ''));
-      setAssetKind(String(formData.get('assetKind') ?? ''));
+      setRole(nextRole);
+      setCharacterId(nextCharacterId);
+      setCharacterLabel(nextCharacterLabel);
+      setAction(nextAction);
+      setTargetSlot(nextTargetSlot);
+      setAssetKind(nextAssetKind);
 
       setAllUploadItems('uploading', 8);
 
-      const data = await uploadWithProgress(actionUrl, formData, (percent) => {
+      const data = await uploadWithProgress(actionUrl, uploadFormData, (percent) => {
         setUploadProgress(percent);
       });
       if (!data?.job?.id) {
@@ -273,7 +363,14 @@ export default function GeneratorClient({
       const nextJobId = data.job.id as string;
       setJobId(nextJobId);
       setQueueDepth(String(data.queueDepth ?? '-'));
-      setAllUploadItems('queued', 20);
+      const returnedStorage = typeof data?.job?.storage === 'string' ? data.job.storage : null;
+      const returnedMessage = typeof data?.message === 'string' ? data.message : null;
+      const queueModeLabel = data.queueDepth === 'persistent' ? '上传完成，任务已进入持久化队列' : '上传完成，当前仍是前端预览接收模式';
+      const queueModeStage = data.queueDepth === 'persistent' ? 'persistent-queued' : 'preview-queued';
+      const queueModePercent = data.queueDepth === 'persistent' ? 18 : 12;
+      const queueModeMessage = returnedMessage ?? (data.queueDepth === 'persistent'
+        ? '文件已经进入 Hetzner 持久化 intake，可继续在追踪台确认后处理状态。'
+        : '当前这次上传已被前端成功接收，但如果后续没有进入本地队列看板，通常表示线上持久化 intake 还没完全接通。');
       setStatus({
         jobId: nextJobId,
         status: data.status ?? 'queued',
@@ -287,11 +384,14 @@ export default function GeneratorClient({
           assetKind: String(formData.get('assetKind') ?? ''),
         },
         progress: {
-          percent: 10,
-          stage: 'upload-complete',
-          label: '上传完成，正在等待后台处理',
+          percent: queueModePercent,
+          stage: queueModeStage,
+          label: queueModeLabel,
         },
+        storage: returnedStorage,
+        message: queueModeMessage,
       });
+      applyStatusProgressToItems('queued', 20);
 
       await pollStatus(nextJobId);
     } catch (err) {
@@ -491,11 +591,18 @@ export default function GeneratorClient({
               <span>{status?.progress?.percent ?? 0}%</span>
             </div>
             <div className="mt-4 grid gap-2 text-sm text-emerald-50/90 md:grid-cols-2">
+              <div>接收模式：{status?.storage === 'hetzner-disk-persistent' ? 'Persistent intake ✅' : status?.storage === 'vercel-ephemeral-preview' ? 'Preview fallback ⚠️' : '等待识别 ⏳'}</div>
               <div>1. 已上传到服务器 {status || uploadItems.some((item) => item.status !== 'pending') ? '✅' : '⬜'}</div>
               <div>2. 已进入队列 {status?.found || uploadItems.some((item) => item.status === 'queued' || item.status === 'processing' || item.status === 'done') ? '✅' : '⬜'}</div>
               <div>3. 后台处理中 {(status?.progress?.percent ?? 0) >= 35 || uploadItems.some((item) => item.status === 'processing' || item.status === 'done') ? '✅' : '⬜'}</div>
               <div>4. 已可应用到前端 {(status?.processedPreviewUrl || (status?.progress?.percent ?? 0) >= 65 || uploadItems.some((item) => item.status === 'done')) ? '✅' : '⬜'}</div>
             </div>
+            {status?.message ? (
+              <div className={`mt-4 rounded-2xl border p-4 text-sm leading-7 ${status?.storage === 'vercel-ephemeral-preview' ? 'border-amber-300/20 bg-amber-400/10 text-amber-50' : 'border-white/10 bg-black/15 text-emerald-50/90'}`}>
+                <div className="text-xs uppercase tracking-[0.25em] text-emerald-200">状态说明</div>
+                <div className="mt-2">{status.message}</div>
+              </div>
+            ) : null}
             <div className="mt-4 rounded-2xl border border-white/10 bg-black/15 p-4 text-sm leading-7 text-emerald-50/90">
               <div className="text-xs uppercase tracking-[0.25em] text-emerald-200">本次绑定目标</div>
               <div className="mt-2">角色类型：{status?.request?.role ?? role ?? '未提供'}</div>
@@ -518,7 +625,13 @@ export default function GeneratorClient({
                 </div>
               </div>
             ) : null}
-            {error ? <div className="mt-4 text-sm text-red-200">{error}</div> : null}
+            {error ? (
+              <div className="mt-4 rounded-2xl border border-red-300/20 bg-red-400/10 p-4 text-sm leading-7 text-red-100">
+                <div className="text-xs uppercase tracking-[0.25em] text-red-200">上传失败诊断</div>
+                <div className="mt-2">{error}</div>
+                <div className="mt-2 text-red-100/85">如果这是公网环境，请优先检查 persistent intake 域名 / SSL / CORS 是否已完成切换；如果是本地预览，再检查 action URL 是否仍指向 /api/generator。</div>
+              </div>
+            ) : null}
           </div>
         ) : null}
       </section>
