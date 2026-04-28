@@ -1418,9 +1418,26 @@ export default function PrototypeClient({ showcaseByUnit = {} }: PrototypeClient
           letterSpacing: 2,
         }),
       });
+      const debugFullscreenText = new Text({
+        text: fullscreenBattleFx.attacker.id === 'moon-deer' ? 'DEBUG FULLSCREEN CANVAS ACTIVE' : '',
+        style: new TextStyle({
+          fill: 0xfef08a,
+          fontFamily: 'Arial',
+          fontSize: 18,
+          fontWeight: '900',
+          letterSpacing: 1.6,
+          dropShadow: { alpha: 0.7, blur: 6, color: 0x000000, distance: 2 },
+        }),
+      });
       phaseText.anchor.set(0.5, 0);
       phaseText.position.set(640, 64);
       stage.addChild(phaseText);
+
+      if (debugFullscreenText.text) {
+        debugFullscreenText.anchor.set(0.5, 0);
+        debugFullscreenText.position.set(640, 96);
+        stage.addChild(debugFullscreenText);
+      }
 
       const attackerPlate = new Graphics();
       stage.addChild(attackerPlate);
