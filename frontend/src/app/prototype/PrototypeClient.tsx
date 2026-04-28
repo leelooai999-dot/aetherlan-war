@@ -219,12 +219,20 @@ const fullscreenBattleCameraTiming = {
     settleZoomMs: 430,
     overshootScale: 1.026,
     settleScale: 1.008,
+    driftStartMs: 150,
+    driftDurationMs: 640,
+    driftX: -22,
+    driftY: -7,
   },
   skill: {
     impactZoomMs: 280,
     settleZoomMs: 520,
     overshootScale: 1.038,
     settleScale: 1.012,
+    driftStartMs: 220,
+    driftDurationMs: 900,
+    driftX: -34,
+    driftY: -12,
   },
 } as const;
 
@@ -1762,11 +1770,13 @@ export default function PrototypeClient({ showcaseByUnit = {} }: PrototypeClient
             : cameraTiming.overshootScale - cameraSettleProgress * (cameraTiming.overshootScale - cameraTiming.settleScale);
           const cameraPunchOffsetX = (fullscreenBattleFx.kind === 'skill' ? -16 : -10) * Math.sin(cameraImpactProgress * Math.PI) * (1 - cameraSettleProgress * 0.72);
           const cameraPunchOffsetY = (fullscreenBattleFx.kind === 'skill' ? 8 : 5) * Math.sin(cameraImpactProgress * Math.PI) * (1 - cameraSettleProgress * 0.76);
+          const cameraDriftProgress = progress(elapsed, timing.impactMs + timing.hitStopMs + cameraTiming.driftStartMs, cameraTiming.driftDurationMs);
+          const cameraDriftEase = 1 - Math.pow(1 - cameraDriftProgress, 2.2);
           stage.scale.set(cameraPunchScale);
           stage.pivot.set(640, 360);
           stage.position.set(640, 360);
-          stage.x += baseShakeX + cameraPunchOffsetX;
-          stage.y += baseShakeY + cameraPunchOffsetY;
+          stage.x += baseShakeX + cameraPunchOffsetX + cameraTiming.driftX * cameraDriftEase;
+          stage.y += baseShakeY + cameraPunchOffsetY + cameraTiming.driftY * cameraDriftEase;
         } else {
           aftershock.visible = false;
           impactShadow.visible = false;
@@ -1957,7 +1967,7 @@ export default function PrototypeClient({ showcaseByUnit = {} }: PrototypeClient
             <div className="pointer-events-none absolute inset-x-0 bottom-0 h-56 bg-gradient-to-t from-black/70 to-transparent" />
           </div>
         ) : null}
-        {battleCinematic ? (
+        {battleCinematic && !fullscreenBattleActive ? (
           <div className="fixed inset-0 z-[90] flex items-center justify-center bg-slate-950/92 backdrop-blur-sm px-4">
             <div className="relative flex h-full max-h-[90vh] w-full max-w-6xl items-end justify-between overflow-hidden rounded-3xl border border-cyan-300/20 bg-[radial-gradient(circle_at_center,_rgba(34,211,238,0.12),_rgba(2,6,23,0.95)_60%)] px-6 py-10 sm:px-10">
               <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_54%,rgba(255,255,255,0.06),transparent_40%)]" />
