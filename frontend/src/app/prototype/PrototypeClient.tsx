@@ -194,14 +194,14 @@ const fullscreenBattleTimingPresets = {
 
 const fullscreenBattleResultTiming = {
   attack: {
-    riseMs: 400,
-    lingerMs: 760,
-    exitMs: 280,
+    riseMs: 420,
+    lingerMs: 900,
+    exitMs: 240,
   },
   skill: {
-    riseMs: 500,
-    lingerMs: 1040,
-    exitMs: 360,
+    riseMs: 540,
+    lingerMs: 1200,
+    exitMs: 320,
   },
 } as const;
 
@@ -658,6 +658,7 @@ export default function PrototypeClient({ showcaseByUnit = {} }: PrototypeClient
   const [movementFx, setMovementFx] = useState<MovementFx | null>(null);
   const [battleCinematic, setBattleCinematic] = useState<BattleCinematic | null>(null);
   const [fullscreenBattleFx, setFullscreenBattleFx] = useState<FullscreenBattleFx | null>(null);
+  const battleVideoEndedRef = useRef(false);
   const [screenFlash, setScreenFlash] = useState<{ kind: "attack" | "skill"; aura?: "wind" | "lunar" | "slash" } | null>(null);
   const [targetFocus, setTargetFocus] = useState<{ x: number; y: number; aura?: "wind" | "lunar" | "slash"; kind: "attack" | "skill"; phase?: "lock" | "commit" } | null>(null);
   const [attackerFocus, setAttackerFocus] = useState<{ unitId: string; x: number; y: number; aura?: "wind" | "lunar" | "slash"; kind: "attack" | "skill"; phase?: "charge" | "release" } | null>(null);
@@ -839,6 +840,7 @@ export default function PrototypeClient({ showcaseByUnit = {} }: PrototypeClient
       attackerFocusCleanupRef.current = null;
     }, cinematicTiming.attackerFocusMs);
 
+    battleVideoEndedRef.current = false;
     setFullscreenBattleFx({
       attacker,
       defender,
@@ -868,6 +870,7 @@ export default function PrototypeClient({ showcaseByUnit = {} }: PrototypeClient
           triggerFx(defender.id, "skill");
         }
         setBattleCinematic(null);
+        battleVideoEndedRef.current = true;
         cinematicCleanupRef.current = null;
       }, kind === "skill" ? cinematicTiming.skillCleanupMs : cinematicTiming.attackCleanupMs);
     }, kind === "skill" ? cinematicTiming.skillImpactMs : cinematicTiming.attackImpactMs);
@@ -1454,28 +1457,25 @@ export default function PrototypeClient({ showcaseByUnit = {} }: PrototypeClient
               ? 0.13 - recoilProgress * 0.11
               : Math.min(0.22, impactProgress * 0.22);
           const damageRevealStart = timing.impactMs + timing.hitStopMs + timing.damageRevealDelayMs;
-          const damageRevealProgress = progress(elapsed, damageRevealStart, timing.damageFadeMs + 40);
+          const damageRevealProgress = progress(elapsed, damageRevealStart, timing.damageFadeMs + 56);
           const damageRiseProgress = progress(elapsed, damageRevealStart, resultTiming.riseMs);
-          const damageHoldStart = damageRevealStart + resultTiming.riseMs + Math.max(150, resultTiming.lingerMs * 0.52);
-          const damageExitStart = damageHoldStart + Math.max(220, resultTiming.lingerMs - resultTiming.exitMs * 0.42);
+          const damageHoldStart = damageRevealStart + resultTiming.riseMs;
+          const damageExitStart = damageHoldStart + resultTiming.lingerMs;
           const damageExitProgress = progress(elapsed, damageExitStart, resultTiming.exitMs);
-          const damageHoldFade = elapsed > damageExitStart
-            ? 1 - progress(elapsed, damageExitStart, Math.max(240, resultTiming.exitMs * 1.12))
-            : 1;
-          const resultAlpha = Math.min(1, damageRevealProgress) * Math.max(0, damageHoldFade) * (1 - damageExitProgress * 0.34);
+          const resultAlpha = Math.min(1, damageRevealProgress) * (1 - damageExitProgress);
           damageText.alpha = resultAlpha;
           damageText.scale.set(
             inHitStop
               ? 0.94
               : recoilProgress < 1
                 ? 0.94 + recoilProgress * 0.16
-                : 1.1 + Math.max(0, 1 - damageRiseProgress) * 0.05 - damageExitProgress * 0.08,
+                : 1.1 + Math.max(0, 1 - damageRiseProgress) * 0.05 - damageExitProgress * 0.12,
           );
           damageText.y = inHitStop
             ? 234
             : recoilProgress < 1
               ? 234 - recoilProgress * 30
-              : 234 - damageRiseProgress * (fullscreenBattleFx.kind === 'skill' ? 118 : 94) - damageExitProgress * 64;
+              : 234 - damageRiseProgress * (fullscreenBattleFx.kind === 'skill' ? 126 : 102) - damageExitProgress * 78;
           damageText.style.fill = fullscreenBattleFx.damage === 0
             ? fullscreenBattleFx.aura === 'lunar'
               ? [0xe9d5ff, 0xc4b5fd]
@@ -1521,7 +1521,7 @@ export default function PrototypeClient({ showcaseByUnit = {} }: PrototypeClient
 
         if (elapsed > timing.settleMs) {
           const settleFade = 1 - progress(elapsed, timing.settleMs, timing.cleanupMs - timing.settleMs);
-          overlayText.text = fullscreenBattleFx.combo ? '连携收束' : '战斗结算中';
+          overlayText.text = fullscreenBattleFx.combo ? '连携收束' : '战果显现';
           stage.x *= 0.72;
           stage.y *= 0.72;
           defenderWrap.rotation *= 0.82;
@@ -1558,6 +1558,9 @@ export default function PrototypeClient({ showcaseByUnit = {} }: PrototypeClient
       }
       if (attackerFocusCleanupRef.current) {
         window.clearTimeout(attackerFocusCleanupRef.current);
+      }
+      if (cinematicCleanupRef.current) {
+        window.clearTimeout(cinematicCleanupRef.current);
       }
     };
   }, []);
@@ -1700,6 +1703,7 @@ export default function PrototypeClient({ showcaseByUnit = {} }: PrototypeClient
                     muted
                     playsInline
                     onEnded={() => {
+                      battleVideoEndedRef.current = true;
                       setBattleCinematic(null);
                       if (cinematicCleanupRef.current) {
                         window.clearTimeout(cinematicCleanupRef.current);
