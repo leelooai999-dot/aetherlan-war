@@ -174,10 +174,10 @@ const fullscreenBattleTimingPresets = {
     impactMs: 400,
     hitStopMs: 132,
     recoilMs: 240,
-    damageRevealDelayMs: 104,
-    damageFadeMs: 240,
-    settleMs: 920,
-    cleanupMs: 1380,
+    damageRevealDelayMs: 116,
+    damageFadeMs: 272,
+    settleMs: 980,
+    cleanupMs: 1480,
   },
   skill: {
     attackerAdvanceMs: 420,
@@ -185,23 +185,23 @@ const fullscreenBattleTimingPresets = {
     impactMs: 560,
     hitStopMs: 220,
     recoilMs: 320,
-    damageRevealDelayMs: 164,
-    damageFadeMs: 300,
-    settleMs: 1360,
-    cleanupMs: 2080,
+    damageRevealDelayMs: 188,
+    damageFadeMs: 344,
+    settleMs: 1460,
+    cleanupMs: 2200,
   },
 } as const;
 
 const fullscreenBattleResultTiming = {
   attack: {
-    riseMs: 420,
-    lingerMs: 900,
-    exitMs: 240,
+    riseMs: 500,
+    lingerMs: 1060,
+    exitMs: 220,
   },
   skill: {
-    riseMs: 540,
-    lingerMs: 1200,
-    exitMs: 320,
+    riseMs: 640,
+    lingerMs: 1360,
+    exitMs: 300,
   },
 } as const;
 
@@ -663,6 +663,7 @@ export default function PrototypeClient({ showcaseByUnit = {} }: PrototypeClient
   const [targetFocus, setTargetFocus] = useState<{ x: number; y: number; aura?: "wind" | "lunar" | "slash"; kind: "attack" | "skill"; phase?: "lock" | "commit" } | null>(null);
   const [attackerFocus, setAttackerFocus] = useState<{ unitId: string; x: number; y: number; aura?: "wind" | "lunar" | "slash"; kind: "attack" | "skill"; phase?: "charge" | "release" } | null>(null);
   const cinematicCleanupRef = useRef<number | null>(null);
+  const fullscreenBattleCleanupRef = useRef<number | null>(null);
   const screenFlashCleanupRef = useRef<number | null>(null);
   const targetFocusCleanupRef = useRef<number | null>(null);
   const attackerFocusCleanupRef = useRef<number | null>(null);
@@ -811,6 +812,10 @@ export default function PrototypeClient({ showcaseByUnit = {} }: PrototypeClient
       window.clearTimeout(screenFlashCleanupRef.current);
       screenFlashCleanupRef.current = null;
     }
+    if (fullscreenBattleCleanupRef.current) {
+      window.clearTimeout(fullscreenBattleCleanupRef.current);
+      fullscreenBattleCleanupRef.current = null;
+    }
     if (targetFocusCleanupRef.current) {
       window.clearTimeout(targetFocusCleanupRef.current);
       targetFocusCleanupRef.current = null;
@@ -841,6 +846,10 @@ export default function PrototypeClient({ showcaseByUnit = {} }: PrototypeClient
     }, cinematicTiming.attackerFocusMs);
 
     battleVideoEndedRef.current = false;
+    fullscreenBattleCleanupRef.current = window.setTimeout(() => {
+      setFullscreenBattleFx(null);
+      fullscreenBattleCleanupRef.current = null;
+    }, (kind === "skill" ? fullscreenBattleTimingPresets.skill.cleanupMs : fullscreenBattleTimingPresets.attack.cleanupMs) + 260);
     setFullscreenBattleFx({
       attacker,
       defender,
@@ -1371,6 +1380,10 @@ export default function PrototypeClient({ showcaseByUnit = {} }: PrototypeClient
       const progress = (time: number, start: number, duration: number) => Math.min(1, Math.max(0, (time - start) / duration));
       app.ticker.add((ticker) => {
         if (elapsed >= timing.cleanupMs) {
+          if (fullscreenBattleCleanupRef.current) {
+            window.clearTimeout(fullscreenBattleCleanupRef.current);
+            fullscreenBattleCleanupRef.current = null;
+          }
           setFullscreenBattleFx(null);
           return;
         }
@@ -1463,19 +1476,21 @@ export default function PrototypeClient({ showcaseByUnit = {} }: PrototypeClient
           const damageExitStart = damageHoldStart + resultTiming.lingerMs;
           const damageExitProgress = progress(elapsed, damageExitStart, resultTiming.exitMs);
           const resultAlpha = Math.min(1, damageRevealProgress) * (1 - damageExitProgress);
+          const resultFloat = 1 - Math.pow(1 - damageRiseProgress, 1.45);
+          const resultLift = fullscreenBattleFx.kind === 'skill' ? 138 : 112;
           damageText.alpha = resultAlpha;
           damageText.scale.set(
             inHitStop
               ? 0.94
               : recoilProgress < 1
                 ? 0.94 + recoilProgress * 0.16
-                : 1.1 + Math.max(0, 1 - damageRiseProgress) * 0.05 - damageExitProgress * 0.12,
+                : 1.08 + Math.max(0, 1 - damageRiseProgress) * 0.08 - damageExitProgress * 0.14,
           );
           damageText.y = inHitStop
-            ? 234
+            ? 236
             : recoilProgress < 1
-              ? 234 - recoilProgress * 30
-              : 234 - damageRiseProgress * (fullscreenBattleFx.kind === 'skill' ? 126 : 102) - damageExitProgress * 78;
+              ? 236 - recoilProgress * 28
+              : 236 - resultFloat * resultLift - damageExitProgress * 94;
           damageText.style.fill = fullscreenBattleFx.damage === 0
             ? fullscreenBattleFx.aura === 'lunar'
               ? [0xe9d5ff, 0xc4b5fd]
@@ -1483,31 +1498,32 @@ export default function PrototypeClient({ showcaseByUnit = {} }: PrototypeClient
             : fullscreenBattleFx.kind === 'skill'
               ? [0xdcfce7, 0x86efac]
               : [0xfff1f2, 0xfda4af];
-          const backdropWidth = fullscreenBattleFx.damage === 0 ? 240 : 188;
-          const backdropHeight = fullscreenBattleFx.damage === 0 ? 88 : 80;
+          const backdropWidth = fullscreenBattleFx.damage === 0 ? 248 : 196;
+          const backdropHeight = fullscreenBattleFx.damage === 0 ? 92 : 84;
+          const backdropY = damageText.y - backdropHeight / 2 + 6;
           damageBackdrop.visible = resultAlpha > 0.02;
           damageBackdrop.clear();
           damageBackdrop.roundRect(
             damageText.x - backdropWidth / 2,
-            damageText.y - backdropHeight / 2 + 4,
+            backdropY,
             backdropWidth,
             backdropHeight,
-            28,
-          ).fill({ color: 0x020617, alpha: Math.min(0.86, resultAlpha * 0.78) });
+            30,
+          ).fill({ color: 0x020617, alpha: Math.min(0.92, resultAlpha * 0.84) });
           damageBackdrop.roundRect(
             damageText.x - backdropWidth / 2 + 8,
-            damageText.y - backdropHeight / 2 + 12,
+            backdropY + 10,
             backdropWidth - 16,
-            Math.max(18, backdropHeight * 0.28),
+            Math.max(20, backdropHeight * 0.28),
             18,
-          ).fill({ color: 0xffffff, alpha: resultAlpha * (fullscreenBattleFx.damage === 0 ? 0.1 : 0.075) });
+          ).fill({ color: 0xffffff, alpha: resultAlpha * (fullscreenBattleFx.damage === 0 ? 0.11 : 0.085) });
           damageBackdrop.roundRect(
             damageText.x - backdropWidth / 2 + 10,
-            damageText.y + backdropHeight * 0.14,
-            Math.max(42, (backdropWidth - 20) * Math.max(0, 1 - damageExitProgress * 0.92)),
+            damageText.y + backdropHeight * 0.16,
+            Math.max(42, (backdropWidth - 20) * Math.max(0, 1 - damageExitProgress * 0.94)),
             6,
             999,
-          ).fill({ color: auraColor, alpha: resultAlpha * 0.22 });
+          ).fill({ color: auraColor, alpha: resultAlpha * 0.26 });
           stage.x = inHitStop
             ? -14
             : Math.sin(postImpactElapsed / 16) * 12 * shakeFalloff;
@@ -1530,7 +1546,8 @@ export default function PrototypeClient({ showcaseByUnit = {} }: PrototypeClient
           supportBurst.alpha = settleFade * 0.88;
           slash.alpha *= 0.78;
           impactRing.alpha = settleFade;
-          damageBackdrop.alpha = Math.max(0, Math.min(0.84, settleFade * 0.88));
+          damageText.alpha *= 0.96 + settleFade * 0.04;
+          damageBackdrop.alpha = Math.max(0, Math.min(0.88, settleFade * 0.92));
         }
       });
     };
@@ -1561,6 +1578,9 @@ export default function PrototypeClient({ showcaseByUnit = {} }: PrototypeClient
       }
       if (cinematicCleanupRef.current) {
         window.clearTimeout(cinematicCleanupRef.current);
+      }
+      if (fullscreenBattleCleanupRef.current) {
+        window.clearTimeout(fullscreenBattleCleanupRef.current);
       }
     };
   }, []);
@@ -1604,6 +1624,10 @@ export default function PrototypeClient({ showcaseByUnit = {} }: PrototypeClient
     setMovementFx(null);
     setBattleCinematic(null);
     setFullscreenBattleFx(null);
+    if (fullscreenBattleCleanupRef.current) {
+      window.clearTimeout(fullscreenBattleCleanupRef.current);
+      fullscreenBattleCleanupRef.current = null;
+    }
   }
 
   const selectedTerrain = selected ? terrainMap[selected.y][selected.x] : null;
