@@ -3,7 +3,6 @@ import { dirname, join, resolve, basename, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
-import { imageSize } from 'image-size';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const rootDir = resolve(__dirname, '..');
@@ -16,6 +15,22 @@ const execFileAsync = promisify(execFile);
 const preprocessScript = join(rootDir, 'python', 'preprocess_frames.py');
 const detectSheetScript = join(rootDir, 'python', 'detect_sheet_layout.py');
 const venvPython = join(rootDir, '.venv', 'bin', 'python');
+
+async function readImageSizeWithPython(sourcePath) {
+  if (!sourcePath) return null;
+  if (!(await exists(venvPython))) return null;
+
+  try {
+    const { stdout } = await execFileAsync(venvPython, ['-c', `from PIL import Image; import json, sys; img = Image.open(sys.argv[1]); print(json.dumps({'width': img.width, 'height': img.height}))`, sourcePath], {
+      cwd: rootDir,
+      timeout: 120000,
+    });
+    const lastLine = stdout.trim().split('\n').filter(Boolean).at(-1);
+    return lastLine ? JSON.parse(lastLine) : null;
+  } catch {
+    return null;
+  }
+}
 
 function providerAdapter(provider) {
   if (typeof provider !== 'string') return 'unassigned-adapter';
@@ -221,8 +236,11 @@ export async function processQueue() {
 
     const previewArtifacts = await copyPreviewArtifacts(job.id, copiedUploads, preprocessResults);
     const primarySheetPath = successfulPreprocess?.output ?? copiedUploads[0]?.jobInputPath ?? null;
-    const sheetDimensions = primarySheetPath ? imageSize(primarySheetPath) : null;
-    const detectedSheet = await detectSheetLayout(primarySheetPath, job.request?.frameCount);
+    const imageLikePath = primarySheetPath && ['.png', '.webp', '.jpg', '.jpeg', '.gif'].includes(extname(primarySheetPath).toLowerCase())
+      ? primarySheetPath
+      : null;
+    const sheetDimensions = imageLikePath ? await readImageSizeWithPython(imageLikePath) : null;
+    const detectedSheet = imageLikePath ? await detectSheetLayout(imageLikePath, job.request?.frameCount) : null;
 
     const result = {
       jobId: job.id,

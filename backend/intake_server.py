@@ -41,13 +41,14 @@ def build_worker_payload(
     return {
         'jobId': job_id,
         'role': role or '未提供',
-        'characterId': character_id,
-        'characterLabel': character_label,
+        'characterId': character_id or 'unassigned',
+        'characterLabel': character_label or '未指定角色',
         'action': action or '未提供',
-        'targetSlot': target_slot,
-        'assetKind': asset_kind,
+        'targetSlot': target_slot or 'unassigned',
+        'assetKind': asset_kind or 'battle-animation',
         'provider': provider or '未提供',
         'uploadCount': len(upload_names),
+        'uploadNames': upload_names,
         'status': 'persistent-intake-received',
         'nextStep': 'dispatch-worker-from-queue',
     }
@@ -92,7 +93,9 @@ def sanitize_worker_payload_for_client(payload: dict) -> dict:
         'action': payload.get('action'),
         'targetSlot': payload.get('targetSlot'),
         'assetKind': payload.get('assetKind'),
+        'provider': payload.get('provider'),
         'uploadCount': payload.get('uploadCount'),
+        'uploadNames': payload.get('uploadNames'),
         'status': payload.get('status'),
         'nextStep': payload.get('nextStep'),
     }

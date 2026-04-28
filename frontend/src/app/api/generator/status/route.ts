@@ -33,6 +33,11 @@ type QueueResult = {
 };
 
 type QueueDashboard = {
+  total?: number;
+  queued?: number;
+  processing?: number;
+  done?: number;
+  failed?: number;
   jobs?: {
     id: string;
     status?: string;
@@ -60,8 +65,17 @@ async function loadJson<T>(relativePath: string): Promise<T | null> {
 }
 
 function buildProgress(result: QueueResult | null, queuedStatus?: string) {
+  const effectiveStatus = result?.status ?? queuedStatus;
+
   if (result?.outputs?.zipReady) {
     return { percent: 100, stage: 'zip-ready', label: 'ZIP 素材包已完成' };
+  }
+  if (effectiveStatus === 'done') {
+    return {
+      percent: 100,
+      stage: result?.processedPreviewUrl ? 'done-with-preview' : 'done',
+      label: result?.processedPreviewUrl ? '处理完成，透明预览已生成' : '处理完成，可查看结果',
+    };
   }
   if (result?.outputs?.atlasPacked) {
     return { percent: 85, stage: 'atlas-packed', label: '图集已打包' };
@@ -69,11 +83,14 @@ function buildProgress(result: QueueResult | null, queuedStatus?: string) {
   if (result?.outputs?.transparentFrames || result?.processedPreviewUrl) {
     return { percent: 65, stage: 'background-removed', label: '背景已移除，透明预览已生成' };
   }
-  if (queuedStatus === 'processing') {
+  if (effectiveStatus === 'processing') {
     return { percent: 35, stage: 'processing', label: '后台正在处理上传素材' };
   }
-  if (queuedStatus === 'queued') {
+  if (effectiveStatus === 'queued') {
     return { percent: 15, stage: 'queued', label: '上传完成，任务已进入队列' };
+  }
+  if (effectiveStatus === 'failed' || effectiveStatus === 'error') {
+    return { percent: 100, stage: 'failed', label: '处理失败，请检查任务结果或重新上传' };
   }
   return { percent: 5, stage: 'received', label: '已收到请求，正在等待同步状态' };
 }
@@ -112,5 +129,15 @@ export async function GET(request: Request) {
     detectedFrameHeight: result?.detectedFrameHeight ?? null,
     outputs: result?.outputs ?? null,
     storage: job?.storage ?? null,
+    queueDepth: job?.storage === 'hetzner-disk-persistent' ? 'persistent' : job?.storage === 'vercel-ephemeral-preview' ? 'preview' : null,
+    queueSummary: dashboard
+      ? {
+          total: dashboard.total ?? null,
+          queued: dashboard.queued ?? null,
+          processing: dashboard.processing ?? null,
+          done: dashboard.done ?? null,
+          failed: dashboard.failed ?? null,
+        }
+      : null,
   });
 }

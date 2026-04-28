@@ -38,6 +38,27 @@ type UploadStatus = {
   detectedFrameWidth?: number | null;
   detectedFrameHeight?: number | null;
   storage?: string | null;
+  queueDepth?: string | null;
+  uploads?: {
+    label?: string | null;
+    name?: string | null;
+    size?: number | null;
+    type?: string | null;
+  }[] | null;
+  workerPayload?: {
+    jobId?: string | null;
+    role?: string | null;
+    characterId?: string | null;
+    characterLabel?: string | null;
+    action?: string | null;
+    targetSlot?: string | null;
+    assetKind?: string | null;
+    provider?: string | null;
+    uploadCount?: number | null;
+    uploadNames?: string[] | null;
+    status?: string | null;
+    nextStep?: string | null;
+  } | null;
   message?: string | null;
 };
 
@@ -362,9 +383,12 @@ export default function GeneratorClient({
 
       const nextJobId = data.job.id as string;
       setJobId(nextJobId);
-      setQueueDepth(String(data.queueDepth ?? '-'));
+      const nextQueueDepth = String(data.queueDepth ?? '-');
+      setQueueDepth(nextQueueDepth);
       const returnedStorage = typeof data?.job?.storage === 'string' ? data.job.storage : null;
       const returnedMessage = typeof data?.message === 'string' ? data.message : null;
+      const returnedUploads = Array.isArray(data?.job?.uploads) ? data.job.uploads : null;
+      const returnedWorkerPayload = data?.workerPayload && typeof data.workerPayload === 'object' ? data.workerPayload : null;
       const queueModeLabel = data.queueDepth === 'persistent' ? '上传完成，任务已进入持久化队列' : '上传完成，当前仍是前端预览接收模式';
       const queueModeStage = data.queueDepth === 'persistent' ? 'persistent-queued' : 'preview-queued';
       const queueModePercent = data.queueDepth === 'persistent' ? 18 : 12;
@@ -389,6 +413,9 @@ export default function GeneratorClient({
           label: queueModeLabel,
         },
         storage: returnedStorage,
+        queueDepth: nextQueueDepth,
+        uploads: returnedUploads,
+        workerPayload: returnedWorkerPayload,
         message: queueModeMessage,
       });
       applyStatusProgressToItems('queued', 20);
@@ -601,6 +628,30 @@ export default function GeneratorClient({
               <div className={`mt-4 rounded-2xl border p-4 text-sm leading-7 ${status?.storage === 'vercel-ephemeral-preview' ? 'border-amber-300/20 bg-amber-400/10 text-amber-50' : 'border-white/10 bg-black/15 text-emerald-50/90'}`}>
                 <div className="text-xs uppercase tracking-[0.25em] text-emerald-200">状态说明</div>
                 <div className="mt-2">{status.message}</div>
+              </div>
+            ) : null}
+            {status?.uploads?.length ? (
+              <div className="mt-4 rounded-2xl border border-white/10 bg-black/15 p-4 text-sm leading-6 text-emerald-50/90">
+                <div className="text-xs uppercase tracking-[0.25em] text-emerald-200">服务器已记录文件</div>
+                <div className="mt-2 space-y-1">
+                  {status.uploads.map((upload, index) => (
+                    <div key={`${upload.name ?? upload.label ?? 'upload'}-${index}`} className="flex items-center justify-between gap-3 text-xs text-emerald-100/85">
+                      <span className="truncate">{upload.name ?? upload.label ?? `asset-${index + 1}`}</span>
+                      <span>{upload.size ? `${Math.max(1, Math.round(upload.size / 1024))} KB` : 'size ?'}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : null}
+            {status?.workerPayload ? (
+              <div className="mt-4 rounded-2xl border border-cyan-300/20 bg-cyan-400/10 p-4 text-sm leading-7 text-cyan-50/95">
+                <div className="text-xs uppercase tracking-[0.25em] text-cyan-200">下一步交接</div>
+                <div className="mt-2">worker 状态：{status.workerPayload.status ?? 'unknown'}</div>
+                <div>worker next step：{status.workerPayload.nextStep ?? 'unknown'}</div>
+                <div>payload 上传数：{status.workerPayload.uploadCount ?? status.uploads?.length ?? 0}</div>
+                {status.workerPayload.uploadNames?.length ? (
+                  <div className="break-all text-xs text-cyan-100/85">payload 文件：{status.workerPayload.uploadNames.join(' | ')}</div>
+                ) : null}
               </div>
             ) : null}
             <div className="mt-4 rounded-2xl border border-white/10 bg-black/15 p-4 text-sm leading-7 text-emerald-50/90">
