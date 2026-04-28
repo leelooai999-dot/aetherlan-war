@@ -155,7 +155,7 @@ class IntakeHandler(BaseHTTPRequestHandler):
         if 'multipart/form-data' not in content_type:
             self._send_json(415, {
                 'ok': False,
-                'message': 'Unsupported Content-Type. Use multipart/form-data with referenceFiles.',
+                'message': 'Unsupported Content-Type. Use multipart/form-data with referenceFiles/uploads.',
                 'receivedContentType': content_type,
             })
             return
@@ -194,12 +194,14 @@ class IntakeHandler(BaseHTTPRequestHandler):
 
         upload_entries = []
         upload_names: list[str] = []
-        if 'referenceFiles' in form:
-            files = form['referenceFiles']
-            if not isinstance(files, list):
-                files = [files]
-        else:
-            files = []
+        files = []
+        for field_name in ('referenceFiles', 'uploads'):
+            if field_name in form:
+                field_value = form[field_name]
+                if isinstance(field_value, list):
+                    files.extend(field_value)
+                else:
+                    files.append(field_value)
 
         for item in files:
             if not getattr(item, 'filename', None):
