@@ -49,6 +49,8 @@ type UnitShowcase = {
   run?: ShowcaseEntry;
   attack?: ShowcaseEntry;
   hit?: ShowcaseEntry;
+  death?: ShowcaseEntry;
+  fullscreen?: ShowcaseEntry;
 };
 
 type Unit = {
@@ -104,6 +106,7 @@ type BattleCinematic = {
   kind: "attack" | "skill";
   damage: number;
   phase: "run" | "attack" | "impact";
+  defenderReacting?: boolean;
   videoEffect?: string;
 };
 
@@ -153,16 +156,54 @@ const mapCols = 10;
 const objectiveTile = { x: 1, y: 5 };
 
 const cinematicTiming = {
-  flashMs: 280,
+  flashMs: 220,
   lockToCommitMs: 120,
-  attackerFocusMs: 760,
-  targetFocusMs: 980,
-  phaseShiftMs: 420,
-  attackImpactMs: 920,
-  skillImpactMs: 1050,
+  attackerFocusMs: 780,
+  targetFocusMs: 780,
+  phaseShiftMs: 360,
+  attackImpactMs: 760,
+  skillImpactMs: 860,
   attackCleanupMs: 520,
-  skillCleanupMs: 650,
+  skillCleanupMs: 620,
 };
+
+const fullscreenBattleTimingPresets = {
+  attack: {
+    attackerAdvanceMs: 300,
+    slashStartMs: 220,
+    impactMs: 400,
+    hitStopMs: 132,
+    recoilMs: 240,
+    damageRevealDelayMs: 104,
+    damageFadeMs: 240,
+    settleMs: 920,
+    cleanupMs: 1380,
+  },
+  skill: {
+    attackerAdvanceMs: 420,
+    slashStartMs: 340,
+    impactMs: 560,
+    hitStopMs: 220,
+    recoilMs: 320,
+    damageRevealDelayMs: 164,
+    damageFadeMs: 300,
+    settleMs: 1360,
+    cleanupMs: 2080,
+  },
+} as const;
+
+const fullscreenBattleResultTiming = {
+  attack: {
+    riseMs: 400,
+    lingerMs: 760,
+    exitMs: 280,
+  },
+  skill: {
+    riseMs: 500,
+    lingerMs: 1040,
+    exitMs: 360,
+  },
+} as const;
 
 const terrainMap: Terrain[][] = [
   ["plain", "plain", "forest", "forest", "plain", "ruin", "ruin", "plain", "plain", "plain"],
@@ -213,7 +254,7 @@ type ShowcaseEntry = {
 };
 
 type PrototypeClientProps = {
-  showcaseByUnit?: Record<string, Partial<Record<'idle' | 'run' | 'attack' | 'hit', ShowcaseEntry>> | undefined>;
+  showcaseByUnit?: Record<string, Partial<Record<'idle' | 'run' | 'attack' | 'hit' | 'death' | 'fullscreen', ShowcaseEntry>> | undefined>;
 };
 
 const initialUnits: Unit[] = [
@@ -500,16 +541,17 @@ function buildAutoSpriteRuntime(entry: ShowcaseEntry | undefined, fallbackSlot: 
   };
 }
 
-function getUnitSpriteState(unit: Unit, flags: { selected: boolean; moving: boolean; attacking: boolean; healing: boolean }): ResolvedUnitSpriteState | null {
-  const showcaseOverride = flags.attacking
-    ? unit.showcase?.attack ?? unit.showcase?.hit ?? unit.showcase?.idle
-    : flags.moving
-      ? unit.showcase?.run ?? unit.showcase?.idle
-      : flags.healing || flags.selected
-        ? unit.showcase?.idle
+function getUnitSpriteState(unit: Unit, flags: { selected: boolean; moving: boolean; attacking: boolean; healing: boolean; reacting?: boolean }): ResolvedUnitSpriteState | null {
+  const fallbackSlot: 'idle' | 'run' | 'attack' | 'hit' = flags.reacting ? 'hit' : flags.attacking ? 'attack' : flags.moving ? 'run' : 'idle';
+  const showcaseOverride = flags.reacting
+    ? unit.showcase?.hit ?? unit.showcase?.death ?? unit.showcase?.idle
+    : flags.attacking
+      ? unit.showcase?.attack ?? unit.showcase?.hit ?? unit.showcase?.death ?? unit.showcase?.idle
+      : flags.moving
+        ? unit.showcase?.run ?? unit.showcase?.idle
         : unit.showcase?.idle;
 
-  const autoSprite = buildAutoSpriteRuntime(showcaseOverride, flags.attacking ? 'attack' : flags.moving ? 'run' : 'idle');
+  const autoSprite = buildAutoSpriteRuntime(showcaseOverride, fallbackSlot);
 
   if ((!unit.spriteSheet || !unit.spriteAnims || !unit.spriteSheetCols || !unit.spriteSheetRows) && autoSprite) {
     return {
@@ -529,13 +571,15 @@ function getUnitSpriteState(unit: Unit, flags: { selected: boolean; moving: bool
   const spriteAnims = unit.spriteAnims;
   if (!spriteAnims) return null;
 
-  const activeKey: SpriteAnimKey = flags.attacking
-    ? "attack"
-    : flags.moving
-      ? "run"
-      : flags.healing || flags.selected
-        ? (spriteAnims.jump ? "jump" : "idle")
-        : "idle";
+  const activeKey: SpriteAnimKey = flags.reacting
+    ? (spriteAnims.attack ? 'attack' : 'idle')
+    : flags.attacking
+      ? "attack"
+      : flags.moving
+        ? "run"
+        : flags.healing || flags.selected
+          ? (spriteAnims.jump ? "jump" : "idle")
+          : "idle";
 
   const activeAnim = spriteAnims[activeKey];
 
@@ -658,6 +702,7 @@ export default function PrototypeClient({ showcaseByUnit = {} }: PrototypeClient
         moving: false,
         attacking: false,
         healing: false,
+        reacting: Boolean(battleCinematic.defenderReacting),
       })
     : null;
   const safeCinematicAttackerSprite = cinematicAttackerSprite && typeof cinematicAttackerSprite.cols === 'number' && typeof cinematicAttackerSprite.rows === 'number' ? cinematicAttackerSprite : null;
@@ -805,14 +850,14 @@ export default function PrototypeClient({ showcaseByUnit = {} }: PrototypeClient
       origin: { x: attacker.x, y: attacker.y },
       target: { x: defender.x, y: defender.y },
     });
-    setBattleCinematic({ attacker, defender, damage, kind, phase: "run", videoEffect });
+    setBattleCinematic({ attacker, defender, damage, kind, phase: "run", defenderReacting: false, videoEffect });
 
     window.setTimeout(() => {
-      setBattleCinematic((prev) => (prev ? { ...prev, phase: "attack" } : null));
+      setBattleCinematic((prev) => (prev ? { ...prev, phase: "attack", defenderReacting: false } : null));
     }, cinematicTiming.phaseShiftMs);
 
     window.setTimeout(() => {
-      setBattleCinematic((prev) => (prev ? { ...prev, phase: "impact" } : null));
+      setBattleCinematic((prev) => (prev ? { ...prev, phase: "impact", defenderReacting: true } : null));
       damageUnit(defender.id, damage, attacker.id, kind);
       onDone?.();
       cinematicCleanupRef.current = window.setTimeout(() => {
@@ -823,7 +868,6 @@ export default function PrototypeClient({ showcaseByUnit = {} }: PrototypeClient
           triggerFx(defender.id, "skill");
         }
         setBattleCinematic(null);
-        setFullscreenBattleFx(null);
         cinematicCleanupRef.current = null;
       }, kind === "skill" ? cinematicTiming.skillCleanupMs : cinematicTiming.attackCleanupMs);
     }, kind === "skill" ? cinematicTiming.skillImpactMs : cinematicTiming.attackImpactMs);
@@ -1190,7 +1234,7 @@ export default function PrototypeClient({ showcaseByUnit = {} }: PrototypeClient
       const supportShadow = new Graphics().ellipse(0, 0, 90, 18).fill({ color: 0x000000, alpha: 0.22 });
       supportWrap.addChild(supportShadow);
 
-      const attackerSprite = Sprite.from(fullscreenBattleFx.attacker.showcase?.attack?.url ?? fullscreenBattleFx.attacker.showcaseIdleUrl ?? fullscreenBattleFx.attacker.profilePortrait ?? fullscreenBattleFx.attacker.portrait ?? "/characters/samuel-profile-pic.png");
+      const attackerSprite = Sprite.from(fullscreenBattleFx.attacker.showcase?.fullscreen?.url ?? fullscreenBattleFx.attacker.showcase?.attack?.url ?? fullscreenBattleFx.attacker.showcaseIdleUrl ?? fullscreenBattleFx.attacker.profilePortrait ?? fullscreenBattleFx.attacker.portrait ?? "/characters/samuel-profile-pic.png");
       attackerSprite.anchor.set(0.5, 1);
       attackerSprite.width = 290;
       attackerSprite.height = 370;
@@ -1206,7 +1250,7 @@ export default function PrototypeClient({ showcaseByUnit = {} }: PrototypeClient
       defenderWrap.addChild(defenderSprite);
 
       const supportSprite = fullscreenBattleFx.supportCaster
-        ? Sprite.from(fullscreenBattleFx.supportCaster.showcase?.attack?.url ?? fullscreenBattleFx.supportCaster.showcaseIdleUrl ?? fullscreenBattleFx.supportCaster.profilePortrait ?? fullscreenBattleFx.supportCaster.portrait ?? "/characters/isolde-profile-pic.png")
+        ? Sprite.from(fullscreenBattleFx.supportCaster.showcase?.fullscreen?.url ?? fullscreenBattleFx.supportCaster.showcase?.attack?.url ?? fullscreenBattleFx.supportCaster.showcaseIdleUrl ?? fullscreenBattleFx.supportCaster.profilePortrait ?? fullscreenBattleFx.supportCaster.portrait ?? "/characters/isolde-profile-pic.png")
         : null;
       if (supportSprite) {
         supportSprite.anchor.set(0.5, 1);
@@ -1232,6 +1276,10 @@ export default function PrototypeClient({ showcaseByUnit = {} }: PrototypeClient
       impactRing.visible = false;
       stage.addChild(impactRing);
 
+      const aftershock = new Graphics();
+      aftershock.visible = false;
+      stage.addChild(aftershock);
+
       const labelStyle = new TextStyle({
         fill: 0xffffff,
         fontFamily: 'Arial',
@@ -1248,9 +1296,10 @@ export default function PrototypeClient({ showcaseByUnit = {} }: PrototypeClient
       const damageStyle = new TextStyle({
         fill: 0xfff1f2,
         fontFamily: 'Arial',
-        fontSize: 72,
+        fontSize: 82,
         fontWeight: '900',
-        dropShadow: { alpha: 0.7, blur: 12, color: 0x7f1d1d, distance: 4 },
+        dropShadow: { alpha: 0.78, blur: 14, color: 0x7f1d1d, distance: 5 },
+        stroke: { color: 0x0f172a, width: 5 },
       });
 
       const attackerName = new Text({ text: fullscreenBattleFx.attacker.name, style: labelStyle });
@@ -1283,6 +1332,10 @@ export default function PrototypeClient({ showcaseByUnit = {} }: PrototypeClient
       phaseText.position.set(640, 64);
       stage.addChild(phaseText);
 
+      const damageBackdrop = new Graphics();
+      damageBackdrop.alpha = 0;
+      stage.addChild(damageBackdrop);
+
       const damageText = new Text({ text: fullscreenBattleFx.damage > 0 ? `-${fullscreenBattleFx.damage}` : '+HEAL', style: damageStyle });
       damageText.anchor.set(0.5);
       damageText.position.set(920, 250);
@@ -1309,13 +1362,25 @@ export default function PrototypeClient({ showcaseByUnit = {} }: PrototypeClient
       stage.addChild(overlayText);
 
       let elapsed = 0;
+      const timing = fullscreenBattleTimingPresets[fullscreenBattleFx.kind];
+      const resultTiming = fullscreenBattleResultTiming[fullscreenBattleFx.kind];
       const auraColor = fullscreenBattleFx.aura === 'wind' ? 0x86efac : fullscreenBattleFx.aura === 'lunar' ? 0xc4b5fd : 0x67e8f9;
+      const progress = (time: number, start: number, duration: number) => Math.min(1, Math.max(0, (time - start) / duration));
       app.ticker.add((ticker) => {
+        if (elapsed >= timing.cleanupMs) {
+          setFullscreenBattleFx(null);
+          return;
+        }
         if (cancelled) return;
         elapsed += ticker.deltaMS;
 
-        attackerWrap.x = elapsed < 380 ? 280 + Math.min(elapsed / 380, 1) * 200 : elapsed < 620 ? 480 : 460;
-        attackerWrap.y = 520 - Math.sin(Math.min(elapsed, 620) / 620 * Math.PI) * (elapsed < 620 ? 34 : 0);
+        const attackArcProgress = progress(elapsed, 0, timing.attackerAdvanceMs + 240);
+        attackerWrap.x = elapsed < timing.attackerAdvanceMs
+          ? 280 + progress(elapsed, 0, timing.attackerAdvanceMs) * 200
+          : elapsed < timing.impactMs + 60
+            ? 480
+            : 460;
+        attackerWrap.y = 520 - Math.sin(attackArcProgress * Math.PI) * 34;
 
         if (supportWrap.visible && supportSprite) {
           supportWrap.x = 150 + Math.min(1, elapsed / 420) * 26;
@@ -1332,35 +1397,85 @@ export default function PrototypeClient({ showcaseByUnit = {} }: PrototypeClient
           auraRibbon.stroke({ width: fullscreenBattleFx.combo ? 16 : 10, color: auraColor, alpha: 0.22 + Math.min(0.28, elapsed / 1800), cap: 'round' });
         }
 
-        if (elapsed > 420) {
+        if (elapsed > timing.slashStartMs) {
+          const slashFade = progress(elapsed, timing.slashStartMs, fullscreenBattleFx.kind === 'skill' ? 220 : 150);
           overlayText.text = fullscreenBattleFx.kind === 'skill' ? (fullscreenBattleFx.combo ? '双人协同爆发' : '能量爆发') : '命中瞬间';
           slash.visible = true;
           slash.clear();
           slash.moveTo(520, 230);
           slash.lineTo(820, 410);
           slash.stroke({ width: fullscreenBattleFx.kind === 'skill' ? 18 : 12, color: auraColor, alpha: 0.9, cap: 'round' });
-          slash.alpha = Math.max(0, 1 - (elapsed - 420) / 240);
+          slash.alpha = 1 - slashFade;
 
           if (supportWrap.visible) {
+            const supportBurstFade = progress(elapsed, timing.slashStartMs, 320);
             supportBurst.visible = true;
             supportBurst.clear();
-            supportBurst.circle(255, 290, 24 + Math.min(70, (elapsed - 420) / 2.2)).stroke({ width: 6, color: auraColor, alpha: Math.max(0, 0.6 - (elapsed - 420) / 420) });
+            supportBurst.circle(255, 290, 24 + Math.min(78, (elapsed - timing.slashStartMs) / 1.9)).stroke({ width: 6, color: auraColor, alpha: Math.max(0, 0.68 - supportBurstFade * 0.68) });
           }
         }
 
-        if (elapsed > 650) {
-          flash.alpha = Math.max(0, 0.85 - (elapsed - 650) / 160);
+        if (elapsed > timing.impactMs) {
+          const inHitStop = elapsed <= timing.impactMs + timing.hitStopMs;
+          const recoilProgress = progress(elapsed, timing.impactMs + timing.hitStopMs, timing.recoilMs);
+          const impactProgress = progress(elapsed, timing.impactMs + timing.hitStopMs, fullscreenBattleFx.kind === 'skill' ? 240 : 180);
+          const shakeFalloff = 1 - progress(elapsed, timing.impactMs + timing.hitStopMs, fullscreenBattleFx.kind === 'skill' ? 340 : 240);
+          const postImpactElapsed = Math.max(0, elapsed - timing.impactMs - timing.hitStopMs);
+          const recoilX = inHitStop
+            ? -22
+            : recoilProgress < 1
+              ? -22 + recoilProgress * 38
+              : Math.sin(postImpactElapsed / 18) * 24 * shakeFalloff;
+          const recoilY = inHitStop
+            ? -14
+            : recoilProgress < 1
+              ? -14 + Math.sin(recoilProgress * Math.PI) * -9
+              : -Math.sin(postImpactElapsed / 36) * 8 * shakeFalloff;
+          flash.alpha = Math.max(0, 0.98 - progress(elapsed, timing.impactMs, fullscreenBattleFx.kind === 'skill' ? 180 : 130) * 0.98);
           impactRing.visible = true;
-          const ringScale = 1 + (elapsed - 650) / 120;
+          aftershock.visible = recoilProgress < 1;
+          const ringScale = 1 + postImpactElapsed / 96;
           impactRing.clear();
-          impactRing.circle(940, 300, 70 * ringScale).stroke({ width: 8, color: 0xffffff, alpha: Math.max(0, 0.7 - (elapsed - 650) / 220) });
+          impactRing.circle(940, 300, 78 * ringScale).stroke({ width: 10, color: 0xffffff, alpha: Math.max(0, 0.94 - impactProgress * 0.94) });
           if (fullscreenBattleFx.combo) {
-            impactRing.circle(940, 300, 118 * ringScale).stroke({ width: 4, color: auraColor, alpha: Math.max(0, 0.5 - (elapsed - 650) / 260) });
+            impactRing.circle(940, 300, 126 * ringScale).stroke({ width: 4, color: auraColor, alpha: Math.max(0, 0.66 - progress(elapsed, timing.impactMs + timing.hitStopMs, 300) * 0.66) });
           }
-          defenderWrap.x = 980 + Math.sin((elapsed - 650) / 24) * 18;
-          defenderWrap.rotation = Math.min(0.18, (elapsed - 650) / 1200);
-          damageText.alpha = Math.min(1, (elapsed - 650) / 120);
-          damageText.y = 250 - Math.min(70, (elapsed - 650) / 4);
+          aftershock.clear();
+          if (recoilProgress < 1) {
+            const aftershockAlpha = (1 - recoilProgress) * (fullscreenBattleFx.kind === 'skill' ? 0.34 : 0.22);
+            aftershock.ellipse(940, 520, 140 + recoilProgress * 70, 24 + recoilProgress * 10).fill({ color: auraColor, alpha: aftershockAlpha });
+          }
+          defenderWrap.x = 980 + recoilX;
+          defenderWrap.y = 302 + recoilY;
+          defenderWrap.scale.set(inHitStop ? 1.065 : recoilProgress < 1 ? 1.065 - recoilProgress * 0.065 : 1);
+          defenderWrap.rotation = inHitStop
+            ? 0.13
+            : recoilProgress < 1
+              ? 0.13 - recoilProgress * 0.11
+              : Math.min(0.22, impactProgress * 0.22);
+          const damageRevealStart = timing.impactMs + timing.hitStopMs + timing.damageRevealDelayMs;
+          const damageRevealProgress = progress(elapsed, damageRevealStart, timing.damageFadeMs + 40);
+          const damageRiseProgress = progress(elapsed, damageRevealStart, resultTiming.riseMs);
+          const damageHoldStart = damageRevealStart + resultTiming.riseMs + Math.max(150, resultTiming.lingerMs * 0.52);
+          const damageExitStart = damageHoldStart + Math.max(220, resultTiming.lingerMs - resultTiming.exitMs * 0.42);
+          const damageExitProgress = progress(elapsed, damageExitStart, resultTiming.exitMs);
+          const damageHoldFade = elapsed > damageExitStart
+            ? 1 - progress(elapsed, damageExitStart, Math.max(240, resultTiming.exitMs * 1.12))
+            : 1;
+          const resultAlpha = Math.min(1, damageRevealProgress) * Math.max(0, damageHoldFade) * (1 - damageExitProgress * 0.34);
+          damageText.alpha = resultAlpha;
+          damageText.scale.set(
+            inHitStop
+              ? 0.94
+              : recoilProgress < 1
+                ? 0.94 + recoilProgress * 0.16
+                : 1.1 + Math.max(0, 1 - damageRiseProgress) * 0.05 - damageExitProgress * 0.08,
+          );
+          damageText.y = inHitStop
+            ? 234
+            : recoilProgress < 1
+              ? 234 - recoilProgress * 30
+              : 234 - damageRiseProgress * (fullscreenBattleFx.kind === 'skill' ? 118 : 94) - damageExitProgress * 64;
           damageText.style.fill = fullscreenBattleFx.damage === 0
             ? fullscreenBattleFx.aura === 'lunar'
               ? [0xe9d5ff, 0xc4b5fd]
@@ -1368,17 +1483,54 @@ export default function PrototypeClient({ showcaseByUnit = {} }: PrototypeClient
             : fullscreenBattleFx.kind === 'skill'
               ? [0xdcfce7, 0x86efac]
               : [0xfff1f2, 0xfda4af];
-          stage.x = Math.sin((elapsed - 650) / 20) * 9;
-          stage.y = Math.cos((elapsed - 650) / 24) * 5;
+          const backdropWidth = fullscreenBattleFx.damage === 0 ? 240 : 188;
+          const backdropHeight = fullscreenBattleFx.damage === 0 ? 88 : 80;
+          damageBackdrop.visible = resultAlpha > 0.02;
+          damageBackdrop.clear();
+          damageBackdrop.roundRect(
+            damageText.x - backdropWidth / 2,
+            damageText.y - backdropHeight / 2 + 4,
+            backdropWidth,
+            backdropHeight,
+            28,
+          ).fill({ color: 0x020617, alpha: Math.min(0.86, resultAlpha * 0.78) });
+          damageBackdrop.roundRect(
+            damageText.x - backdropWidth / 2 + 8,
+            damageText.y - backdropHeight / 2 + 12,
+            backdropWidth - 16,
+            Math.max(18, backdropHeight * 0.28),
+            18,
+          ).fill({ color: 0xffffff, alpha: resultAlpha * (fullscreenBattleFx.damage === 0 ? 0.1 : 0.075) });
+          damageBackdrop.roundRect(
+            damageText.x - backdropWidth / 2 + 10,
+            damageText.y + backdropHeight * 0.14,
+            Math.max(42, (backdropWidth - 20) * Math.max(0, 1 - damageExitProgress * 0.92)),
+            6,
+            999,
+          ).fill({ color: auraColor, alpha: resultAlpha * 0.22 });
+          stage.x = inHitStop
+            ? -14
+            : Math.sin(postImpactElapsed / 16) * 12 * shakeFalloff;
+          stage.y = inHitStop
+            ? 6
+            : Math.cos(postImpactElapsed / 20) * 7 * shakeFalloff;
+        } else {
+          aftershock.visible = false;
+          damageBackdrop.visible = false;
         }
 
-        if (elapsed > 980) {
+        if (elapsed > timing.settleMs) {
+          const settleFade = 1 - progress(elapsed, timing.settleMs, timing.cleanupMs - timing.settleMs);
           overlayText.text = fullscreenBattleFx.combo ? '连携收束' : '战斗结算中';
-          stage.x *= 0.82;
-          stage.y *= 0.82;
-          defenderWrap.rotation *= 0.85;
-          auraRibbon.alpha *= 0.92;
-          supportBurst.alpha *= 0.9;
+          stage.x *= 0.72;
+          stage.y *= 0.72;
+          defenderWrap.rotation *= 0.82;
+          defenderWrap.scale.set(1);
+          auraRibbon.alpha = settleFade;
+          supportBurst.alpha = settleFade * 0.88;
+          slash.alpha *= 0.78;
+          impactRing.alpha = settleFade;
+          damageBackdrop.alpha = Math.max(0, Math.min(0.84, settleFade * 0.88));
         }
       });
     };
@@ -1593,6 +1745,9 @@ export default function PrototypeClient({ showcaseByUnit = {} }: PrototypeClient
                 </div>
               </div>
               <div className={`relative flex w-[38%] min-w-[140px] justify-center self-end transition-all duration-300 ${battleCinematic.phase === "impact" ? "scale-105 -translate-y-2" : ""}`}>
+                {battleCinematic.phase === "impact" ? (
+                  <div className="pointer-events-none absolute bottom-3 left-1/2 h-7 w-32 -translate-x-1/2 rounded-full bg-cyan-200/20 blur-xl" />
+                ) : null}
                 <div className="relative h-[40vh] w-full max-w-[280px] min-h-[200px] scale-x-[-1]">
                   {safeCinematicDefenderSprite ? (
                     <div
@@ -1912,12 +2067,15 @@ export default function PrototypeClient({ showcaseByUnit = {} }: PrototypeClient
                     const hitFx = unitFx.some((fx) => fx.kind === "hit");
                     const healFx = unitFx.some((fx) => fx.kind === "heal");
                     const returnFx = unitFx.some((fx) => fx.kind === "return");
+                    const isDefeatedPreview = Boolean(unit && unit.hp <= Math.max(1, Math.floor(unit.maxHp * 0.25)));
                     const unitVisualUrl = unit
                       ? attackerFx
                         ? unit.showcase?.attack?.url ?? unit.showcaseIdleUrl
                         : hitFx
-                          ? unit.showcase?.hit?.url ?? unit.showcaseIdleUrl
-                          : unit.showcaseIdleUrl
+                          ? unit.showcase?.hit?.url ?? unit.showcase?.death?.url ?? unit.showcaseIdleUrl
+                          : isDefeatedPreview
+                            ? unit.showcase?.death?.url ?? unit.showcase?.hit?.url ?? unit.showcaseIdleUrl
+                            : unit.showcaseIdleUrl
                       : undefined;
                     const focusFx = Boolean(targetFocus && targetFocus.x === x && targetFocus.y === y);
                     const attackerPrepFx = Boolean(unit && attackerFocus?.unitId === unit.id);
@@ -1927,6 +2085,7 @@ export default function PrototypeClient({ showcaseByUnit = {} }: PrototypeClient
                           moving: movementFx?.unitId === unit.id,
                           attacking: attackerFx,
                           healing: healFx,
+                          reacting: hitFx || isDefeatedPreview,
                         })
                       : null;
 
@@ -1986,6 +2145,7 @@ export default function PrototypeClient({ showcaseByUnit = {} }: PrototypeClient
                             {attackerFx ? <div className="absolute inset-0 bg-cyan-300/25" /> : null}
                             {attackerPrepFx ? <div className={`absolute inset-0 rounded-[inherit] ${attackerFocus?.aura === "lunar" ? "bg-violet-200/12" : attackerFocus?.kind === "skill" ? "bg-emerald-200/12" : "bg-cyan-100/12"} ${attackerFocus?.phase === "charge" ? "animate-pulse" : "animate-ping"}`} /> : null}
                             {hitFx ? <div className="absolute inset-0 bg-rose-300/35 animate-pulse" /> : null}
+                            {isDefeatedPreview && !healFx ? <div className="absolute inset-0 bg-gradient-to-t from-rose-950/55 via-transparent to-transparent" /> : null}
                             {healFx ? <div className="absolute inset-0 bg-emerald-300/30" /> : null}
                             {returnFx ? <div className="absolute inset-0 rounded-[inherit] border border-cyan-200/40 bg-cyan-200/8" /> : null}
                             {focusFx ? <div className={`absolute inset-0 rounded-[inherit] ${targetFocus?.aura === "lunar" ? "bg-violet-300/16" : targetFocus?.kind === "skill" ? "bg-emerald-300/14" : "bg-cyan-200/12"} ${targetFocus?.phase === "lock" ? "animate-ping" : "animate-pulse"}`} /> : null}
@@ -1997,9 +2157,14 @@ export default function PrototypeClient({ showcaseByUnit = {} }: PrototypeClient
                                 {attackerFocus?.phase === "charge" ? "CHARGING" : "RELEASING"}
                               </div>
                             ) : null}
-                            <div className="absolute bottom-1 right-1 rounded bg-black/75 px-1 text-[9px] text-white">
+                            <div className={`absolute bottom-1 right-1 rounded px-1 text-[9px] ${isDefeatedPreview ? 'bg-rose-950/85 text-rose-100' : 'bg-black/75 text-white'}`}>
                               {unit.hp}
                             </div>
+                            {isDefeatedPreview ? (
+                              <div className="absolute inset-x-1 bottom-5 rounded bg-rose-950/85 px-1 py-0.5 text-center text-[8px] font-bold uppercase tracking-[0.18em] text-rose-100">
+                                FINISHABLE
+                              </div>
+                            ) : null}
                             {focusFx ? (
                               <div className="absolute inset-x-1 bottom-5 rounded bg-black/70 px-1 py-0.5 text-center text-[8px] font-bold uppercase tracking-[0.18em] text-white">
                                 {targetFocus?.phase === "lock"

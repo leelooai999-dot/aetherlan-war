@@ -31,6 +31,8 @@ type ShowcaseEntry = {
   sourceLabel: string;
   jobId: string;
   action: string;
+  targetSlot?: string;
+  assetKind?: string;
   frameCount?: number;
   frameWidth?: number;
   frameHeight?: number;
@@ -40,7 +42,8 @@ type ShowcaseEntry = {
   isSpriteSheet?: boolean;
 };
 
-export type ShowcaseByUnit = Record<string, Partial<Record<'idle' | 'run' | 'attack' | 'hit', ShowcaseEntry>>>;
+export type ShowcaseSlot = 'idle' | 'run' | 'attack' | 'hit' | 'death' | 'fullscreen';
+export type ShowcaseByUnit = Record<string, Partial<Record<ShowcaseSlot, ShowcaseEntry>>>;
 
 const ROLE_TO_UNIT_ID: Record<string, string> = {
   '人类战士': 'samuel',
@@ -58,7 +61,7 @@ const CHARACTER_ID_TO_UNIT_ID: Record<string, string> = {
   'mutated-beast': 'wolf',
 };
 
-const ACTION_TO_SLOT: Record<string, 'idle' | 'run' | 'attack' | 'hit' | null> = {
+const ACTION_TO_SLOT: Record<string, ShowcaseSlot | null> = {
   '待机': 'idle',
   'idle': 'idle',
   '行走': 'run',
@@ -69,12 +72,12 @@ const ACTION_TO_SLOT: Record<string, 'idle' | 'run' | 'attack' | 'hit' | null> =
   '施法': 'attack',
   '技能': 'attack',
   'attack': 'attack',
-  'fullscreen-attack': 'attack',
+  'fullscreen-attack': 'fullscreen',
   '受击': 'hit',
   '僵直': 'hit',
-  '死亡': 'hit',
   'hit': 'hit',
-  'death': 'hit',
+  '死亡': 'death',
+  'death': 'death',
 };
 
 async function loadShowcaseByUnit(): Promise<ShowcaseByUnit> {
@@ -94,7 +97,7 @@ async function loadShowcaseByUnit(): Promise<ShowcaseByUnit> {
       mapped[unitId] ??= {};
       const action = result.request?.action ?? slot;
       const layout = inferSpriteSheetLayout({
-        frameCount: result.request?.frameCount ?? (slot === 'hit' ? 2 : 4),
+        frameCount: result.request?.frameCount ?? (slot === 'hit' || slot === 'death' ? 2 : 4),
         width: result.sheetWidth,
         height: result.sheetHeight,
         detectedFrameCount: result.detectedFrameCount,
@@ -111,6 +114,8 @@ async function loadShowcaseByUnit(): Promise<ShowcaseByUnit> {
         sourceLabel: result.processedPreviewUrl ? `pipeline ${action}` : '上传参考图',
         jobId: result.jobId,
         action,
+        targetSlot: result.request?.targetSlot,
+        assetKind: result.request?.assetKind,
         frameCount: layout.frameCount,
         frameWidth: layout.frameWidth,
         frameHeight: layout.frameHeight,
