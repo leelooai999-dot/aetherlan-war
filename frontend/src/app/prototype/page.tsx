@@ -98,7 +98,17 @@ async function loadShowcaseByUnit(): Promise<ShowcaseByUnit> {
       const slot = ACTION_TO_SLOT[result.request?.targetSlot ?? ''] ?? ACTION_TO_SLOT[result.request?.action ?? ''];
       if (!unitId || !slot || result.status !== 'done') continue;
       const isBattleReady = Boolean(result.processedPreviewUrl || result.outputs?.atlasPacked || result.outputs?.transparentFrames);
-      if (!isBattleReady) continue;
+      const canUseAcceptedFallback = result.status === 'done' && Boolean(result.previewUrl) && (
+        result.request?.assetKind === 'battle-animation' ||
+        result.request?.assetKind === 'fullscreen-fx' ||
+        result.request?.targetSlot === 'attack' ||
+        result.request?.targetSlot === 'fullscreen-attack' ||
+        result.request?.action === 'attack' ||
+        result.request?.action === '施法' ||
+        result.request?.action === '普攻' ||
+        result.request?.action === '重击'
+      );
+      if (!isBattleReady && !canUseAcceptedFallback) continue;
       const url = result.processedPreviewUrl || result.previewUrl;
       if (!url) continue;
 
@@ -119,7 +129,7 @@ async function loadShowcaseByUnit(): Promise<ShowcaseByUnit> {
 
       mapped[unitId][slot] = {
         url,
-        sourceLabel: result.processedPreviewUrl ? `pipeline ${action}` : '上传参考图',
+        sourceLabel: result.processedPreviewUrl ? `pipeline ${action}` : canUseAcceptedFallback ? `已验收待透底 ${action}` : '上传参考图',
         jobId: result.jobId,
         action,
         targetSlot: result.request?.targetSlot,
