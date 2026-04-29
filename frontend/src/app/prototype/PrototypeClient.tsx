@@ -123,6 +123,12 @@ type FullscreenBattleFx = {
   forced?: boolean;
 };
 
+type DeerAttackOverlay = {
+  attacker: Unit;
+  defender: Unit;
+  damage: number;
+};
+
 type CombatFx = {
   id: number;
   unitId: string;
@@ -697,6 +703,7 @@ export default function PrototypeClient({ showcaseByUnit = {} }: PrototypeClient
   const [movementFx, setMovementFx] = useState<MovementFx | null>(null);
   const [battleCinematic, setBattleCinematic] = useState<BattleCinematic | null>(null);
   const [fullscreenBattleFx, setFullscreenBattleFx] = useState<FullscreenBattleFx | null>(null);
+  const [deerAttackOverlay, setDeerAttackOverlay] = useState<DeerAttackOverlay | null>(null);
   const battleVideoEndedRef = useRef(false);
   const [screenFlash, setScreenFlash] = useState<{ kind: "attack" | "skill"; aura?: "wind" | "lunar" | "slash" } | null>(null);
   const [targetFocus, setTargetFocus] = useState<{ x: number; y: number; aura?: "wind" | "lunar" | "slash"; kind: "attack" | "skill"; phase?: "lock" | "commit" } | null>(null);
@@ -1029,12 +1036,28 @@ export default function PrototypeClient({ showcaseByUnit = {} }: PrototypeClient
       const isMoonDeerAttack = selected.id === "moon-deer";
       const bonus = selected.id === "samuel" && siblingBondActive ? 2 : 0;
       const totalDamage = selected.atk + bonus;
-      playBattleCinematic(selected, unit, totalDamage, isMoonDeerAttack ? "skill" : "attack", () => {
+
+      if (isMoonDeerAttack) {
+        setDeerAttackOverlay({ attacker: selected, defender: unit, damage: totalDamage });
+        window.setTimeout(() => {
+          damageUnit(unit.id, totalDamage, selected.id, "skill");
+          markUnitActed(selected.id);
+          setEventBanner(`${selected.name} 压制了 ${unit.name}。`);
+          pushLog(`${selected.name} 攻击 ${unit.name}，造成 ${totalDamage} 点伤害。`);
+          setMode("move");
+        }, 520);
+        window.setTimeout(() => {
+          setDeerAttackOverlay(null);
+        }, 1800);
+        return;
+      }
+
+      playBattleCinematic(selected, unit, totalDamage, "attack", () => {
         markUnitActed(selected.id);
         setEventBanner(`${selected.name} 压制了 ${unit.name}。`);
         pushLog(`${selected.name} 攻击 ${unit.name}，造成 ${totalDamage} 点伤害。`);
         setMode("move");
-      }, isMoonDeerAttack ? { aura: "lunar" } : undefined);
+      });
       return;
     }
 
@@ -1898,6 +1921,7 @@ export default function PrototypeClient({ showcaseByUnit = {} }: PrototypeClient
     setMovementFx(null);
     setBattleCinematic(null);
     setFullscreenBattleFx(null);
+    setDeerAttackOverlay(null);
     if (fullscreenBattleCleanupRef.current) {
       window.clearTimeout(fullscreenBattleCleanupRef.current);
       fullscreenBattleCleanupRef.current = null;
@@ -1986,7 +2010,45 @@ export default function PrototypeClient({ showcaseByUnit = {} }: PrototypeClient
             <div className="pointer-events-none absolute inset-x-0 bottom-0 h-56 bg-gradient-to-t from-black/70 to-transparent" />
           </div>
         ) : null}
-        {battleCinematic && !(fullscreenBattleFx?.forced || fullscreenBattleActive) ? (
+        {deerAttackOverlay ? (
+          <div className="fixed inset-0 z-[110] flex items-center justify-center overflow-hidden bg-slate-950/96 backdrop-blur-md">
+            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(196,181,253,0.24),rgba(2,6,23,0.96)_62%)]" />
+            <div className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-white/10 to-transparent" />
+            <div className="relative flex h-full w-full max-w-6xl items-end justify-between px-8 pb-16 pt-20">
+              <div className="flex w-[44%] justify-center self-end">
+                <div
+                  className="h-[380px] w-[380px] bg-no-repeat [image-rendering:pixelated] animate-[spriteFloatCenter_0.9s_ease-in-out_infinite]"
+                  style={{
+                    backgroundImage: `url(${deerAttackOverlay.attacker.spriteSheet ?? '/characters/moon-deer-sprite.png'})`,
+                    backgroundSize: `${(deerAttackOverlay.attacker.spriteSheetCols ?? 10) * 100}% ${(deerAttackOverlay.attacker.spriteSheetRows ?? 5) * 100}%`,
+                    backgroundPositionX: '0%',
+                    backgroundPositionY: `${(((deerAttackOverlay.attacker.spriteAnims?.attack?.row ?? 3)) / Math.max(1, (deerAttackOverlay.attacker.spriteSheetRows ?? 5) - 1)) * 100}%`,
+                    animation: `unitSpritePlay ${Math.max(0.35, ((deerAttackOverlay.attacker.spriteAnims?.attack?.frames ?? 8) / Math.max(1, (deerAttackOverlay.attacker.spriteAnims?.attack?.fps ?? 12))))}s steps(${Math.max(1, (deerAttackOverlay.attacker.spriteAnims?.attack?.frames ?? 8) - 1)}) infinite, spriteFloatCenter 0.9s ease-in-out infinite`,
+                    filter: 'drop-shadow(0 18px 28px rgba(0,0,0,0.5))',
+                  }}
+                />
+              </div>
+              <div className="flex w-[34%] justify-center self-end">
+                <div
+                  className="h-[320px] w-[320px] scale-x-[-1] bg-contain bg-bottom bg-no-repeat"
+                  style={{
+                    backgroundImage: `url(${deerAttackOverlay.defender.profilePortrait ?? deerAttackOverlay.defender.portrait ?? '/characters/mutated-monster-profile-pic.png'})`,
+                    filter: 'drop-shadow(0 18px 28px rgba(0,0,0,0.5))',
+                  }}
+                />
+              </div>
+              <div className="pointer-events-none absolute left-1/2 top-16 -translate-x-1/2 text-center">
+                <div className="text-sm font-black tracking-[0.35em] text-violet-200/90">MOON DEER FULLSCREEN ATTACK</div>
+                <div className="mt-3 text-4xl font-black text-white drop-shadow-[0_4px_16px_rgba(0,0,0,0.55)]">月溪突进</div>
+              </div>
+              <div className="pointer-events-none absolute inset-x-0 bottom-14 flex justify-center">
+                <div className="rounded-2xl border border-violet-200/30 bg-violet-200/10 px-8 py-4 text-5xl font-black text-violet-50 shadow-2xl shadow-violet-950/40">
+                  -{deerAttackOverlay.damage}
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : battleCinematic && !(fullscreenBattleFx?.forced || fullscreenBattleActive) ? (
           <div className="fixed inset-0 z-[90] flex items-center justify-center bg-slate-950/92 backdrop-blur-sm px-4">
             <div className="relative flex h-full max-h-[90vh] w-full max-w-6xl items-end justify-between overflow-hidden rounded-3xl border border-cyan-300/20 bg-[radial-gradient(circle_at_center,_rgba(34,211,238,0.12),_rgba(2,6,23,0.95)_60%)] px-6 py-10 sm:px-10">
               <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_54%,rgba(255,255,255,0.06),transparent_40%)]" />
